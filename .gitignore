@@ -1,0 +1,12 @@
+.DS_Store
+.idea/
+*.iml
+__pycache__/
+*.py[cod]
+*.conf
+settings.py
+mainapp/staticfiles/
+mainapp/static/fonts/
+mainapp/static/images/
+mainapp/static/img/
+mainapp/log/

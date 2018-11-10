@@ -1681,6 +1681,11 @@ input.ui-editRangeSlider-inputValue {
   display: none;
 }
 
+/* alert message, gritter */
+.gritter-item-wrapper {
+  background: url('../img/ie-spacer.gif?1379032210');
+}
+
 .gritter-item-wrapper > div {
   background: rgba(0, 0, 0, 0.7);
 }
@@ -1697,7 +1702,13 @@ input.ui-editRangeSlider-inputValue {
 .gritter-item .gritter-title {
   text-shadow: none;
 }
-
+.gritter-item .gritter-close {
+  background: url('../img/gritter.png?1379032210');
+  outline: none;
+  left: auto;
+  right: 3px;
+  cursor: normal;
+}
 .gritter-item a, .gritter-item a:focus {
   color: #fff;
   text-decoration: underline;
@@ -1978,7 +1989,13 @@ input.ui-editRangeSlider-inputValue {
     transform: rotate(0);
   }
 }
-
+/* dropzone file uplaod */
+.dropzone {
+  padding: 20px;
+  height: 500px;
+  background-image: url('../img/diagonal-stripe.png?1369651034');
+  background-repeat: repeat;
+}
 .dropzone .dz-message {
   font-size: 52px;
   text-align: center;
@@ -2136,13 +2153,22 @@ input.ui-editRangeSlider-inputValue {
 .select2-search input.select2-active {
   background: none;
 }
-
+.select2-search input.select2-active background {
+  image: url('../img/select2-spinner.gif?1451707423');
+  color: #fff;
+  repeat: no-repeat;
+}
 
 .select2-search input.select2-active,
 .select2-more-results.select2-active {
   background: none;
 }
 .select2-search input.select2-active background,
+.select2-more-results.select2-active background {
+  image: url('../img/select2-spinner.gif?1451707423');
+  color: #f4f4f4;
+  repeat: no-repeat;
+}
 
 .select2-container.select2-dropdown-open .select2-choice,
 .select2-container.select2-dropdown-open .select2-arrow {
@@ -2197,7 +2223,9 @@ input.ui-editRangeSlider-inputValue {
 .select2-container-multi .select2-choices .select2-search-field input {
   padding: 3px;
 }
-
+.select2-container-multi .select2-choices .select2-search-field input.select2-active {
+  background-image: url('../img/select2-spinner.gif?1451707423') !important;
+}
 .select2-container-multi.select2-container-active .select2-choices {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
