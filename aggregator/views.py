@@ -443,7 +443,8 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView):
         serializer.is_valid(raise_exception=True)
 
         result = []
-        for key, group in groupby(serializer.data, lambda x: x['title__title']):
+        get_key = lambda x: x['title__title']
+        for key, group in groupby(sorted(serializer.data, key=get_key), key=get_key):
             item = dict(zip(self.fg_values_list, [{} for i in range(len(self.fg_values_list))]))
             item['title__title'] = key
             item['views'] = 0
