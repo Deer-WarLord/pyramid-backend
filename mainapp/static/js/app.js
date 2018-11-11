@@ -50277,12 +50277,9 @@ module.exports = Marionette.CompositeView.extend({
                 .value();
         } else {
             result = {};
-            var key_words = JSON.parse(this.model.get("key_word__in"));
 
-            _.each(key_words, function(key_word) {
-                _.each(_.values(sdMap[sdKey]), function(el){
-                    result[el] = [];
-                });
+            _.each(_.values(sdMap[sdKey]), function(el){
+                result[el] = [];
             });
 
             if (url.includes("-fg-")) {
