@@ -46667,7 +46667,7 @@ module.exports = Marionette.Controller.extend({
             this.getOption('layout').triggerMethod('show:theme');
         }
     },
-    
+
     themeCompanyRatingFilter: function(market, fromDate, toDate) {
         if (this.permissions.theme) {
             this.getOption('layout').triggerMethod('show:theme:dates', [fromDate, toDate, market]);
@@ -46715,7 +46715,7 @@ module.exports = Marionette.Controller.extend({
             this.getOption('layout').triggerMethod('show:publication:topic:dates', [fromDate, toDate, region__in, type__in]);
         }
     },
-    
+
     publicationRatingAll: function() {
         if (this.permissions.publication) {
             this.getOption('layout').model.clear();
@@ -47213,7 +47213,7 @@ module.exports = Marionette.LayoutView.extend({
     onShowPublications: function () {
         if (this.initialData.permissions.publication) {
             this.showBars();
-            this.left_sidebar.currentView.activatePublicationsQuery();
+            this.left_sidebar.currentView.activateRegionQuery();
             this.showChildView('publication_rating_table', new PublicationRating({
                 model: this.model,
                 permissions: this.initialData.permissions,
