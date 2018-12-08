@@ -96,6 +96,21 @@ class ThemeCompanyRatingSerializer(serializers.Serializer):
     publication_amount = serializers.IntegerField()
 
 
+class RegionRatingSerializer(serializers.Serializer):
+    region = serializers.CharField(max_length=1024)
+    publication_amount = serializers.IntegerField()
+
+
+class PublicationTypeRatingSerializer(serializers.Serializer):
+    type = serializers.CharField(max_length=1024)
+    publication_amount = serializers.IntegerField()
+
+
+class PublicationTopicRatingSerializer(serializers.Serializer):
+    topic = serializers.CharField(max_length=1024)
+    publication_amount = serializers.IntegerField()
+
+
 class PublicationRatingSerializer(serializers.Serializer):
     publication = serializers.CharField(max_length=1024)
     publication_amount = serializers.IntegerField()

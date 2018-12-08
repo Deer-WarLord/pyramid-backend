@@ -55,6 +55,19 @@ def handle_request_params(request):
         params["key_word__in"] = json.loads(params.pop("key_word__in"))
         if not len(params["key_word__in"]):
             params.pop("key_word__in")
+    if "region__in" in params:
+        params["region__in"] = json.loads(params.pop("region__in"))
+        if not len(params["region__in"]):
+            params.pop("region__in")
+    if "type__in" in params:
+        params["type__in"] = json.loads(params.pop("type__in"))
+        if not len(params["type__in"]):
+            params.pop("type__in")
+    if "topic__in" in params:
+        params["topic__in"] = json.loads(params.pop("topic__in"))
+        if not len(params["topic__in"]):
+            params.pop("topic__in")
+
     return params
 
 
@@ -203,6 +216,75 @@ class ThemeCompanyRating(generics.ListAPIView):
         else:
             self.queryset = Publication.objects.values(
                 "key_word").annotate(publication_amount=Count("key_word")).order_by("-publication_amount")
+
+        return self.list(request, *args, **kwargs)
+
+
+class RegionRating(generics.ListAPIView):
+    queryset = Publication.objects
+    serializer_class = RegionRatingSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+    pagination_class = ConfiguredPageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "region__in" in params:
+            params.pop("region__in")
+
+        if len(params):
+            self.queryset = Publication.objects.filter(**params).values(
+                "region").annotate(publication_amount=Count("region")).order_by("-publication_amount")
+        else:
+            self.queryset = Publication.objects.values(
+                "region").annotate(publication_amount=Count("region")).order_by("-publication_amount")
+
+        return self.list(request, *args, **kwargs)
+
+
+class PublicationTypeRating(generics.ListAPIView):
+    queryset = Publication.objects
+    serializer_class = PublicationTypeRatingSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+    pagination_class = ConfiguredPageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "type__in" in params:
+            params.pop("type__in")
+
+        if len(params):
+            self.queryset = Publication.objects.filter(**params).values(
+                "type").annotate(publication_amount=Count("type")).order_by("-publication_amount")
+        else:
+            self.queryset = Publication.objects.values(
+                "type").annotate(publication_amount=Count("type")).order_by("-publication_amount")
+
+        return self.list(request, *args, **kwargs)
+
+
+class PublicationTopicRating(generics.ListAPIView):
+    queryset = Publication.objects
+    serializer_class = PublicationTopicRatingSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+    pagination_class = ConfiguredPageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "topic__in" in params:
+            params.pop("topic__in")
+
+        if len(params):
+            self.queryset = Publication.objects.filter(**params).values(
+                "topic").annotate(publication_amount=Count("topic")).order_by("-publication_amount")
+        else:
+            self.queryset = Publication.objects.values(
+                "topic").annotate(publication_amount=Count("topic")).order_by("-publication_amount")
 
         return self.list(request, *args, **kwargs)
 
