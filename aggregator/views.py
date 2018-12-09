@@ -60,6 +60,10 @@ class ParamsHandler:
             params["key_word__in"] = json.loads(params.pop("key_word__in"))
             if not len(params["key_word__in"]):
                 params.pop("key_word__in")
+        if "publication__in" in params:
+            params["publication__in"] = json.loads(params.pop("publication__in"))
+            if not len(params["publication__in"]):
+                params.pop("publication__in")
         if "region__in" in params:
             params["region__in"] = json.loads(params.pop("region__in"))
             if not len(params["region__in"]):
@@ -678,8 +682,8 @@ class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView, ParamsHandle
             self.queryset = PublicationsSocialDemoRating.objects.filter(
                 created_date__gte=params['posted_date__gte'],
                 created_date__lte=params['posted_date__lte']).order_by("-views")
-            if "publication" in params:
-                self.queryset = self.queryset.filter(publication=request.query_params['publication']).order_by("-views")
+            if "publication__in" in params:
+                self.queryset = self.queryset.filter(publication__in=params['publication__in']).order_by("-views")
         else:
             self.queryset = PublicationsSocialDemoRating.objects.all().order_by("-views")
 

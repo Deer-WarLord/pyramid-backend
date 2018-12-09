@@ -46759,6 +46759,7 @@ module.exports = Marionette.Controller.extend({
 
     specificSocialDemoRatingAdmixer: function(fromDate, toDate, key_word, publication) {
         if (this.permissions.social_demo) {
+            this.getOption('layout').model.clear();
             this.getOption('layout').model.set({
                 "posted_date__gte": fromDate,
                 "posted_date__lte": toDate,
@@ -46766,7 +46767,7 @@ module.exports = Marionette.Controller.extend({
             });
 
             if (publication) {
-                this.getOption('layout').model.set("publication", publication);
+                this.getOption('layout').model.set("publication__in", publication);
             }
 
             this.getOption('layout').triggerMethod('specific:show:social:demo:admixer');
@@ -46775,6 +46776,7 @@ module.exports = Marionette.Controller.extend({
 
     specificSocialDemoRatingFg: function(fromDate, toDate, key_word, publication){
         if (this.permissions.social_demo) {
+            this.getOption('layout').model.clear();
             this.getOption('layout').model.set({
                 "posted_date__gte": fromDate,
                 "posted_date__lte": toDate,
@@ -46782,7 +46784,7 @@ module.exports = Marionette.Controller.extend({
             });
 
             if (publication) {
-                this.getOption('layout').model.set("publication", publication);
+                this.getOption('layout').model.set("publication__in", publication);
             }
 
             this.getOption('layout').triggerMethod('specific:show:social:demo:fg');
@@ -48957,12 +48959,14 @@ var Table = Marionette.CompositeView.extend({
         "publication": ".publication",
         "publicationList": ".publication-list",
         "selectProvider": "#publication-provider-type",
-        "modalDialog": "#myModal"
+        "modalDialog": "#myModal",
+        "querySd": "#query-sd"
     },
 
     events: {
         'keyup @ui.rowFilter': 'filterColumn',
-        'click @ui.publication': 'getSocialDemo',
+        'click @ui.publication': 'selectPublication',
+        'click @ui.querySd': 'querySd',
         'click @ui.publicationList': 'getPublicationList',
         'change @ui.input': 'filterCollection',
         'hidden.bs.modal @ui.modalDialog': 'onHideModal'
@@ -49003,6 +49007,7 @@ var Table = Marionette.CompositeView.extend({
         self.$el.parent().show();
         this.ui.table.DataTable().destroy();
         var reportRange = $(Object.getPrototypeOf(this).ui.reportRange);
+        this.ui.querySd.hide();
         this.collection.fetch({
             success: function() {
                 if (self.history) {
@@ -49042,6 +49047,7 @@ var Table = Marionette.CompositeView.extend({
                 "posted_date__gte": data.fromDate,
                 "posted_date__lte": data.toDate
             });
+            this.ui.querySd.hide();
             this.collection.fetch({
                 success: function() {
                     self.$('.publication, .publication-list').tooltip();
@@ -49055,17 +49061,31 @@ var Table = Marionette.CompositeView.extend({
         }
     },
 
-    getSocialDemo: function(domEvent) {
-        this.model.set("publication", domEvent.toElement.innerHTML);
+    selectPublication: function(domEvent) {
+        this.$(domEvent.toElement).toggleClass("select");
+        if (this.$(".select").length > 0) {
+            this.ui.querySd.show();
+        } else {
+            this.ui.querySd.hide();
+        }
+    },
+
+    querySd: function(domEvent) {
         this.model.set("page", 1);
         var params = "";
+
+        var self = this;
+        var publications = [];
+        this.$(".select").each(function(i, item) {publications.push(self.$(item).text());});
+
+        this.model.set("publication__in", JSON.stringify(publications));
 
         if (this.model.isValidForPublications()) {
 
             params = this.model.get('posted_date__gte')+"/"+
                      this.model.get('posted_date__lte')+"/"+
                      this.model.get("key_word__in")+"/"+
-                    this.model.get("publication");
+                     this.model.get("publication__in");
 
             if (this.ui.selectProvider.val() === "admixer") {
                 var history = 'specific-social-demo-rating-admixer/' + params;
@@ -49074,11 +49094,11 @@ var Table = Marionette.CompositeView.extend({
                 history = 'specific-social-demo-rating-fg/' + params;
             }
 
-        } else {
+        } else if (publications.length > 0) {
 
             params = this.model.get('posted_date__gte')+"/"+
                      this.model.get('posted_date__lte')+"/"+
-                     this.model.get("publication");
+                     this.model.get("publication__in");
 
             if (this.ui.selectProvider.val() === "admixer") {
                 history = 'general-social-demo-rating-admixer/' + params;
@@ -49206,7 +49226,7 @@ __p+='<div class="widget widget-table">\n    <div class="widget-header">\n      
  if (permissions.social_demo) { 
 __p+='\n                <select id="publication-provider-type" name="provider-type">\n                    <option value="admixer">Admixer</option>\n                    <option value="fg">Factum Group</option>\n                </select>\n            ';
  } 
-__p+='\n        </div>\n\n        <div id="publication-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publications" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="3"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="4"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="5"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="6"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="7"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                </tr>\n                <tr>\n                    <th>СМИ</th>\n                    <th>Число публикаций</th>\n                    <th>Страна</th>\n                    <th>Регион</th>\n                    <th>Город</th>\n                    <th>Тип издания</th>\n                    <th>Вид издания</th>\n                    <th>Сводный тип</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="row paginator"></div>\n        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title" id="myModalLabel">СМИ</h4>\n                    </div>\n                    <div class="modal-body">\n                        <table id="publications-list" class="table table-hover table-bordered datatable">\n                            <thead>\n                                <tr>\n                                    <th>Название публикации</th>\n                                    <th>Дата публикаций</th>\n                                </tr>\n                            </thead>\n                            <tbody></tbody>\n                        </table>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Закрыть</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n';
+__p+='\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-sd" class="btn btn-default">Перейти</button>\n        </div>\n\n        <div id="publication-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publications" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="3"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="4"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="5"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="6"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="7"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                </tr>\n                <tr>\n                    <th>СМИ</th>\n                    <th>Число публикаций</th>\n                    <th>Страна</th>\n                    <th>Регион</th>\n                    <th>Город</th>\n                    <th>Тип издания</th>\n                    <th>Вид издания</th>\n                    <th>Сводный тип</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="row paginator"></div>\n        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title" id="myModalLabel">СМИ</h4>\n                    </div>\n                    <div class="modal-body">\n                        <table id="publications-list" class="table table-hover table-bordered datatable">\n                            <thead>\n                                <tr>\n                                    <th>Название публикации</th>\n                                    <th>Дата публикаций</th>\n                                </tr>\n                            </thead>\n                            <tbody></tbody>\n                        </table>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Закрыть</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
