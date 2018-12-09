@@ -62,7 +62,7 @@ class PublicationTitleDateList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
 
         if len(request.query_params):
-            self.queryset = Publication.objects.filter(**dict(request.query_params.items()))
+            self.queryset = Publication.objects.filter(**dict(request.query_params.items())).distinct("title")
 
         return self.list(request, *args, **kwargs)
 
