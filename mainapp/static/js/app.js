@@ -46626,7 +46626,8 @@ var jQueryBehaviorOnFetch = __webpack_require__(177);
 var TableBehavior = __webpack_require__(178);
 var ToggleBehavior = __webpack_require__(181);
 var ExportBehavior = __webpack_require__(182);
-var PlotBehavior = __webpack_require__(186);
+var BreadCrumbBehavior = __webpack_require__(186);
+var PlotBehavior = __webpack_require__(187);
 
 Marionette.Behaviors.behaviorsLookup = function() {
     return {
@@ -46636,6 +46637,7 @@ Marionette.Behaviors.behaviorsLookup = function() {
         "jQueryBehaviorOnFetch": jQueryBehaviorOnFetch,
         "ToggleBehavior": ToggleBehavior,
         "ExportBehavior": ExportBehavior,
+        "BreadCrumbBehavior": BreadCrumbBehavior,
         "TableBehavior": TableBehavior
     };
 };
@@ -47035,6 +47037,10 @@ module.exports = Marionette.LayoutView.extend({
         'show:admin:files': 'onShowAdminFiles'
     },
 
+    behaviors: {
+        BreadCrumbBehavior: {}
+    },
+
     onQueryChange: function (data) {
       this.model.set(data);
     },
@@ -47174,6 +47180,7 @@ module.exports = Marionette.LayoutView.extend({
             });
             this.showBars();
             this.left_sidebar.currentView.activateRegionQuery();
+            this.triggerMethod('initBreadcrumb');
             this.showChildView('publication_type_rating_table', new PublicationTypeRating({
                 model: this.model,
                 permissions: this.initialData.permissions,
@@ -47522,8 +47529,9 @@ module.exports = Marionette.ItemView.extend({
 
     marketsQuery: function () {
         this.model.clear();
-        this.model.set("history", "market-rating/");
+        Backbone.history.navigate('market-rating/');
         this.triggerMethod('show:market');
+        return false;
     },
 
     activateRegionQuery: function () {
@@ -47533,8 +47541,9 @@ module.exports = Marionette.ItemView.extend({
 
     regionQuery: function () {
         this.model.clear();
-        this.model.set("history", "region-rating/");
+        Backbone.history.navigate('region-rating/');
         this.triggerMethod('show:region');
+        return false;
     },
 
     activatePublicationsQuery: function () {
@@ -47557,6 +47566,7 @@ module.exports = Marionette.ItemView.extend({
         this.activatePublicationsSocialDemoQueryAdmixer();
         this.model.clear();
         this.model.set("history", "general-social-demo-rating-by-publication-admixer");
+        this.model.set("lvl", 0);
         this.triggerMethod('general:show:social:demo:admixer', "publication");
     },
 
@@ -47568,6 +47578,7 @@ module.exports = Marionette.ItemView.extend({
     themesSocialDemoQueryAdmixer: function () {
         this.activateThemesSocialDemoQueryAdmixer();
         this.model.clear();
+        this.model.set("lvl", 0);
         this.model.set("history", "general-social-demo-rating-by-theme-admixer");
         this.triggerMethod('general:show:social:demo:admixer', "key_word");
     },
@@ -47580,6 +47591,7 @@ module.exports = Marionette.ItemView.extend({
     publicationsSocialDemoQueryFg: function () {
         this.activatePublicationsSocialDemoQueryFg();
         this.model.clear();
+        this.model.set("lvl", 0);
         this.model.set("history", "general-social-demo-rating-by-publication-fg");
         this.triggerMethod('general:show:social:demo:fg', "publication");
     },
@@ -47592,6 +47604,7 @@ module.exports = Marionette.ItemView.extend({
     themesSocialDemoQueryFg: function () {
         this.activateThemesSocialDemoQueryFg();
         this.model.clear();
+        this.model.set("lvl", 0);
         this.model.set("history", "general-social-demo-rating-by-theme-fg");
         this.triggerMethod('general:show:social:demo:fg', "key_word");
     },
@@ -47800,6 +47813,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -47827,8 +47841,8 @@ var Table = Marionette.CompositeView.extend({
         });
 
         this.ui.reportRange.find('span').html(dates[0] + ' - ' + dates[1]);
-        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1])
-
+        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1]);
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Рынки", "lvl": 0});
     },
 
     filterColumn: function (event) {
@@ -48024,6 +48038,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         jQueryBehavior: {
             '@ui.selectQuery': {
                 'multiselect': {
@@ -48078,8 +48093,8 @@ var Table = Marionette.CompositeView.extend({
         });
 
         this.ui.reportRange.find('span').html(dates[0] + ' - ' + dates[1]);
-        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1])
-
+        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1]);
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Темы/Компании", "lvl": 1});
     },
 
     filterColumn: function (event) {
@@ -48294,6 +48309,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48321,8 +48337,8 @@ var Table = Marionette.CompositeView.extend({
         });
 
         this.ui.reportRange.find('span').html(dates[0] + ' - ' + dates[1]);
-        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1])
-
+        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1]);
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Регионы", "lvl": 0});
     },
 
     filterColumn: function (event) {
@@ -48512,6 +48528,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48539,8 +48556,8 @@ var Table = Marionette.CompositeView.extend({
         });
 
         this.ui.reportRange.find('span').html(dates[0] + ' - ' + dates[1]);
-        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1])
-
+        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1]);
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Тип СМИ", "lvl": 1});
     },
 
     filterColumn: function (event) {
@@ -48731,6 +48748,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48758,8 +48776,8 @@ var Table = Marionette.CompositeView.extend({
         });
 
         this.ui.reportRange.find('span').html(dates[0] + ' - ' + dates[1]);
-        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1])
-
+        this.ui.reportRange.find('input').val(dates[0] + ',' + dates[1]);
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Вид СМИ", "lvl": 1});
     },
 
     filterColumn: function (event) {
@@ -48968,6 +48986,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         jQueryBehavior: {
             '@ui.selectProvider': {
                 'multiselect': {
@@ -49001,6 +49020,7 @@ var Table = Marionette.CompositeView.extend({
             },
             data: this.model.attributes
         });
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Публикации", "lvl": 3});
     },
 
     filterColumn: function (event) {
@@ -49312,6 +49332,11 @@ var Table = Marionette.CompositeView.extend({
             this.history = this.model.get("history");
             this.model.unset("history");
         }
+        this.lvl = 3;
+        if (this.model.has("lvl")) {
+            this.lvl = this.model.get("lvl");
+            this.model.unset("lvl");
+        }
         if (!this.options.permissions.free_time || !this.model.get("posted_date__gte")) {
             this.model.set({
                 "posted_date__gte": this.options.fixed_dates[0],
@@ -49361,6 +49386,7 @@ var Table = Marionette.CompositeView.extend({
         PlotBehavior: {},
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -49385,6 +49411,7 @@ var Table = Marionette.CompositeView.extend({
             },
             data: this.model.attributes
         });
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Соц.Дем.Admixer", "lvl": this.lvl});
     },
 
     filterColumn: function (event) {
@@ -49807,6 +49834,11 @@ var Table = Marionette.CompositeView.extend({
             this.history = this.model.get("history");
             this.model.unset("history");
         }
+        this.lvl = 3;
+        if (this.model.has("lvl")) {
+            this.lvl = this.model.get("lvl");
+            this.model.unset("lvl");
+        }
         this.childViewOptions = options.model;
 
         if (!this.options.permissions.free_time || !this.model.get("posted_date__gte")) {
@@ -49860,6 +49892,7 @@ var Table = Marionette.CompositeView.extend({
         },
         ToggleBehavior: {},
         ExportBehavior: {},
+        BreadCrumbBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -49884,6 +49917,7 @@ var Table = Marionette.CompositeView.extend({
             },
             data: this.model.attributes
         });
+        this.triggerMethod('addBreadcrumb', {"url": this.history, "title": "Соц.Дем.Factum", "lvl": this.lvl});
     },
 
     filterColumn: function (event) {
@@ -51938,7 +51972,7 @@ module.exports = Backbone.Model.extend({
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div id="top-bar" class="top-bar navbar-fixed-top"></div>\n\n<div id="left-sidebar" class="left-sidebar "></div>\n\n<div id="main-content-wrapper" class="content-wrapper ">\n\n    <div id="market-rating" class="content"></div>\n\n    <div id="theme-company-rating" class="content"></div>\n\n    <div id="region-rating" class="content"></div>\n\n    <div id="publication-type-rating" class="content"></div>\n\n    <div id="publication-topic-rating" class="content"></div>\n\n    <div id="publication-rating" class="content"></div>\n\n    <div id="specific-social-demo-rating" class="content"></div>\n\n    <div id="general-social-demo-rating-table" class="content"></div>\n\n    <div id="themes-social-demo-rating" class="content"></div>\n\n    <div id="publications-social-demo-rating" class="content"></div>\n\n    <div id="keyword-charts-region" class="content"></div>\n\n    <div id="admin-data-uploader-region" class="content"></div>\n\n    <div id="admin-user-roles-region" class="content"></div>\n\n    <div id="admin-keys-update-region" class="content"></div>\n\n    <div id="admin-files-region" class="content"></div>\n\n    <footer class="footer">\n        &copy; 2018 Analytics\n    </footer>\n\n</div>';
+__p+='<div id="top-bar" class="top-bar navbar-fixed-top"></div>\n\n<div id="left-sidebar" class="left-sidebar "></div>\n\n<div id="main-content-wrapper" class="content-wrapper ">\n\n    <div class="row">\n        <div class="col-lg-8">\n            <ul class="breadcrumb" id="breadcrumb"></ul>\n        </div>\n    </div>\n\n    <div id="market-rating" class="content"></div>\n\n    <div id="theme-company-rating" class="content"></div>\n\n    <div id="region-rating" class="content"></div>\n\n    <div id="publication-type-rating" class="content"></div>\n\n    <div id="publication-topic-rating" class="content"></div>\n\n    <div id="publication-rating" class="content"></div>\n\n    <div id="specific-social-demo-rating" class="content"></div>\n\n    <div id="general-social-demo-rating-table" class="content"></div>\n\n    <div id="themes-social-demo-rating" class="content"></div>\n\n    <div id="publications-social-demo-rating" class="content"></div>\n\n    <div id="keyword-charts-region" class="content"></div>\n\n    <div id="admin-data-uploader-region" class="content"></div>\n\n    <div id="admin-user-roles-region" class="content"></div>\n\n    <div id="admin-keys-update-region" class="content"></div>\n\n    <div id="admin-files-region" class="content"></div>\n\n    <footer class="footer">\n        &copy; 2018 Analytics\n    </footer>\n\n</div>';
 }
 return __p;
 };
@@ -52097,7 +52131,7 @@ var PaginationView = __webpack_require__(179);
 module.exports = Marionette.Behavior.extend({
 
     events: {
-        'click .paginate_button a': 'renderPage',
+        'click .paginate_button a': 'renderPage'
     },
 
     onFetched: function() {
@@ -52511,6 +52545,44 @@ var objectKeys = Object.keys || function (obj) {
 
 /***/ }),
 /* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(_) {var Marionette = __webpack_require__(2);
+
+var breadCrumbHomeTmpl = '<li class="active" data-lvl="<%- lvl %>" data-url="<%- url %>" data-title="<%- title %>">' +
+    '<i class="fa fa-home"></i><%- title %></li>';
+var breadCrumbItemTmpl = '<li class="active" data-lvl="<%- lvl %>" data-url="<%- url %>" data-title="<%- title %>">' +
+    '<%- title %></li>';
+
+module.exports = Marionette.Behavior.extend({
+
+    onAddBreadcrumb: function (data) {
+        var breadcrumb = this.$el.parents("#main-content-wrapper").find("#breadcrumb");
+        if (data.url === undefined) {
+            data.url = Backbone.history.getHash();
+        }
+        if (data.lvl === 0) {
+            breadcrumb.html(_.template(breadCrumbHomeTmpl)(data))
+        } else {
+            var prevEl = breadcrumb.find(".active");
+            prevEl.removeClass("active");
+            // prevEl.html("");
+            // if (prevEl.data("lvl") === 0) {
+            //     prevEl.append('<i class="fa fa-home"></i>');
+            // }
+            // prevEl.append("<a href='#" + prevEl.data("url") + "'>" + prevEl.data("title") + "</a>");
+            breadcrumb.append(_.template(breadCrumbItemTmpl)(data))
+        }
+    },
+
+    onInitBreadcrumb: function (data) {
+        
+    }
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($, _) {var Marionette = __webpack_require__(2);
