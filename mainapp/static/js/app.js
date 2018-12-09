@@ -46625,7 +46625,8 @@ var jQueryBehavior = __webpack_require__(176);
 var jQueryBehaviorOnFetch = __webpack_require__(177);
 var TableBehavior = __webpack_require__(178);
 var ToggleBehavior = __webpack_require__(181);
-var PlotBehavior = __webpack_require__(182);
+var ExportBehavior = __webpack_require__(182);
+var PlotBehavior = __webpack_require__(186);
 
 Marionette.Behaviors.behaviorsLookup = function() {
     return {
@@ -46634,6 +46635,7 @@ Marionette.Behaviors.behaviorsLookup = function() {
         "jQueryBehavior": jQueryBehavior,
         "jQueryBehaviorOnFetch": jQueryBehaviorOnFetch,
         "ToggleBehavior": ToggleBehavior,
+        "ExportBehavior": ExportBehavior,
         "TableBehavior": TableBehavior
     };
 };
@@ -47797,6 +47799,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -47948,7 +47951,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по рынкам</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас сегмент\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-themes" class="btn btn-default">Перейти к темам/компаниям </button>\n        </div>\n\n        <div id="market-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-market" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Рынки</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по рынкам</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас сегмент\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-themes" class="btn btn-default">Перейти к темам/компаниям </button>\n        </div>\n\n        <div id="market-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-market" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Рынки</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
@@ -48020,7 +48023,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
-
+        ExportBehavior: {},
         jQueryBehavior: {
             '@ui.selectQuery': {
                 'multiselect': {
@@ -48208,7 +48211,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по темам и компаниям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас сегмент\n        </div>\n\n        <div class="col-sm-4">\n            <select id="query-type" name="query-type">\n                ';
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по темам и компаниям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас сегмент\n        </div>\n\n        <div class="col-sm-4">\n            <select id="query-type" name="query-type">\n                ';
  if (permissions.social_demo) { 
 __p+=' <option value="social-demo">Соц.дем профиль</option> ';
  } 
@@ -48290,6 +48293,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48437,7 +48441,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по регионам</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас регионы\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication-type" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="region-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-region" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Регионы</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по регионам</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас регионы\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication-type" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="region-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-region" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Регионы</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
@@ -48507,6 +48511,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48655,7 +48660,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по типам СМИ</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас тип СМИ\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication-topic" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="publication-type-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publication-type" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Тип СМИ</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по типам СМИ</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас тип СМИ\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication-topic" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="publication-type-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publication-type" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Тип СМИ</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
@@ -48725,6 +48730,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -48874,7 +48880,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по видам СМИ</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас вид СМИ\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="publication-topic-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publication-topic" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Вид СМИ</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по видам СМИ</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n        <div class="alert alert-info fade in">\n            <button class="close" data-dismiss="alert">&times;</button>\n            <i class="fa fa-info-circle"></i> выберити интересующий вас вид СМИ\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-publication" class="btn btn-default">Перейти далее</button>\n        </div>\n\n        <div id="publication-topic-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publication-topic" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n            <tr class="row-filter">\n                <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                <th data-index="1"></th>\n            </tr>\n            <tr>\n                <th>Вид СМИ</th>\n                <th>Число публикаций</th>\n            </tr>\n            </thead>\n            <tbody>\n            </tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
@@ -48961,6 +48967,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         jQueryBehavior: {
             '@ui.selectProvider': {
                 'multiselect': {
@@ -49175,7 +49182,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по СМИ. '+
 ((__t=( typeof(key_word__in)!== 'undefined' ?  key_word__in : '' ))==null?'':__t)+
-'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div class="col-sm-4">\n            ';
+'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div class="col-sm-4">\n            ';
  if (permissions.social_demo) { 
 __p+='\n                <select id="publication-provider-type" name="provider-type">\n                    <option value="admixer">Admixer</option>\n                    <option value="fg">Factum Group</option>\n                </select>\n            ';
  } 
@@ -49353,6 +49360,7 @@ var Table = Marionette.CompositeView.extend({
         },
         PlotBehavior: {},
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -49590,7 +49598,7 @@ return __p;
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="admixer-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="admixer-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                </tr>\n                <tr>\n                    <th>'+
+__p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="admixer-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="admixer-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                </tr>\n                <tr>\n                    <th>'+
 ((__t=( keyContext() ))==null?'':__t)+
 '</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="demo-flot-chart" id="demo-donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
@@ -49851,6 +49859,7 @@ var Table = Marionette.CompositeView.extend({
             }
         },
         ToggleBehavior: {},
+        ExportBehavior: {},
         DatePickerBehavior: {}
     },
 
@@ -50241,7 +50250,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям. '+
 ((__t=( typeof(publication)!== 'undefined' ?  publication : (typeof(key_word__in)!== 'undefined' ?  key_word__in : '') ))==null?'':__t)+
-'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="fg-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="fg-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                    <th data-index="9"></th>\n                    <th data-index="10"></th>\n                    <th data-index="11"></th>\n                </tr>\n                <tr>\n                    ';
+'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="fg-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="fg-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                    <th data-index="9"></th>\n                    <th data-index="10"></th>\n                    <th data-index="11"></th>\n                </tr>\n                <tr>\n                    ';
  if (typeof(key_word__in) !== "undefined") { 
 __p+='<th>Темы/Компании</th>';
  } 
@@ -52277,6 +52286,231 @@ module.exports = Marionette.Behavior.extend({
 
 /***/ }),
 /* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Marionette = __webpack_require__(2);
+var querystring = __webpack_require__(183);
+
+module.exports = Marionette.Behavior.extend({
+
+    ui: {
+        "export_btn": ".widget .btn-export-csv"
+    },
+
+    events: {
+        'click @ui.export_btn': 'exportCollection'
+    },
+
+    exportCollection: function(e) {
+        var params = this.view.model.attributes;
+        params.per_page = 10000;
+        params.format = "csv";
+        var downloadUrl  = this.view.collection.url + "?" + querystring.stringify(params);
+        var a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = "pyramid_data_export_" + (new Date()).getTime() + ".csv";
+        a.setAttribute("data-bypass", "");
+        document.body.appendChild(a);
+        a.click();
+    }
+});
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.decode = exports.parse = __webpack_require__(184);
+exports.encode = exports.stringify = __webpack_require__(185);
+
+
+/***/ }),
+/* 184 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+// If obj.hasOwnProperty has been overridden, then calling
+// obj.hasOwnProperty(prop) will break.
+// See: https://github.com/joyent/node/issues/1707
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+module.exports = function(qs, sep, eq, options) {
+  sep = sep || '&';
+  eq = eq || '=';
+  var obj = {};
+
+  if (typeof qs !== 'string' || qs.length === 0) {
+    return obj;
+  }
+
+  var regexp = /\+/g;
+  qs = qs.split(sep);
+
+  var maxKeys = 1000;
+  if (options && typeof options.maxKeys === 'number') {
+    maxKeys = options.maxKeys;
+  }
+
+  var len = qs.length;
+  // maxKeys <= 0 means that we should not limit keys count
+  if (maxKeys > 0 && len > maxKeys) {
+    len = maxKeys;
+  }
+
+  for (var i = 0; i < len; ++i) {
+    var x = qs[i].replace(regexp, '%20'),
+        idx = x.indexOf(eq),
+        kstr, vstr, k, v;
+
+    if (idx >= 0) {
+      kstr = x.substr(0, idx);
+      vstr = x.substr(idx + 1);
+    } else {
+      kstr = x;
+      vstr = '';
+    }
+
+    k = decodeURIComponent(kstr);
+    v = decodeURIComponent(vstr);
+
+    if (!hasOwnProperty(obj, k)) {
+      obj[k] = v;
+    } else if (isArray(obj[k])) {
+      obj[k].push(v);
+    } else {
+      obj[k] = [obj[k], v];
+    }
+  }
+
+  return obj;
+};
+
+var isArray = Array.isArray || function (xs) {
+  return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+
+/***/ }),
+/* 185 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+var stringifyPrimitive = function(v) {
+  switch (typeof v) {
+    case 'string':
+      return v;
+
+    case 'boolean':
+      return v ? 'true' : 'false';
+
+    case 'number':
+      return isFinite(v) ? v : '';
+
+    default:
+      return '';
+  }
+};
+
+module.exports = function(obj, sep, eq, name) {
+  sep = sep || '&';
+  eq = eq || '=';
+  if (obj === null) {
+    obj = undefined;
+  }
+
+  if (typeof obj === 'object') {
+    return map(objectKeys(obj), function(k) {
+      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      if (isArray(obj[k])) {
+        return map(obj[k], function(v) {
+          return ks + encodeURIComponent(stringifyPrimitive(v));
+        }).join(sep);
+      } else {
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+      }
+    }).join(sep);
+
+  }
+
+  if (!name) return '';
+  return encodeURIComponent(stringifyPrimitive(name)) + eq +
+         encodeURIComponent(stringifyPrimitive(obj));
+};
+
+var isArray = Array.isArray || function (xs) {
+  return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+function map (xs, f) {
+  if (xs.map) return xs.map(f);
+  var res = [];
+  for (var i = 0; i < xs.length; i++) {
+    res.push(f(xs[i], i));
+  }
+  return res;
+}
+
+var objectKeys = Object.keys || function (obj) {
+  var res = [];
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) res.push(key);
+  }
+  return res;
+};
+
+
+/***/ }),
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($, _) {var Marionette = __webpack_require__(2);

@@ -36,39 +36,44 @@ r.CSVRenderer.writer_opts = {
 }
 
 
-def handle_request_params(request):
-    params = dict(request.query_params.items())
-    params.pop("page")
-    params.pop("per_page")
+class ParamsHandler:
 
-    if not request.user.has_perm('global_permissions.free_time'):
-        params["posted_date__lte"] = "2018-12-30"
-        params["posted_date__gte"] = "2018-07-01"
-        # end_date = datetime.now().replace(day=1) - timedelta(days=1)
-        # params["posted_date__lte"] = end_date.strftime("%Y-%m-%d")
-        # params["posted_date__gte"] = end_date.replace(day=1).strftime("%Y-%m-%d")
-    if "market__in" in params:
-        params["market__in"] = json.loads(params.pop("market__in"))
-        if not len(params["market__in"]):
-            params.pop("market__in")
-    if "key_word__in" in params:
-        params["key_word__in"] = json.loads(params.pop("key_word__in"))
-        if not len(params["key_word__in"]):
-            params.pop("key_word__in")
-    if "region__in" in params:
-        params["region__in"] = json.loads(params.pop("region__in"))
-        if not len(params["region__in"]):
-            params.pop("region__in")
-    if "type__in" in params:
-        params["type__in"] = json.loads(params.pop("type__in"))
-        if not len(params["type__in"]):
-            params.pop("type__in")
-    if "topic__in" in params:
-        params["topic__in"] = json.loads(params.pop("topic__in"))
-        if not len(params["topic__in"]):
-            params.pop("topic__in")
+    def handle_request_params(self, request):
+        params = dict(request.query_params.items())
+        params.pop("page")
+        params.pop("per_page")
 
-    return params
+        if "format" in params:
+            self.format = params.pop("format")
+
+        if not request.user.has_perm('global_permissions.free_time'):
+            params["posted_date__lte"] = "2018-12-30"
+            params["posted_date__gte"] = "2018-07-01"
+            # end_date = datetime.now().replace(day=1) - timedelta(days=1)
+            # params["posted_date__lte"] = end_date.strftime("%Y-%m-%d")
+            # params["posted_date__gte"] = end_date.replace(day=1).strftime("%Y-%m-%d")
+        if "market__in" in params:
+            params["market__in"] = json.loads(params.pop("market__in"))
+            if not len(params["market__in"]):
+                params.pop("market__in")
+        if "key_word__in" in params:
+            params["key_word__in"] = json.loads(params.pop("key_word__in"))
+            if not len(params["key_word__in"]):
+                params.pop("key_word__in")
+        if "region__in" in params:
+            params["region__in"] = json.loads(params.pop("region__in"))
+            if not len(params["region__in"]):
+                params.pop("region__in")
+        if "type__in" in params:
+            params["type__in"] = json.loads(params.pop("type__in"))
+            if not len(params["type__in"]):
+                params.pop("type__in")
+        if "topic__in" in params:
+            params["topic__in"] = json.loads(params.pop("topic__in"))
+            if not len(params["topic__in"]):
+                params.pop("topic__in")
+
+        return params
 
 
 class GeneralInfoRenderer(r.CSVRenderer):
@@ -178,7 +183,8 @@ class FactrumAdmixerSocialDetailsList(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class MarketsRating(generics.ListAPIView):
+class MarketsRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Market.objects
     serializer_class = MarketsRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -186,7 +192,7 @@ class MarketsRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if len(params):
             params["market_publications__posted_date__lte"] = params.pop("posted_date__lte")
@@ -200,7 +206,8 @@ class MarketsRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class ThemeCompanyRating(generics.ListAPIView):
+class ThemeCompanyRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = ThemeCompanyRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -208,7 +215,7 @@ class ThemeCompanyRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if len(params):
             self.queryset = Publication.objects.filter(**params).values(
@@ -220,7 +227,8 @@ class ThemeCompanyRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class RegionRating(generics.ListAPIView):
+class RegionRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = RegionRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -228,7 +236,7 @@ class RegionRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if "region__in" in params:
             params.pop("region__in")
@@ -243,7 +251,8 @@ class RegionRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class PublicationTypeRating(generics.ListAPIView):
+class PublicationTypeRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationTypeRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -251,7 +260,7 @@ class PublicationTypeRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if "type__in" in params:
             params.pop("type__in")
@@ -266,7 +275,8 @@ class PublicationTypeRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class PublicationTopicRating(generics.ListAPIView):
+class PublicationTopicRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationTopicRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -274,7 +284,7 @@ class PublicationTopicRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if "topic__in" in params:
             params.pop("topic__in")
@@ -289,7 +299,8 @@ class PublicationTopicRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class PublicationRating(generics.ListAPIView):
+class PublicationRating(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToPublicationAllow)
@@ -297,7 +308,7 @@ class PublicationRating(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         if len(params):
             self.queryset = Publication.objects.filter(**params).values(
@@ -311,7 +322,8 @@ class PublicationRating(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class SpecificSocialDemoRatingAdmixer(generics.ListAPIView):
+class SpecificSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = SocialDemoRatingAdmixerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -349,7 +361,7 @@ class SpecificSocialDemoRatingAdmixer(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         # TODO validate using form/serializer query params
         if not len(params):
@@ -403,7 +415,8 @@ class SpecificSocialDemoRatingAdmixer(generics.ListAPIView):
         return Response(queryset)
 
 
-class GeneralSocialDemoRatingAdmixer(generics.ListAPIView):
+class GeneralSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = SocialDemoRatingAdmixerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -441,7 +454,7 @@ class GeneralSocialDemoRatingAdmixer(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         aggregator = params.pop("aggregator", None)
 
@@ -496,7 +509,8 @@ class GeneralSocialDemoRatingAdmixer(generics.ListAPIView):
         return Response(queryset)
 
 
-class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView):
+class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -505,7 +519,7 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         # TODO validate using form/serializer query params
         if not len(params):
@@ -548,7 +562,8 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView):
         return Response(result)
 
 
-class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView):
+class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow,
                           IsRequestsToPublicationAllow, IsRequestsToThemeAllow)
@@ -558,7 +573,7 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
 
         # TODO validate using form/serializer query params
         if not len(params):
@@ -595,7 +610,8 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView):
+class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -604,7 +620,7 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
         params.pop("aggregator")
         queryset = []
         if len(params):
@@ -645,14 +661,17 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView):
         return Response(result)
 
 
-class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView):
+class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
     serializer_class = PublicationsSocialDemoRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToPublicationAllow)
     pagination_class = ConfiguredPageNumberPagination
+    fg_values_list = ('publication', 'views', 'sex', 'age', 'education', 'children_lt_16',
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
 
-    def get(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
+        params = self.handle_request_params(request)
         params.pop("aggregator")
 
         if len(params):
@@ -664,4 +683,28 @@ class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView):
         else:
             self.queryset = PublicationsSocialDemoRating.objects.all().order_by("-views")
 
-        return self.list(request, *args, **kwargs)
+        serializer = self.get_serializer(data=list(self.queryset.values()), many=True)
+        serializer.is_valid(raise_exception=True)
+
+        result = []
+        get_key = lambda x: x['publication']
+        for key, group in groupby(sorted(serializer.data, key=get_key), key=get_key):
+            item = dict(zip(self.fg_values_list, [{} for i in range(len(self.fg_values_list))]))
+            item['publication'] = key
+            item['views'] = 0
+            for row in group:
+                item['views'] += row['views']
+                for sd, sub_sd in row.items():
+                    if type(sub_sd) is dict:
+                        for k, v in sub_sd.items():
+                            try:
+                                item[sd][k] += v
+                            except KeyError:
+                                item[sd][k] = v
+            result.append(item)
+
+        page = self.paginate_queryset(result)
+        if page is not None:
+            return self.get_paginated_response(page)
+
+        return Response(result)
