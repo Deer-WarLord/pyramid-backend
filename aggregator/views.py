@@ -47,8 +47,8 @@ class ParamsHandler:
             self.format = params.pop("format")
 
         if not request.user.has_perm('global_permissions.free_time'):
-            params["posted_date__lte"] = "2018-12-30"
-            params["posted_date__gte"] = "2018-07-01"
+            params["posted_date__lte"] = "2018-08-30"
+            params["posted_date__gte"] = "2018-01-01"
             # end_date = datetime.now().replace(day=1) - timedelta(days=1)
             # params["posted_date__lte"] = end_date.strftime("%Y-%m-%d")
             # params["posted_date__gte"] = end_date.replace(day=1).strftime("%Y-%m-%d")
