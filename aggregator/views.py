@@ -29,6 +29,7 @@ from datetime import datetime, timedelta
 from uploaders.models import UploadedInfo
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 r.CSVRenderer.writer_opts = {
@@ -37,7 +38,6 @@ r.CSVRenderer.writer_opts = {
 
 
 class ParamsHandler:
-
     def handle_request_params(self, request):
         params = dict(request.query_params.items())
         params.pop("page")
@@ -88,6 +88,126 @@ class SocialDetailsRenderer(r.CSVRenderer):
     header = ['id_theme', 'theme', 'factrum_views', 'admixer_views', 'uniques_admixer', 'sex_factrum', 'sex_admixer',
               'age_factrum', 'age_admixer', 'region_factrum', 'region_admixer', 'income_factrum', 'income_admixer',
               'education', 'children_lt_16', 'marital_status', 'occupation', 'group', 'typeNP', 'platform', 'browser']
+
+
+class FGRenderer(r.PaginatedCSVRenderer):
+    labels = {
+        "title__title": "Ключи",
+        "publication": "СМИ",
+        "views": "Просмотры",
+        "sex.male": "Мужчин",
+        "sex.female": "Женщин",
+        "age.15-17": "Возраст от 15 до 17",
+        "age.18-24": "Возраст от 18 до 24",
+        "age.25-34": "Возраст от 25 до 34",
+        "age.35-44": "Возраст от 35 до 44",
+        "age.45+": "Возраст после 45",
+        "education.lte9": "С не полным среднем",
+        "education.11": "С среднем",
+        "education.bachelor": "С не полным высшим",
+        "education.master": "С высшим",
+        "children_lt_16.yes": "Дети младше 16 Есть",
+        "children_lt_16.no": "Дети младше 16 Нету",
+        "marital_status.single": "Не женатых/замужем",
+        "marital_status.married": "Женатых/Замужем",
+        "marital_status.widow(er)": "Вдовцов/Вдов",
+        "marital_status.divorced": "Разведенных",
+        "marital_status.liveTogether": "Проживающих вместе",
+        "occupation.businessOwner": "Владелецев бизнеса с наёмными сотрудниками",
+        "occupation.entrepreneur": "Частных предпринимателей",
+        "occupation.hiredManager": "Наёмных руководителей",
+        "occupation.middleManager": "Руководителей среднего звена",
+        "occupation.masterDegreeSpecialist": "Специалистов с высшим образованием",
+        "occupation.employee": "Служащих",
+        "occupation.skilledWorker": "Квалифицированных рабочих",
+        "occupation.otherWorkers": "Других рабочих и технического персонала",
+        "occupation.mobileWorker": "Мобильных работников",
+        "occupation.militaryPoliceman": "Военнослужащих/Сотрудников правоохранительных органов",
+        "occupation.student": "Студентов/Школьников",
+        "occupation.pensioner": "Пенсионеров",
+        "occupation.disabled": "Инвалидов",
+        "occupation.housewife": "Домохозяек",
+        "occupation.maternityLeave": "В декретном отпуске",
+        "occupation.temporarilyUnemployed": "Временно безработных/ищущих работу",
+        "occupation.other": "Другие",
+        "group.1": "Не имеют достаточно денег для приобретения продуктов",
+        "group.2": "Имеют достаточно денег для приобретения продуктов",
+        "group.3": "Имеют достаточно денег для приобретения продуктов и одежды",
+        "group.4": "Имеют достаточно денег для приобретения товаров длительного пользования",
+        "group.5": "Могут позволить себе покупать действительно дорогие вещи",
+        "income.noAnswer": "Доход Не ответили",
+        "income.0-1000": "Доход до 1000",
+        "income.1001-2000": "Доход от 1000 до 2000",
+        "income.2001-3000": "Доход от 2000 до 3000",
+        "income.3001-4000": "Доход от 3000 до 4000",
+        "income.4001-5000": "Доход от 4000 до 5000",
+        "income.gt5001": "Доход более 5000",
+        "region.west": "Запад",
+        "region.center": "Центр",
+        "region.east": "Восток",
+        "region.south": "Юг",
+        "typeNP.50+": "Тип НП 50+",
+        "typeNP.50-": "Тип НП 50-"
+    }
+
+
+class AdmixerRenderer(r.PaginatedCSVRenderer):
+    labels = {
+        "uniques": "Уникальных пользователей",
+        "views": "Просмотров",
+        "0": "Пол Неизвестно",
+        "1": "Мужчин",
+        "2": "Женщин",
+        "age_groups.0": "Возраст Неизвестно",
+        "age_groups.1": "Возраст до 18",
+        "age_groups.2": "Возраст от 18 до 24",
+        "age_groups.3": "Возраст от 25 до 34",
+        "age_groups.4": "Возраст от 35 до 44",
+        "age_groups.5": "Возраст после 45",
+        "browsers.0": "Браузер Неизвестно",
+        "browsers.1": "IE",
+        "browsers.2": "Firefox",
+        "browsers.3": "Chrome",
+        "browsers.4": "Safari",
+        "browsers.5": "Opera",
+        "browsers.6": "Yandex",
+        "browsers.7": "IE7andLower",
+        "browsers.8": "IE8",
+        "browsers.9": "IE9",
+        "browsers.10": "IE10",
+        "browsers.11": "IE11",
+        "browsers.12": "Edge",
+        "platforms.0": "Неизвестно",
+        "platforms.1": "IPad",
+        "platforms.2": "IPod",
+        "platforms.3": "IPhone",
+        "platforms.4": "Windows_Phone_7",
+        "platforms.5": "Android_tablet",
+        "platforms.6": "Android_phone",
+        "platforms.7": "BlackBerry",
+        "platforms.8": "Symbian",
+        "platforms.9": "Bada",
+        "platforms.10": "Win8_tablet",
+        "platforms.11": "Win_phone_8",
+        "platforms.12": "Palm",
+        "platforms.13": "Motorola",
+        "platforms.14": "WinCE",
+        "platforms.15": "Win95",
+        "platforms.16": "Win98",
+        "platforms.17": "WinME",
+        "platforms.18": "Win2000",
+        "platforms.19": "WinXP",
+        "platforms.20": "WinVista",
+        "platforms.21": "Win7",
+        "platforms.22": "Win8",
+        "platforms.23": "WinRT",
+        "platforms.24": "Mac",
+        "platforms.25": "Linux",
+        "platforms.26": "Irix",
+        "platforms.27": "Sun",
+        "platforms.28": "Win10",
+        "platforms.29": "Win_phone_10"
+    }
 
 
 class HomeView(LoginRequiredMixin, TemplateView):
@@ -327,14 +447,14 @@ class PublicationRating(generics.ListAPIView, ParamsHandler):
 
 
 class SpecificSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, AdmixerRenderer)
     serializer_class = SocialDemoRatingAdmixerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow)
     pagination_class = ConfiguredPageNumberPagination
     admixer_values_list = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views')
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -356,7 +476,7 @@ class SpecificSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
             item = dict(zip(self.admixer_values_list, row[1:]))
             for key in self.admixer_values_list[:-2]:
                 results[key].append(item[key])
-            for key in self.admixer_values_list[len(self.admixer_values_list)-2:]:
+            for key in self.admixer_values_list[len(self.admixer_values_list) - 2:]:
                 results[key] += (item[key])
 
         logger.info("Received %d records from ClickHouse", len(results))
@@ -420,14 +540,14 @@ class SpecificSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
 
 
 class GeneralSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, AdmixerRenderer)
     serializer_class = SocialDemoRatingAdmixerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow)
     pagination_class = ConfiguredPageNumberPagination
     admixer_values_list = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views')
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -449,7 +569,7 @@ class GeneralSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
             item = dict(zip(self.admixer_values_list, row[1:]))
             for key in self.admixer_values_list[:-2]:
                 results[key].append(item[key])
-            for key in self.admixer_values_list[len(self.admixer_values_list)-2:]:
+            for key in self.admixer_values_list[len(self.admixer_values_list) - 2:]:
                 results[key] += (item[key])
 
         logger.info("Received %d records from ClickHouse", len(results))
@@ -514,7 +634,7 @@ class GeneralSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
 
 
 class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, FGRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -567,7 +687,7 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
 
 
 class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, FGRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow,
                           IsRequestsToPublicationAllow, IsRequestsToThemeAllow)
@@ -615,7 +735,7 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHa
 
 
 class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, FGRenderer)
     serializer_class = SocialDemoRatingFGSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
@@ -666,9 +786,10 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
 
 
 class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, FGRenderer)
     serializer_class = PublicationsSocialDemoRatingSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToPublicationAllow)
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToPublicationAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('publication', 'views', 'sex', 'age', 'education', 'children_lt_16',
                       'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
