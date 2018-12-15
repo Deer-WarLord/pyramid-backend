@@ -2,7 +2,10 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from import_export import resources
 from daterange_filter.filter import DateRangeFilter
+from import_export.admin import ExportMixin, ImportExportModelAdmin
+from import_export.fields import Field
 
 from noksfishes.models import *
 from admixer.tasks import async_get_admixer_data
@@ -38,8 +41,27 @@ class MarketAdmin(admin.ModelAdmin):
     ordering = ['id', 'name']
 
 
+class PublicationsResource(resources.ModelResource):
+    id_article = Field(attribute='id', column_name='id_article')
+    id_title = Field()
+    title = Field(attribute='key_word', column_name='title')
+    site = Field(attribute='title', column_name='site')
+
+    class Meta:
+        model = Publication
+        fields = ['url', 'posted_date']
+        export_order = ('id_article', 'id_title', 'posted_date', 'site', 'title', 'url')
+        widgets = {
+            'posted_date': {'format': '%Y-%m-%d'},
+        }
+
+    def dehydrate_id_title(self, obj):
+        return Theme.objects.get_or_create(title=obj.key_word)[0].id
+
+
 @admin.register(Publication)
-class PublicationsAdmin(admin.ModelAdmin):
+class PublicationsAdmin(ImportExportModelAdmin):
+    resource_class = PublicationsResource
     list_display = ["key_word", "title", "inserted_date", "posted_date", "posted_time",
                     "category", "url", "priority", "advertisement", "size", "symbols", "publication", "source",
                     "country", "region", "city", "regionality", "type", "topic", "number", "printing", "page",
@@ -60,6 +82,56 @@ class PublicationsAdmin(admin.ModelAdmin):
 
 def get_admixer_data(modeladmin, request, queryset):
     async_get_admixer_data.delay()
+
+
+class TvPublications(Publication):
+    class Meta:
+        proxy = True
+
+
+class TvPublicationsResource(resources.ModelResource):
+    id_article = Field(attribute='id', column_name='id_article')
+    id_title = Field()
+    posted_time = Field(attribute='inserted_date', column_name='posted_time')
+    end_time = Field(attribute='posted_time', column_name='end_time')
+
+
+    class Meta:
+        model = Publication
+        fields = ['key_word', 'title', 'posted_date', 'publication']
+        export_order = ('id_article', 'id_title', 'key_word', 'title', 'posted_date', 'posted_time', 'end_time', 'publication')
+        widgets = {
+            'inserted_date': {'format': '%H:%M:%S'},
+            'posted_time': {'format': '%H:%M:%S'},
+            'posted_date': {'format': '%Y-%m-%d'},
+        }
+
+    def dehydrate_id_title(self, obj):
+        return Theme.objects.get_or_create(title=obj.key_word)[0].id
+
+
+@admin.register(TvPublications)
+class TvPublicationsAdmin(ImportExportModelAdmin):
+    resource_class = TvPublicationsResource
+    list_display = ["key_word", "title", "inserted_date", "posted_date", "posted_time",
+                    "category", "url", "priority", "advertisement", "size", "symbols", "publication", "source",
+                    "country", "region", "city", "regionality", "type", "topic", "number", "printing", "page",
+                    "fill_rate", "user", "author_tone", "event_tone", "general_tone", "objectivity", "mention_type",
+                    "eventivity", "subject", "plot", "author", "top_managers", "companies", "heading", "w", "y", "z",
+                    "fc", "r", "ce", "f", "r_small", "s", "e", "ta", "ts", "tc", "tmk", "tmc", "l", "d", "ktl", "kt",
+                    "kl", "m", "pg", "h", "result", "periodicity", "activity", "marginality", "cost", "visitors",
+                    "citation_index", "width", "k1", "k2", "k3", "dtek_kof", "created_date", "edit_date", "note"]
+
+    search_fields = ['upload_info__title', 'key_word', 'url', 'category', 'country', 'region', 'city', 'type', 'topic']
+    date_hierarchy = 'posted_date'
+    list_filter = [('posted_date', DateRangeFilter), 'upload_info__title', 'key_word', 'category', 'country', 'region',
+                   'city', 'type', 'topic']
+    ordering = ["w", "y", "z", "fc", "r", "ce", "f", "r_small", "s", "e", "ta", "ts", "tc", "tmk", "tmc", "l", "d",
+                "ktl", "kt", "kl", "m", "pg", "h", "result", "periodicity", "activity", "marginality", "cost",
+                "visitors", "citation_index", "width", "k1", "k2", "k3", "dtek_kof"]
+
+    def get_queryset(self, request):
+        return self.model.objects.filter(type="ТВ")
 
 
 @admin.register(ShukachPublication)
