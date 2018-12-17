@@ -143,3 +143,12 @@ class ShukachPublicationAdmin(admin.ModelAdmin):
     list_filter = [('publication__posted_date', DateRangeFilter), 'publication__key_word']
     date_hierarchy = 'publication__posted_date'
     actions = [get_admixer_data]
+
+
+@admin.register(AdeptPublication)
+class AdeptPublicationAdmin(admin.ModelAdmin):
+    list_display = ['adept_id']
+    search_fields = ['publication__id', 'publication__key_word', 'publication__title', 'publication__url', 'adept_id']
+    ordering = ['publication__id', 'publication__key_word', 'publication__title', 'publication__url', 'adept_id']
+    list_filter = [('publication__posted_date', DateRangeFilter), 'publication__key_word']
+    date_hierarchy = 'publication__posted_date'
