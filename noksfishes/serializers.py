@@ -82,6 +82,14 @@ class ShukachIdSerializer(serializers.ModelSerializer):
     shukach_id = serializers.IntegerField()
 
 
+class IdAdeptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdeptPublication
+        fields = ['id_adept']
+
+    id_adept = serializers.IntegerField()
+
+
 class ShukachPublicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publication
@@ -92,6 +100,7 @@ class ShukachPublicationSerializer(serializers.ModelSerializer):
     posted_date = DateTimeField(allow_null=True)
     inserted_date = DateTimeField(allow_null=True)
     shukach_id = ShukachIdSerializer()
+    id_adept = IdAdeptSerializer(required=False)
 
     def to_internal_value(self, data):
 
@@ -114,14 +123,18 @@ class ShukachPublicationSerializer(serializers.ModelSerializer):
             pass
 
         data["shukach_id"] = {"shukach_id": data["shukach_id"]}
-        data["id_adept"] = {"id_adept": data["id_adept"]}
+        if "id_adept" in data:
+            data["id_adept"] = {"id_adept": data["id_adept"]}
 
         return super(ShukachPublicationSerializer, self).to_internal_value(data=data)
 
     def create(self, validated_data):
         shukach_id = validated_data.pop('shukach_id')['shukach_id']
-        id_adept = validated_data.pop('id_adept')['id_adept']
+        id_adept = None
+        if "id_adept" in validated_data:
+            id_adept = validated_data.pop('id_adept')['id_adept']
         publication = Publication.objects.create(**validated_data)
         ShukachPublication.objects.create(publication=publication, shukach_id=shukach_id)
-        AdeptPublication.objects.create(publication=publication, id_adept=id_adept)
+        if id_adept:
+            AdeptPublication.objects.create(publication=publication, id_adept=id_adept)
         return publication
