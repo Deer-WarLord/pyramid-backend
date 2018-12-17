@@ -114,11 +114,14 @@ class ShukachPublicationSerializer(serializers.ModelSerializer):
             pass
 
         data["shukach_id"] = {"shukach_id": data["shukach_id"]}
+        data["id_adept"] = {"id_adept": data["id_adept"]}
 
         return super(ShukachPublicationSerializer, self).to_internal_value(data=data)
 
     def create(self, validated_data):
         shukach_id = validated_data.pop('shukach_id')['shukach_id']
+        id_adept = validated_data.pop('id_adept')['id_adept']
         publication = Publication.objects.create(**validated_data)
         ShukachPublication.objects.create(publication=publication, shukach_id=shukach_id)
+        AdeptPublication.objects.create(publication=publication, id_adept=id_adept)
         return publication

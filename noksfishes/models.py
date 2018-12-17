@@ -140,6 +140,12 @@ class ShukachPublication(models.Model):
     shukach_id = models.IntegerField()
 
 
+class AdeptPublication(models.Model):
+
+    publication = models.OneToOneField(Publication, on_delete=models.CASCADE, primary_key=True)
+    adept_id = models.IntegerField()
+
+
 
 
 
