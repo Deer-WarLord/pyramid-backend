@@ -136,5 +136,5 @@ class ShukachPublicationSerializer(serializers.ModelSerializer):
         publication = Publication.objects.create(**validated_data)
         ShukachPublication.objects.create(publication=publication, shukach_id=shukach_id)
         if id_adept:
-            AdeptPublication.objects.create(publication=publication, id_adept=id_adept)
+            AdeptPublication.objects.create(publication=publication, adept_id=id_adept)
         return publication
