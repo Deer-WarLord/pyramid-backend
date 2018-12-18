@@ -8,6 +8,7 @@ import requests
 from django.core.files import File
 from django.db import transaction
 from django.conf import settings
+from django.core import mail
 
 from noksfishes.admin import SCSV
 from noksfishes.admin import PublicationsResource
@@ -56,3 +57,6 @@ def async_save_data_from_provider(data):
                 ftp.set_pasv(False)
                 ftp.storbinary('STOR %s.csv' % upload_info.title, binary_file)
                 logger.info("Send saved %s.csv via FTP" % upload_info.title)
+                mail.send_mail('Автоматическое письмо. Pyramid. Загрузка данных',
+                               'Файл %s.csv успешно загружен на сервре Factum' % upload_info.title,
+                               'pyramid@sendgrid.com', ['deerwarlord@gmail.com', 'olepole2009@gmail.com'], fail_silently=False)
