@@ -117,3 +117,4 @@ class AsyncUploadedInfoSerializerOwner(serializers.Serializer):
     title = serializers.CharField(max_length=256)
     provider = serializers.IntegerField()
     url = serializers.URLField()
+    send_to_provider = serializers.CharField(max_length=5, required=False, default="off")
