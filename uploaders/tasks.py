@@ -45,10 +45,12 @@ def async_save_data_from_provider(data):
         ftp.login(user=settings.FACTUM_USER, passwd=settings.FACTUM_PASSWORD)
         ftp.cwd("SourceData")
         logger.info("Connected to Factum FTP")
-        data_set = PublicationsResource().export(Publication.objects.filter(upload_info__title=upload_info.title), delimiter=";")
+        data_set = PublicationsResource().export(Publication.objects.filter(upload_info__title=upload_info.title))
         with open("/tmp/%s.csv" % upload_info.title, "w") as text_file:
             text_file.write(SCSV().export_data(data_set))
         logger.info("Temporary saved %s.csv" % upload_info.title)
         with open("/tmp/%s.csv" % upload_info.title, "rb") as binary_file:
+            logger.info("Open saved %s.csv via FTP" % upload_info.title)
+            ftp.set_pasv(False)
             ftp.storbinary('STOR %s.csv' % upload_info.title, binary_file)
             logger.info("Send saved %s.csv via FTP" % upload_info.title)
