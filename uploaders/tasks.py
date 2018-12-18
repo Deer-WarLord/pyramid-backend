@@ -59,4 +59,4 @@ def async_save_data_from_provider(data):
                 logger.info("Send saved %s.csv via FTP" % upload_info.title)
                 mail.send_mail('Автоматическое письмо. Pyramid. Загрузка данных',
                                'Файл %s.csv успешно загружен на сервре Factum' % upload_info.title,
-                               'pyramid@sendgrid.com', ['deerwarlord@gmail.com', 'olepole2009@gmail.com'], fail_silently=False)
+                               'pyramid@gmail.com', ['deerwarlord@gmail.com', 'olepole2009@gmail.com'], fail_silently=False)
