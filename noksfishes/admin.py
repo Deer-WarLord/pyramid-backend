@@ -4,11 +4,23 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from import_export import resources
 from daterange_filter.filter import DateRangeFilter
-from import_export.admin import ExportMixin, ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 
 from noksfishes.models import *
 from admixer.tasks import async_get_admixer_data
+
+from import_export.formats import base_formats
+
+
+class SCSV(base_formats.CSV):
+
+    def get_title(self):
+        return "scsv"
+
+    def export_data(self, dataset, **kwargs):
+        kwargs['delimiter'] = ';'
+        return self.get_format().export_set(dataset, **kwargs)
 
 
 @admin.register(AnalyzedInfo)
@@ -62,6 +74,7 @@ class PublicationsResource(resources.ModelResource):
 @admin.register(Publication)
 class PublicationsAdmin(ImportExportModelAdmin):
     resource_class = PublicationsResource
+    formats = (SCSV,)
     list_display = ["key_word", "title", "inserted_date", "posted_date", "posted_time",
                     "category", "url", "priority", "advertisement", "size", "symbols", "publication", "source",
                     "country", "region", "city", "regionality", "type", "topic", "number", "printing", "page",
@@ -129,6 +142,9 @@ class TvPublicationsAdmin(ImportExportModelAdmin):
     ordering = ["w", "y", "z", "fc", "r", "ce", "f", "r_small", "s", "e", "ta", "ts", "tc", "tmk", "tmc", "l", "d",
                 "ktl", "kt", "kl", "m", "pg", "h", "result", "periodicity", "activity", "marginality", "cost",
                 "visitors", "citation_index", "width", "k1", "k2", "k3", "dtek_kof"]
+
+    def get_import_formats(self):
+        return (SCSV,)
 
     def get_queryset(self, request):
         return self.model.objects.filter(type="ТВ")
