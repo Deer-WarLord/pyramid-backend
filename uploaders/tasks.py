@@ -9,6 +9,7 @@ from django.core.files import File
 from django.db import transaction
 from django.conf import settings
 
+from noksfishes.admin import SCSV
 from noksfishes.admin import PublicationsResource
 from noksfishes.models import Publication
 from uploaders.models import Provider
@@ -46,10 +47,8 @@ def async_save_data_from_provider(data):
         logger.info("Connected to Factum FTP")
         data_set = PublicationsResource().export(Publication.objects.filter(upload_info__title=upload_info.title), delimiter=";")
         with open("/tmp/%s.csv" % upload_info.title, "w") as text_file:
-            text_file.write(data_set.csv)
+            text_file.write(SCSV().export_data(data_set))
         logger.info("Temporary saved %s.csv" % upload_info.title)
         with open("/tmp/%s.csv" % upload_info.title, "rb") as binary_file:
             ftp.storbinary('STOR %s.csv' % upload_info.title, binary_file)
             logger.info("Send saved %s.csv via FTP" % upload_info.title)
-
-
