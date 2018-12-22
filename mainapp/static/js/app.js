@@ -45705,7 +45705,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "/*\t\n*\t################################################################################\n*\t\n*\tMy Custom Style for KINGADMIN\n*\t---------------------------------------------------------------------\n*\n*\tVersion\t\t1.0\n*\tAuthor\t\tYour Name\n*\t\n*\tOverride theme style or create your new styles. Direct change to main.css\n*\tis not recommended to avoid problems when theme updates arrived in the future\n*\t\n*\t################################################################################\n*/\n.logged-user img {\n    height: 25px;\n}\n\n.themesList {\n    min-width: 300px;\n}\n\n.publication, .publication-list, .market {\n    cursor: pointer;\n}\n\n.publication:hover, .publication-list:hover, .select {\n    background: #FFFEED;\n}\n\n.sd-item-row {\n    line-height: 30px;\n}", ""]);
+exports.push([module.i, "/*\t\n*\t################################################################################\n*\t\n*\tMy Custom Style for KINGADMIN\n*\t---------------------------------------------------------------------\n*\n*\tVersion\t\t1.0\n*\tAuthor\t\tYour Name\n*\t\n*\tOverride theme style or create your new styles. Direct change to main.css\n*\tis not recommended to avoid problems when theme updates arrived in the future\n*\t\n*\t################################################################################\n*/\n.logged-user img {\n    height: 25px;\n}\n\n.themesList {\n    min-width: 300px;\n}\n\n.publication, .publication-list, .market {\n    cursor: pointer;\n}\n\n.publication:hover, .publication-list:hover, .select {\n    background: #FFFEED;\n}\n\n.sd-item-row {\n    line-height: 30px;\n}\n\n.donut-chart {\n    height: 350px;\n    width: 100%;\n}", ""]);
 
 // exports
 
@@ -49414,7 +49414,8 @@ var Table = Marionette.CompositeView.extend({
         "reportRange": "#admixer-reportrange",
         "input": "#admixer-reportrange input",
         "rowFilter": "#admixer-datatable-social-demo .row-filter input",
-        "table": "#admixer-datatable-social-demo"
+        "table": "#admixer-datatable-social-demo",
+        "socialDemoDialog": "#admixer-social-demo-plot"
     },
 
     events: {
@@ -49677,7 +49678,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="admixer-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="admixer-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                </tr>\n                <tr>\n                    <th>'+
 ((__t=( keyContext() ))==null?'':__t)+
-'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="demo-flot-chart" id="demo-donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="demo-flot-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -49916,7 +49917,8 @@ var Table = Marionette.CompositeView.extend({
         "reportRange": "#fg-reportrange",
         "input": "#fg-reportrange input",
         "rowFilter": "#fg-datatable-social-demo_wrapper .row-filter input",
-        "table": "#fg-datatable-social-demo"
+        "table": "#fg-datatable-social-demo",
+        "socialDemoDialog": "#fg-social-demo-plot"
     },
 
     events: {
@@ -49940,6 +49942,7 @@ var Table = Marionette.CompositeView.extend({
                 }
             }
         },
+        PlotBehavior: {},
         ToggleBehavior: {},
         ExportBehavior: {},
         BreadCrumbBehavior: {},
@@ -50136,81 +50139,121 @@ __p+='<td>'+
 ((__t=( publication ))==null?'':_.escape(__t))+
 '</td>\n<td>'+
 ((__t=( views ))==null?'':_.escape(__t))+
-'</td>\n<td>\n    <table>\n        ';
+'</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getSex(sex), function(val, key) { 
-__p+='\n            <tr class="sd-item-row">\n                <td><span class="label label-info">'+
+__p+='\n            <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n                <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n                <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n            </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getAge(age), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getEducation(education), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getСhildrenLt16(children_lt_16), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getMaritalStatus(marital_status), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getOccupation(occupation), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getGroup(group), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getIncome(income), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getRegion(region), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getTypeNP(typeNP), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
@@ -50238,81 +50281,121 @@ __p+='<td>'+
  } 
 __p+='\n<td>'+
 ((__t=( views ))==null?'':_.escape(__t))+
-'</td>\n<td>\n    <table>\n        ';
+'</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getSex(sex), function(val, key) { 
-__p+='\n            <tr class="sd-item-row">\n                <td><span class="label label-info">'+
+__p+='\n            <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n                <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n                <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n            </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getAge(age), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getEducation(education), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getСhildrenLt16(children_lt_16), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getMaritalStatus(marital_status), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getOccupation(occupation), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getGroup(group), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getIncome(income), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getRegion(region), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
-__p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
+__p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getTypeNP(typeNP), function(val, key) { 
-__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
+((__t=( key ))==null?'':_.escape(__t))+
+'" data-index="'+
+((__t=( val ))==null?'':_.escape(__t))+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
@@ -50346,7 +50429,7 @@ __p+='\n                    ';
  if (typeof(aggregator) !== "undefined" && aggregator === "publication") { 
 __p+='<th>СМИ</th>';
  } 
-__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="fg-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -52647,8 +52730,7 @@ module.exports = Marionette.Behavior.extend({
 module.exports = Marionette.Behavior.extend({
 
     ui: {
-        "socialDemoItem": ".social-demo-item",
-        "socialDemoDialog": "#admixer-social-demo-plot"
+        "socialDemoItem": ".social-demo-item"
     },
 
     events: {
@@ -52661,52 +52743,40 @@ module.exports = Marionette.Behavior.extend({
 
     showPlot: function(e) {
         e.preventDefault();
-
-        var data = [];
+        var self = this;
         var total = 0;
+        var data = [];
 
         $(event.target).closest("table").find("tr").each(function(index, item) {
             data.push({label: item.dataset.role, data: item.dataset.index});
             total += +item.dataset.index;
         });
 
-        var p_data = _.map(data, function(item){ return {label: item.label, data: Math.round(item.data/total * 100.0)} });
+        data = _.map(data, function(item){ return {label: item.label, data: Math.round(item.data/total * 100.0)} });
 
-        this.ui.socialDemoDialog.modal();
+        this.ui.socialDemoDialog.modal().on('shown.bs.modal', function (event) {
 
-        var data = [
-            { label: "Stock",  data: 55},
-            { label: "Mutual Fund",  data: 8},
-            { label: "Fixed Assets", data: 18},
-            { label: "Forex", data: 12},
-            { label: "Others", data: 7}
-        ];
-
-        $.plot('#demo-donut-chart', data, {
-            series: {
-                pie: {
-                    show: true,
-                    //innerRadius: 0,
-                    stroke: {
-                        width: 0,
-                        color: "#F9F9F9"
-                    },
-                    label: {
+            self.ui.socialDemoDialog.find(".donut-chart").plot(data, {
+                series: {
+                    pie: {
                         show: true,
-                        radius: 3/4,
-                        formatter: this._donutLabelFormatter
+                        innerRadius: 30,
+                        label: {
+                            show: true,
+                            formatter: this._donutLabelFormatter
+                        }
                     }
                 },
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                hoverable: true
-            },
-            colors: ["#f98114", "#88f914", "#f91465", "#1461f9", "#f9d614"],
+                legend: {
+                    show: false
+                },
+                grid: {
+                    hoverable: true
+                }
+            });
         });
-    },
+
+    }
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
