@@ -25,10 +25,11 @@ class PublicationSerializer(serializers.ModelSerializer):
     edit_date = DateTimeField(allow_null=True)
 
 
-class PublicationTitleDateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Publication
-        fields = ['title', 'posted_date']
+class PublicationTitleDateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=2048)
+    posted_date = serializers.DateField()
+    count = serializers.IntegerField()
+
 
 
 class ExportPublicationSerializer(serializers.ModelSerializer):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.db.models import Count
 from django.http import HttpResponse
 
 from noksfishes.serializers import *
@@ -62,7 +63,9 @@ class PublicationTitleDateList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
 
         if len(request.query_params):
-            self.queryset = Publication.objects.filter(**dict(request.query_params.items())).distinct("title")
+            self.queryset = Publication.objects.filter(
+                **dict(request.query_params.items())
+            ).values('title', 'posted_date').annotate(count=Count("title")).order_by("-count")
 
         return self.list(request, *args, **kwargs)
 
