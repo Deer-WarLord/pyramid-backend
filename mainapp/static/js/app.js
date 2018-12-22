@@ -45705,7 +45705,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "/*\t\n*\t################################################################################\n*\t\n*\tMy Custom Style for KINGADMIN\n*\t---------------------------------------------------------------------\n*\n*\tVersion\t\t1.0\n*\tAuthor\t\tYour Name\n*\t\n*\tOverride theme style or create your new styles. Direct change to main.css\n*\tis not recommended to avoid problems when theme updates arrived in the future\n*\t\n*\t################################################################################\n*/\n.logged-user img {\n    height: 25px;\n}\n\n.themesList {\n    min-width: 300px;\n}\n\n.publication, .publication-list, .market {\n    cursor: pointer;\n}\n\n.publication:hover, .publication-list:hover, .select {\n    background: #FFFEED;\n}", ""]);
+exports.push([module.i, "/*\t\n*\t################################################################################\n*\t\n*\tMy Custom Style for KINGADMIN\n*\t---------------------------------------------------------------------\n*\n*\tVersion\t\t1.0\n*\tAuthor\t\tYour Name\n*\t\n*\tOverride theme style or create your new styles. Direct change to main.css\n*\tis not recommended to avoid problems when theme updates arrived in the future\n*\t\n*\t################################################################################\n*/\n.logged-user img {\n    height: 25px;\n}\n\n.themesList {\n    min-width: 300px;\n}\n\n.publication, .publication-list, .market {\n    cursor: pointer;\n}\n\n.publication:hover, .publication-list:hover, .select {\n    background: #FFFEED;\n}\n\n.sd-item-row {\n    line-height: 30px;\n}", ""]);
 
 // exports
 
@@ -49613,25 +49613,25 @@ __p+='<td>'+
 ((__t=( income_groups ))==null?'':_.escape(__t))+
 '</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getAgesGroup(age_groups), function(val, key) { 
-__p+='\n            <tr data-role="'+
+__p+='\n            <tr class="sd-item-row" data-role="'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '" data-index="'+
 ((__t=( val ))==null?'':_.escape(__t))+
-'">\n                <td><span class="badge element-bg-color-blue">'+
+'">\n                <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n                <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n                <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n            </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getGendersGroup(gender_groups), function(val, key) { 
-__p+='\n        <tr data-role="'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '" data-index="'+
 ((__t=( val ))==null?'':_.escape(__t))+
-'">\n            <td><span class="badge element-bg-color-blue">'+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
@@ -49639,25 +49639,25 @@ __p+='\n    </table>\n</td>\n<td>'+
 ((__t=( regions ))==null?'':_.escape(__t))+
 '</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getPlatformsGroup(platforms), function(val, key) { 
-__p+='\n        <tr data-role="'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '" data-index="'+
 ((__t=( val ))==null?'':_.escape(__t))+
-'">\n            <td><span class="badge element-bg-color-blue">'+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table class="social-demo-item">\n        ';
  _.mapObject(getBrowsersGroup(browsers), function(val, key) { 
-__p+='\n        <tr data-role="'+
+__p+='\n        <tr class="sd-item-row" data-role="'+
 ((__t=( key ))==null?'':_.escape(__t))+
 '" data-index="'+
 ((__t=( val ))==null?'':_.escape(__t))+
-'">\n            <td><span class="badge element-bg-color-blue">'+
+'">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
@@ -50138,81 +50138,81 @@ __p+='<td>'+
 ((__t=( views ))==null?'':_.escape(__t))+
 '</td>\n<td>\n    <table>\n        ';
  _.mapObject(getSex(sex), function(val, key) { 
-__p+='\n            <tr>\n                <td><span class="badge element-bg-color-blue">'+
+__p+='\n            <tr class="sd-item-row">\n                <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n                <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n                <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n            </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getAge(age), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getEducation(education), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getСhildrenLt16(children_lt_16), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getMaritalStatus(marital_status), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getOccupation(occupation), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getGroup(group), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getIncome(income), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getRegion(region), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getTypeNP(typeNP), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
@@ -50240,81 +50240,81 @@ __p+='\n<td>'+
 ((__t=( views ))==null?'':_.escape(__t))+
 '</td>\n<td>\n    <table>\n        ';
  _.mapObject(getSex(sex), function(val, key) { 
-__p+='\n            <tr>\n                <td><span class="badge element-bg-color-blue">'+
+__p+='\n            <tr class="sd-item-row">\n                <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n                <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n                <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n            </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getAge(age), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getEducation(education), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getСhildrenLt16(children_lt_16), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getMaritalStatus(marital_status), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getOccupation(occupation), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getGroup(group), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getIncome(income), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getRegion(region), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
 __p+='\n    </table>\n</td>\n<td>\n    <table>\n        ';
  _.mapObject(getTypeNP(typeNP), function(val, key) { 
-__p+='\n        <tr>\n            <td><span class="badge element-bg-color-blue">'+
+__p+='\n        <tr class="sd-item-row">\n            <td><span class="label label-info">'+
 ((__t=( key ))==null?'':_.escape(__t))+
-'</span></td>\n            <td><span class="badge element-bg-color-seagreen">'+
+'</span></td>\n            <td><span class="label label-primary">'+
 ((__t=( val ))==null?'':_.escape(__t))+
 '</span></td>\n        </tr>\n        ';
  }) 
