@@ -49256,7 +49256,7 @@ __p+='<div class="widget widget-table">\n    <div class="widget-header">\n      
  if (permissions.social_demo) { 
 __p+='\n                <select id="publication-provider-type" name="provider-type">\n                    <option value="admixer">Admixer</option>\n                    <option value="fg">Factum Group</option>\n                </select>\n            ';
  } 
-__p+='\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-sd" class="btn btn-default">Перейти</button>\n        </div>\n\n        <div id="publication-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publications" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="3"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="4"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="5"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="6"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="7"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                </tr>\n                <tr>\n                    <th>СМИ</th>\n                    <th>Число публикаций</th>\n                    <th>Страна</th>\n                    <th>Регион</th>\n                    <th>Город</th>\n                    <th>Тип издания</th>\n                    <th>Вид издания</th>\n                    <th>Сводный тип</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="row paginator"></div>\n        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title" id="myModalLabel">СМИ</h4>\n                    </div>\n                    <div class="modal-body">\n                        <table id="publications-list" class="table table-hover table-bordered datatable">\n                            <thead>\n                                <tr>\n                                    <th>Название публикации</th>\n                                    <th>Дата публикаций</th>\n                                    <th>Число публикаций</th>\n                                </tr>\n                            </thead>\n                            <tbody></tbody>\n                        </table>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Закрыть</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n';
+__p+='\n        </div>\n\n        <div class="col-sm-4">\n            <button type="button" id="query-sd" class="btn btn-default">Перейти</button>\n        </div>\n\n        <div id="publication-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="datatable-publications" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="3"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="4"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="5"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="6"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="7"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                </tr>\n                <tr class="row-headers">\n                    <th>СМИ</th>\n                    <th>Число публикаций</th>\n                    <th>Страна</th>\n                    <th>Регион</th>\n                    <th>Город</th>\n                    <th>Тип издания</th>\n                    <th>Вид издания</th>\n                    <th>Сводный тип</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="row paginator"></div>\n        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title" id="myModalLabel">СМИ</h4>\n                    </div>\n                    <div class="modal-body">\n                        <table id="publications-list" class="table table-hover table-bordered datatable">\n                            <thead>\n                                <tr>\n                                    <th>Название публикации</th>\n                                    <th>Дата публикаций</th>\n                                    <th>Число публикаций</th>\n                                </tr>\n                            </thead>\n                            <tbody></tbody>\n                        </table>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Закрыть</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n';
 }
 return __p;
 };
@@ -49678,7 +49678,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="admixer-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="admixer-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                </tr>\n                <tr>\n                    <th>'+
 ((__t=( keyContext() ))==null?'':__t)+
-'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="demo-flot-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -50417,7 +50417,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям. '+
 ((__t=( typeof(publication)!== 'undefined' ?  publication : (typeof(key_word__in)!== 'undefined' ?  key_word__in : '') ))==null?'':__t)+
-'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="fg-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="fg-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                    <th data-index="9"></th>\n                    <th data-index="10"></th>\n                    <th data-index="11"></th>\n                </tr>\n                <tr>\n                    ';
+'</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="fg-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="fg-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                    <th data-index="9"></th>\n                    <th data-index="10"></th>\n                    <th data-index="11"></th>\n                </tr>\n                <tr class="row-headers">\n                    ';
  if (typeof(key_word__in) !== "undefined") { 
 __p+='<th>Темы/Компании</th>';
  } 
@@ -50429,7 +50429,7 @@ __p+='\n                    ';
  if (typeof(aggregator) !== "undefined" && aggregator === "publication") { 
 __p+='<th>СМИ</th>';
  } 
-__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="fg-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="fg-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -52727,6 +52727,65 @@ module.exports = Marionette.Behavior.extend({
 
 /* WEBPACK VAR INJECTION */(function($, _) {var Marionette = __webpack_require__(2);
 
+var donutConfig = {
+    series: {
+        pie: {
+            show: true,
+            innerRadius: 30,
+            label: {
+                show: true,
+                formatter: function (label, series) {
+                    return "<div class=\"donut-label\">" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+                }
+            }
+        }
+    },
+    legend: {
+        show: false
+    },
+    grid: {
+        hoverable: true
+    }
+};
+
+var gistConfig = {
+    series: {
+        bars: {
+            show: true,
+            barWidth: .2
+        }
+    },
+    bars: {
+        show: true,
+        horizontal: true,
+        barWidth: 0.2,
+        fill: true,
+        order: true,
+        lineWidth: 0,
+        fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] }
+    },
+    grid: {
+        hoverable: true,
+        clickable: true,
+        borderWidth: 0,
+        tickColor: "#E4E4E4"
+
+    },
+    xaxis: {
+        autoscaleMargin: 0.2
+    },
+    yaxis: {
+        ticks: null
+    },
+    legend: {
+        show: false
+    },
+    tooltip: true,
+    tooltipOpts: {
+        content: '%s: %x'
+    }
+};
+
 module.exports = Marionette.Behavior.extend({
 
     ui: {
@@ -52737,45 +52796,49 @@ module.exports = Marionette.Behavior.extend({
         'click @ui.socialDemoItem': 'showPlot'
     },
 
-    _donutLabelFormatter: function (label, series) {
-        return "<div class=\"donut-label\">" + label + "<br/>" + Math.round(series.percent) + "%</div>";
-    },
-
     showPlot: function(e) {
         e.preventDefault();
         var self = this;
         var total = 0;
         var data = [];
+        var sdTable = $(event.target).closest("table");
 
-        $(event.target).closest("table").find("tr").each(function(index, item) {
+        sdTable.find("tr").each(function(index, item) {
             data.push({label: item.dataset.role, data: item.dataset.index});
             total += +item.dataset.index;
         });
 
-        data = _.map(data, function(item){ return {label: item.label, data: Math.round(item.data/total * 100.0)} });
+        var $td = sdTable.parent();
+        var title = $($td.parents("div").get(1)).find('tr.row-headers > th').eq($td.index()).text();
+
+        var donutData = _.map(data, function(item){ return {label: item.label, data: Math.round(item.data/total * 100.0)} });
+        var index = 0;
+        var gistData = [
+            {
+                data: _.map(donutData, function(item){ index++; return [item.data, index]; }),
+                label: title
+            }
+        ];
+
+        index = 0;
+        gistConfig.yaxis.ticks = _.map(donutData, function(item){ index++; return [index, item.label]; });
+
+        this.ui.socialDemoDialog.find(".modal-title").text(title);
 
         this.ui.socialDemoDialog.modal().on('shown.bs.modal', function (event) {
+            self.ui.socialDemoDialog.find(".donut-chart").plot(donutData, donutConfig);
 
-            self.ui.socialDemoDialog.find(".donut-chart").plot(data, {
-                series: {
-                    pie: {
-                        show: true,
-                        innerRadius: 30,
-                        label: {
-                            show: true,
-                            formatter: this._donutLabelFormatter
-                        }
-                    }
-                },
-                legend: {
-                    show: false
-                },
-                grid: {
-                    hoverable: true
+            self.ui.socialDemoDialog.find(".gist-donut").click(function(e) {
+                if(self.$(e.target).data("key") === "donut") {
+                    self.ui.socialDemoDialog.find(".donut-chart").plot(gistData, gistConfig);
+                    self.$(e.target).data("key", "gist").text("Диаграмма");
+                } else {
+                    self.ui.socialDemoDialog.find(".donut-chart").plot(donutData, donutConfig);
+                    self.$(e.target).data("key", "donut").text("Гистограмма");
                 }
+
             });
         });
-
     }
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
