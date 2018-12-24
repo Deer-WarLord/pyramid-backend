@@ -45,16 +45,6 @@ class Keyword(generics.ListAPIView):
             self.queryset = Publication.objects.filter(
                 **params).values('key_word', year=ExtractYear('posted_date'), week=ExtractWeek('posted_date')).annotate(
                 publication_amount=Count("key_word"))
-        else:
-            top3 = Publication.objects.values('key_word').annotate(
-                publication_amount=Count("key_word")).order_by("-publication_amount").values_list(
-                "key_word", flat=True)[:3]
-
-            params["key_word__in"] = top3
-
-            self.queryset = Publication.objects.filter(
-                **params).values('key_word', year=ExtractYear('posted_date'), week=ExtractWeek('posted_date')).annotate(
-                publication_amount=Count("key_word"))
 
         return self.list(request, *args, **kwargs)
 
@@ -80,20 +70,13 @@ class KeywordFactrumViews(generics.ListAPIView):
             end_date = datetime.datetime.now()
             start_date = end_date - datetime.timedelta(days=120)
 
-        if "key_word__in" not in params:
-            top3 = Publication.objects.values('key_word').annotate(
-                publication_amount=Count("key_word")).order_by("-publication_amount").values_list(
-                "key_word", flat=True)[:3]
-
-            params["key_word__in"] = top3
-
         self.queryset = []
 
-        for info in UploadedInfo.objects.filter(provider__title="factrum_group"):
+        for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
             if not info.is_in_period(start_date, end_date):
                 # TODO make flag for week or month
                 continue
-            self.queryset += info.factrum_group.filter(
+            self.queryset += info.factrum_group_detailed.filter(
                 title__title__in=params["key_word__in"]
             ).values("title__title").annotate(views=Sum("views")).values(
                 "views", "title__title", "upload_info__title")
