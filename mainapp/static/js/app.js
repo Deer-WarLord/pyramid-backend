@@ -49674,8 +49674,8 @@ var moment = __webpack_require__(15);
 var SocialDemoRatingCollection = __webpack_require__(149);
 
 var SexGroupsMap = {
-    "male": "Мужчин",
-    "female": "Женщин"
+    "male": "Мужчины",
+    "female": "Женщины"
 };
 
 var AgeGroupsMap = {
@@ -49687,42 +49687,43 @@ var AgeGroupsMap = {
 };
 
 var EducationGroupsMap = {
-    "lte9": "С не полным среднем",
-    "11": "С среднем",
-    "bachelor": "С не полным высшим",
-    "master": "С высшим"
+    "lte9": "Неполное cреднее",
+    "11": "Среднее",
+    "bachelor": "Неполное высшее",
+    "master": "Высшее"
 };
+
 
 var ChildrenGroupsMap = {
     "yes": "Есть",
-    "no": "Нету"
+    "no": "Нет"
 };
 
 var MaritalStatusMap = {
-    "single": "Не женатых/замужем",
-    "married": "Женатых/Замужем",
-    "widow(er)": "Вдовцов/Вдов",
-    "divorced": "Разведенных",
-    "liveTogether": "Проживающих вместе"
+    "single": "Не женат\\не замужем",
+    "married": "Женат\\земужем",
+    "widow(er)": "Вдовец\\Вдова",
+    "divorced": "Разведен (а)",
+    "liveTogether": "Проживают вместе"
 };
 
 var OccupationMap = {
     "businessOwner": "Владелецев бизнеса с наёмными сотрудниками",
-    "entrepreneur": "Частных предпринимателей",
-    "hiredManager": "Наёмных руководителей",
+    "entrepreneur": "Частные предприниматели",
+    "hiredManager": "Наемные руководители",
     "middleManager": "Руководителей среднего звена",
-    "masterDegreeSpecialist": "Специалистов с высшим образованием",
-    "employee": "Служащих",
-    "skilledWorker": "Квалифицированных рабочих",
+    "masterDegreeSpecialist": "Специалисты с высшим образованием",
+    "employee": "Служащий",
+    "skilledWorker": "Квалифицированные рабочие",
     "otherWorkers": "Других рабочих и технического персонала",
     "mobileWorker": "Мобильных работников",
-    "militaryPoliceman": "Военнослужащих/Сотрудников правоохранительных органов",
-    "student": "Студентов/Школьников",
-    "pensioner": "Пенсионеров",
+    "militaryPoliceman": "Военнослужащие\\сотрудники правоохранительных органов",
+    "student": "Студент\\школник",
+    "pensioner": "Пенсионеры",
     "disabled": "Инвалидов",
-    "housewife": "Домохозяек",
+    "housewife": "Домохозяйки",
     "maternityLeave": "В декретном отпуске",
-    "temporarilyUnemployed": "Временно безработных/ищущих работу",
+    "temporarilyUnemployed": "Временно безработные",
     "other": "Другие"
 };
 
@@ -49736,12 +49737,12 @@ var GroupMap = {
 
 var IncomeMap = {
     "noAnswer": "Не ответили",
-    "0-1000": "до 1000",
-    "1001-2000": "от 1000 до 2000",
-    "2001-3000": "от 2000 до 3000",
-    "3001-4000": "от 3000 до 4000",
-    "4001-5000": "от 4000 до 5000",
-    "gt5001": "более 5000"
+    "0-1000": "до 1000 грн.",
+    "1001-2000": "от 1000 грн. до 2000 грн.",
+    "2001-3000": "от 2000 грн. до 3000 грн.",
+    "3001-4000": "от 3000 грн. до 4000 грн.",
+    "4001-5000": "от 4000 грн. до 5000 грн.",
+    "gt5001": "более 5000 грн."
 };
 
 var RegionMap = {
@@ -53033,6 +53034,8 @@ module.exports = Marionette.Behavior.extend({
 
         var $td = sdTable.parent();
         var title = $($td.parents("div").get(1)).find('tr.row-headers > th').eq($td.index()).text();
+        title += " " + $td.parent().children().eq(0).text();
+        title += " c " + this.view.model.get("posted_date__gte") + " по " + this.view.model.get("posted_date__lte");
 
         var donutData = _.map(data, function(item){
             return {
