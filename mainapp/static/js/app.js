@@ -51452,21 +51452,56 @@ module.exports = Marionette.CompositeView.extend({
         });
     },
 
+    stringToColour: function(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var colour = '#';
+        for (var i = 0; i < 3; i++) {
+            var value = (hash >> (i * 8)) & 0xFF;
+            colour += ('00' + value.toString(16)).substr(-2);
+        }
+        return colour;
+    },
+
     processGraphData: function (data, sdMap, url) {
         var self = this;
         var sdKey = this.model.get("sd");
+        var maxDate = new Date(_.max(data, function(item) {return new Date(item.date)}).date);
+        var minDate = new Date(_.min(data, function(item) {return new Date(item.date)}).date);
+        maxDate.setDate(maxDate.getDate() + 6);
+        minDate.setDate(minDate.getDate() - 6);
+        var dateDict = _.chain(data)
+            .map(function(item){ return item.date; })
+            .uniq()
+            .sortBy(function(item) {return new Date(item)})
+            .map(function (item) { return {x: item, y: 0};})
+            .value();
 
         if (sdKey === undefined){
             var result = _.chain(data)
                 .groupBy(function(item) { return item.key_word; })
                 .mapObject(function(val, key) {
-                    return _.map(val,function(item){
-                        return [self.gt.apply(self, item.date.split("-")), item.views]
-                    });
+                    return _.chain(val)
+                        .map(function(item){
+                            return { x: item.date, y: item.views};
+                        })
+                        .sortBy(function(item) { return new Date(item.x); })
+                        .union(dateDict)
+                        .uniq("x")
+                        .sortBy(function(item) { return new Date(item.x); })
+                        .value();
                 })
                 .pairs()
                 .map(function (item) {
-                    return {label: item[0], data: item[1]};
+                    return {
+                        label: item[0],
+                        data: item[1],
+                        backgroundColor: self.stringToColour(item[0]),
+                        borderColor : "#111",
+                        borderWidth : 1
+                    };
                 })
                 .value();
         } else {
@@ -51481,14 +51516,14 @@ module.exports = Marionette.CompositeView.extend({
                     _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
                         var views = el_i[sdKey][el_j_k];
                         views = (views !== undefined) ? views/100.0 * el_i.views : 0;
-                        result[el_j_v].push([self.gt.apply(self, el_i.date.split("-")), views]);
+                        result[el_j_v].push([el_i.date, views]);
                     })
                 });
             } else {
                 _.each(data, function (el_i) {
                     _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
                         var views = el_i[sdKey][el_j_k];
-                        result[el_j_v].push([self.gt.apply(self, el_i.date.split("-")), views]);
+                        result[el_j_v].push([el_i.date, views]);
                     })
                 });
             }
@@ -51501,59 +51536,74 @@ module.exports = Marionette.CompositeView.extend({
                                     return s + item[1]}, 0);
                             })
                             .pairs().value();
-            }).pairs().map(function (item) { return {label: item[0], data: item[1]};}).value();
+            }).pairs().map(function (item) {
+                return {
+                    label: item[0],
+                    data: _.chain(item[1])
+                            .sortBy(function (el) {
+                                return el[0];})
+                            .map(function(el){
+                                return {x:el[0], y:el[1]};})
+                            .value(),
+                    backgroundColor: self.stringToColour(item[0]),
+                    borderColor : "#111",
+                    borderWidth : 1
+                };
+            }).value();
 
         }
 
-        return result;
-    },
-
-    // get day function
-    gt: function(y, m, d) {
-        return new Date(y, m-1, d).getTime();
+        return [result, minDate, maxDate];
     },
 
     buildDynamicGraph: function (data) {
-        var config = {
-            bars: {
-                show: true,
-                barWidth: 4,
-                fill: true,
-                order: true,
-                lineWidth: 4,
-                fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] }
-            },
-            grid: {
-                hoverable: true,
-                clickable: true,
-                borderWidth: 0,
-                tickColor: "#E4E4E4"
-            },
-            yaxis: {
-                font: { color: "#555" }
-            },
-            xaxis: {
-                mode: "time",
-                timezone: "browser",
-                timeformat: "%d/%m/%y",
-                font: { color: "#555" },
-                tickColor: "#fafafa"
-            },
-            legend: {
-                labelBoxBorderColor: "transparent",
-                backgroundColor: "transparent"
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: '%s: %y'
-            }
-        };
-        try {
-            $.plot(this.ui.dynamicChart, data, config);
-        } catch (err) {
-            alert("По этому запросу данных не найдено");
-        }
+        var self = this;
+        if (self.barChart === undefined) {
+            self.barChart = new Chart(this.ui.dynamicChart, {
+                type: 'bar',
+                data: {
+                    datasets: data[0]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'week',
+                                displayFormats: {
+                                    quarter: 'll'
+                                },
+                                min: data[1],
+                                max: data[2]
+                            }
+                        }]
+                    },
+                    'onClick' : function (evt, item) {
+                        var el = this.getElementAtEvent(evt);
+                        if (el.length > 0) {
+                            var provider = (self.model.get("url").includes("-fg-")) ?
+                                'specific-social-demo-rating-fg/' : 'specific-social-demo-rating-admixer/';
+                            var fromDate = data[1];
+                            fromDate.setDate(fromDate.getDate() + 6);
+                            var toDate = data[2];
+                            toDate.setDate(toDate.getDate() - 6);
 
+                            var history = provider +
+                                moment(fromDate).format('YYYY-MM-DD') + "/" +
+                                moment(toDate).format('YYYY-MM-DD') + "/" +
+                                self.model.get("key_word__in");
+                            Backbone.history.navigate(history);
+                        }
+                    }
+                }
+            });
+        } else {
+            self.barChart.data.datasets = data[0];
+            self.barChart.options.scales.xAxes[0].time.min = data[1];
+            self.barChart.options.scales.xAxes[0].time.max = data[2];
+            self.barChart.update();
+        }
     },
 
 
@@ -51568,7 +51618,6 @@ module.exports = Marionette.CompositeView.extend({
             },
             data: this.model.attributes
         });
-        self.query();
     },
 
     addChart: function (event) {
@@ -51665,7 +51714,7 @@ module.exports = Marionette.CompositeView.extend({
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<button type="button" id="add-chart" class="btn btn-default"><i class="fa fa-plus-square"></i> Добавить объект </button>\n<div class="widget">\n    <div class="widget-header">\n        <h3><i class="fa fa-magic"></i> Построение запроса</h3></div>\n    <div class="widget-content">\n        <div class="wizard-wrapper">\n            <div class="wizard">\n                <ul class="steps">\n                    <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Рынки<span class="chevron"></span></li>\n                    <li data-target="#step2"><span class="badge">2</span>Темы / Компании<span class="chevron"></span></li>\n                    <li data-target="#step3"><span class="badge">3</span>Провайдеры<span class="chevron"></span></li>\n                    <li data-target="#step4"><span class="badge">4</span>График<span class="chevron"></span></li>\n                </ul>\n            </div>\n            <div class="step-content">\n                <div class="step-pane active" id="step1">\n                    <form class="form1" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас рынки:</p>\n                        <select name="multiselect1[]" class="multiselect markets-selection" multiple="multiple"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step2">\n                    <form class="form2" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас темы или компании:</p>\n                        <select multiple name="select2-multiple1" class="select2 select2-multiple themes-selection"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step3">\n                    <form class="form3" data-parsley-validate novalidate>\n                        <p>Выберите поставщика данных:</p>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-fg-sd/">\n                            <span><i></i>Factum Group</span>\n                        </label>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-admixer-sd/">\n                            <span><i></i>Admixer</span>\n                        </label>\n                    </form>\n                </div>\n                <div class="step-pane" id="step4">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Соц. демо <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group sd-chart-list">\n\n\n                                </div>\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <div class="demo-flot-chart demo-vertical-bar-chart" data-ctype="#week"></div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>\n';
+__p+='<button type="button" id="add-chart" class="btn btn-default"><i class="fa fa-plus-square"></i> Добавить объект </button>\n<div class="widget">\n    <div class="widget-header">\n        <h3><i class="fa fa-magic"></i> Построение запроса</h3></div>\n    <div class="widget-content">\n        <div class="wizard-wrapper">\n            <div class="wizard">\n                <ul class="steps">\n                    <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Рынки<span class="chevron"></span></li>\n                    <li data-target="#step2"><span class="badge">2</span>Темы / Компании<span class="chevron"></span></li>\n                    <li data-target="#step3"><span class="badge">3</span>Провайдеры<span class="chevron"></span></li>\n                    <li data-target="#step4"><span class="badge">4</span>График<span class="chevron"></span></li>\n                </ul>\n            </div>\n            <div class="step-content">\n                <div class="step-pane active" id="step1">\n                    <form class="form1" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас рынки:</p>\n                        <select name="multiselect1[]" class="multiselect markets-selection" multiple="multiple"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step2">\n                    <form class="form2" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас темы или компании:</p>\n                        <select multiple name="select2-multiple1" class="select2 select2-multiple themes-selection"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step3">\n                    <form class="form3" data-parsley-validate novalidate>\n                        <p>Выберите поставщика данных:</p>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-fg-sd/">\n                            <span><i></i>Factum Group</span>\n                        </label>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-admixer-sd/">\n                            <span><i></i>Admixer</span>\n                        </label>\n                    </form>\n                </div>\n                <div class="step-pane" id="step4">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Соц. демо <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group sd-chart-list">\n\n\n                                </div>\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <canvas class="demo-vertical-bar-chart" height="350"></canvas>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>\n';
 }
 return __p;
 };
@@ -51694,7 +51743,7 @@ __p+='<div class="widget">\n    <div class="widget-header">\n        <h3><i clas
 ((__t=( uid ))==null?'':__t)+
 '">\n                    <form class="form3" data-parsley-validate novalidate>\n                        <p>Выберите поставщика данных:</p>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-fg-sd/">\n                            <span><i></i>Factum Group</span>\n                        </label>\n                        <label class="control-inline fancy-radio">\n                            <input type="radio" name="provider" value="/charts/keyword-admixer-sd/">\n                            <span><i></i>Admixer</span>\n                        </label>\n                    </form>\n                </div>\n                <div class="step-pane" id="step4-'+
 ((__t=( uid ))==null?'':__t)+
-'">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Соц. демо <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group">\n                                    <select class="sd-list" name="sdList">\n                                        <!--Factum Group-->\n                                        <optgroup label="Factum Group">\n                                            <option class="fg-sd" value="sex">Пол</option>\n                                            <option class="fg-sd" value="age">Возраст</option>\n                                            <option class="fg-sd" value="education">Образование</option>\n                                            <option class="fg-sd" value="children_lt_16">Дети младше 16</option>\n                                            <option class="fg-sd" value="marital_status">Семейный статус</option>\n                                            <option class="fg-sd" value="occupation">Род занятий</option>\n                                            <option class="fg-sd" value="group">Групп населения</option>\n                                            <option class="fg-sd" value="income">Доход</option>\n                                            <option class="fg-sd" value="region">Регион</option>\n                                            <option class="fg-sd" value="typeNP">ТипНП</option>\n                                        </optgroup>\n                                        <!---->\n                                        <!--Admixer-->\n                                        <optgroup label="Admixer">\n                                            <option class="admixer-sd" value="platform">Платформа</option>\n                                            <option class="admixer-sd" value="browser">Браузер</option>\n                                            <option class="admixer-sd" value="age">Возраст</option>\n                                            <option class="admixer-sd" value="gender">Гендер</option>\n                                            <!--<option class="admixer-sd" value="region">Регион</option>-->\n                                            <!--<option class="admixer-sd" value="income">Групп населения</option>-->\n                                        </optgroup>\n                                        <!---->\n                                    </select>\n                                    <input class="sd-list-query" type="hidden" />\n                                </div>\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <div class="demo-flot-chart demo-vertical-bar-chart" data-ctype="#week"></div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>';
+'">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Соц. демо <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group">\n                                    <select class="sd-list" name="sdList">\n                                        <!--Factum Group-->\n                                        <optgroup label="Factum Group">\n                                            <option class="fg-sd" value="sex">Пол</option>\n                                            <option class="fg-sd" value="age">Возраст</option>\n                                            <option class="fg-sd" value="education">Образование</option>\n                                            <option class="fg-sd" value="children_lt_16">Дети младше 16</option>\n                                            <option class="fg-sd" value="marital_status">Семейный статус</option>\n                                            <option class="fg-sd" value="occupation">Род занятий</option>\n                                            <option class="fg-sd" value="group">Групп населения</option>\n                                            <option class="fg-sd" value="income">Доход</option>\n                                            <option class="fg-sd" value="region">Регион</option>\n                                            <option class="fg-sd" value="typeNP">ТипНП</option>\n                                        </optgroup>\n                                        <!---->\n                                        <!--Admixer-->\n                                        <optgroup label="Admixer">\n                                            <option class="admixer-sd" value="platform">Платформа</option>\n                                            <option class="admixer-sd" value="browser">Браузер</option>\n                                            <option class="admixer-sd" value="age">Возраст</option>\n                                            <option class="admixer-sd" value="gender">Гендер</option>\n                                            <!--<option class="admixer-sd" value="region">Регион</option>-->\n                                            <!--<option class="admixer-sd" value="income">Групп населения</option>-->\n                                        </optgroup>\n                                        <!---->\n                                    </select>\n                                    <input class="sd-list-query" type="hidden" />\n                                </div>\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <canvas class="demo-vertical-bar-chart" height="350"></canvas>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>';
 }
 return __p;
 };

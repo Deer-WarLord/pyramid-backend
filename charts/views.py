@@ -106,8 +106,8 @@ class KeywordFactrumSdViews(generics.ListAPIView):
             start_date = datetime.datetime.strptime(params.pop("posted_date__gte"), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(params.pop("posted_date__lte"), "%Y-%m-%d")
         else:
-            end_date = datetime.datetime.now()
-            start_date = end_date - datetime.timedelta(days=120)
+            end_date = datetime.datetime.strptime("2018-06-01", "%Y-%m-%d")
+            start_date = datetime.datetime.strptime("2018-04-01", "%Y-%m-%d")
 
         if "key_word__in" not in params:
             top = Publication.objects.values('key_word').annotate(
