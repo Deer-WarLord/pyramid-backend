@@ -71,8 +71,8 @@ class KeywordFactrumViews(generics.ListAPIView):
             start_date = datetime.datetime.strptime(params.pop("posted_date__gte"), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(params.pop("posted_date__lte"), "%Y-%m-%d")
         else:
-            end_date = datetime.datetime.strptime("2018-04-01", "%Y-%m-%d")
-            start_date = datetime.datetime.strptime("2018-06-01", "%Y-%m-%d")
+            end_date = datetime.datetime.strptime("2018-06-01", "%Y-%m-%d")
+            start_date = datetime.datetime.strptime("2018-04-01", "%Y-%m-%d")
 
         self.queryset = []
 
