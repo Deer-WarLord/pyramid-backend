@@ -47750,7 +47750,7 @@ __p+='\n                                        <li>\n                          
  } 
 __p+='\n                                </ul>\n                            </li>\n                        </ul>\n                    </li>\n                ';
  } 
-__p+='\n            </ul>\n        </li>\n        <li id="charts">\n            <a href="#" class="js-sub-menu-toggle">\n                <i class="fa fa-bar-chart-o fw"></i>\n                <span class="text">Графики</span>\n                <i class="toggle-icon fa fa-angle-left"></i>\n            </a>\n            <ul class="sub-menu">\n                <li><a id="keyword-chart" href="#"><span class="text">Темы/Компании/Спикеры публикации</span></a></li>\n                <li><a id="keyword-chart-fg" href="#"><span class="text">Темы/Компании/Спикеры просмотры</span></a></li>\n                <li><a id="keyword-chart-fg-sd" href="#"><span class="text">Темы/Компании/Спикеры соц. демо</span></a></li>\n            </ul>\n        </li>\n\n        ';
+__p+='\n            </ul>\n        </li>\n        <li id="charts">\n            <a href="#" class="js-sub-menu-toggle">\n                <i class="fa fa-bar-chart-o fw"></i>\n                <span class="text">Графики</span>\n                <i class="toggle-icon fa fa-angle-left"></i>\n            </a>\n            <ul class="sub-menu">\n                <li><a id="keyword-chart" href="#">\n                    <span class="text">Количество публикаций:<br/> темы, компании, спикеры</span>\n                </a></li>\n                <li><a id="keyword-chart-fg" href="#">\n                    <span class="text">Количество просмотров:<br/> темы, компании, спикеры</span>\n                </a></li>\n                <li><a id="keyword-chart-fg-sd" href="#">\n                    <span class="text">Соц.-дем. Срез:<br/> темы, компании, спикеры</span>\n                </a></li>\n            </ul>\n        </li>\n\n        ';
  if (permissions.admin) { 
 __p+='\n            <li id="admin-menu">\n                <a href="#" class="js-sub-menu-toggle">\n                    <i class="fa fa-gears fa-fw"></i>\n                    <span class="text">Администрирование</span>\n                    <i class="toggle-icon fa fa-angle-left"></i>\n                </a>\n                <ul class="sub-menu">\n                    <li><a id="admin-data-upload" href="#"><span class="text">Загрузка данных</span></a></li>\n                    <li><a href="/admin/uploaders/user/"><span class="text">Пользователи и Роли</span></a></li>\n                    <li><a id="admin-keys-update" href="#"><span class="text">Обновление ключей</span></a></li>\n                    <li><a id="admin-files" href="#"><span class="text">Файлы</span></a></li>\n                </ul>\n            </li>\n        ';
  } 
@@ -49253,8 +49253,8 @@ var SocialDemoRatingCollection = __webpack_require__(144);
 
 var GenderGroupsMap = {
     0: "Неизвестно",
-    1: "Мужчин",
-    2: "Женщин"
+    1: "Мужчины",
+    2: "Женщины"
 };
 
 var AgeGroupsMap = {
@@ -49711,16 +49711,16 @@ var OccupationMap = {
     "businessOwner": "Владелецев бизнеса с наёмными сотрудниками",
     "entrepreneur": "Частные предприниматели",
     "hiredManager": "Наемные руководители",
-    "middleManager": "Руководителей среднего звена",
+    "middleManager": "Руководители среднего звена",
     "masterDegreeSpecialist": "Специалисты с высшим образованием",
-    "employee": "Служащий",
+    "employee": "Служащие",
     "skilledWorker": "Квалифицированные рабочие",
-    "otherWorkers": "Других рабочих и технического персонала",
-    "mobileWorker": "Мобильных работников",
+    "otherWorkers": "Другие рабочие и технический персонал",
+    "mobileWorker": "Мобильные работники",
     "militaryPoliceman": "Военнослужащие\\сотрудники правоохранительных органов",
     "student": "Студент\\школник",
     "pensioner": "Пенсионеры",
-    "disabled": "Инвалидов",
+    "disabled": "Инвалиды",
     "housewife": "Домохозяйки",
     "maternityLeave": "В декретном отпуске",
     "temporarilyUnemployed": "Временно безработные",
@@ -51142,8 +51142,8 @@ var Cookies = __webpack_require__(14);
 
 var FACTRUM_SD_MAP = {
     "sex": {
-        "male": "Мужчин",
-        "female": "Женщин"
+        "male": "Мужчины",
+        "female": "Женщины"
     },
     "age": {
         "15-17": "от 15 до 17",
@@ -51153,39 +51153,39 @@ var FACTRUM_SD_MAP = {
         "45+": "после 45"
     },
     "education": {
-        "lte9": "С не полным среднем",
-        "11": "С среднем",
-        "bachelor": "С не полным высшим",
-        "master": "С высшим"
+        "lte9": "Неполное cреднее",
+        "11": "Среднее",
+        "bachelor": "Неполное высшее",
+        "master": "Высшее"
     },
     "children_lt_16": {
         "yes": "Есть",
-        "no": "Нету"
+        "no": "Нет"
     },
     "marital_status": {
-        "single": "Не женатых/замужем",
-        "married": "Женатых/Замужем",
-        "widow(er)": "Вдовцов/Вдов",
-        "divorced": "Разведенных",
-        "liveTogether": "Проживающих вместе"
+        "single": "Не женат\\не замужем",
+        "married": "Женат\\земужем",
+        "widow(er)": "Вдовец\\Вдова",
+        "divorced": "Разведен (а)",
+        "liveTogether": "Проживают вместе"
     },
     "occupation": {
         "businessOwner": "Владелецев бизнеса с наёмными сотрудниками",
-        "entrepreneur": "Частных предпринимателей",
-        "hiredManager": "Наёмных руководителей",
-        "middleManager": "Руководителей среднего звена",
-        "masterDegreeSpecialist": "Специалистов с высшим образованием",
-        "employee": "Служащих",
-        "skilledWorker": "Квалифицированных рабочих",
-        "otherWorkers": "Других рабочих и технического персонала",
-        "mobileWorker": "Мобильных работников",
-        "militaryPoliceman": "Военнослужащих/Сотрудников правоохранительных органов",
-        "student": "Студентов/Школьников",
-        "pensioner": "Пенсионеров",
-        "disabled": "Инвалидов",
-        "housewife": "Домохозяек",
+        "entrepreneur": "Частные предприниматели",
+        "hiredManager": "Наемные руководители",
+        "middleManager": "Руководители среднего звена",
+        "masterDegreeSpecialist": "Специалисты с высшим образованием",
+        "employee": "Служащие",
+        "skilledWorker": "Квалифицированные рабочие",
+        "otherWorkers": "Другие рабочие и технический персонал",
+        "mobileWorker": "Мобильные работники",
+        "militaryPoliceman": "Военнослужащие\\сотрудники правоохранительных органов",
+        "student": "Студент\\школник",
+        "pensioner": "Пенсионеры",
+        "disabled": "Инвалиды",
+        "housewife": "Домохозяйки",
         "maternityLeave": "В декретном отпуске",
-        "temporarilyUnemployed": "Временно безработных/ищущих работу",
+        "temporarilyUnemployed": "Временно безработные",
         "other": "Другие"
     },
     "group": {
@@ -51197,12 +51197,12 @@ var FACTRUM_SD_MAP = {
     },
     "income": {
         "noAnswer": "Не ответили",
-        "0-1000": "до 1000",
-        "1001-2000": "от 1000 до 2000",
-        "2001-3000": "от 2000 до 3000",
-        "3001-4000": "от 3000 до 4000",
-        "4001-5000": "от 4000 до 5000",
-        "gt5001": "более 5000"
+        "0-1000": "до 1000 грн.",
+        "1001-2000": "от 1000 грн. до 2000 грн.",
+        "2001-3000": "от 2000 грн. до 3000 грн.",
+        "3001-4000": "от 3000 грн. до 4000 грн.",
+        "4001-5000": "от 4000 грн. до 5000 грн.",
+        "gt5001": "более 5000 грн."
     },
     "region": {
         "west": "Запад",
@@ -51277,8 +51277,8 @@ var ADMIXER_SD_MAP = {
     },
     "gender": {
         0: "Неизвестно",
-        1: "Мужчин",
-        2: "Женщин"
+        1: "Мужчины",
+        2: "Женщины"
     },
     "income": {
 
@@ -52362,10 +52362,10 @@ function initDateRange(reportRangeID, input, options) {
         });
     };
     reportRangeID.daterangepicker({
-        startDate: '01/01/2018',
-        endDate: '01/07/2087',
-        minDate: '01/01/1970',
-        maxDate: '12/31/2024',
+        startDate: '01/06/2018',
+        endDate: '01/07/2018',
+        minDate: '01/01/2017',
+        maxDate: '12/31/2019',
         dateLimit: {days: 360},
         showDropdowns: true,
         showWeekNumbers: true,

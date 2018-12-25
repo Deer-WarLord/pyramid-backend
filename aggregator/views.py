@@ -47,11 +47,8 @@ class ParamsHandler:
             self.format = params.pop("format")
 
         if not request.user.has_perm('global_permissions.free_time'):
-            params["posted_date__lte"] = "2018-08-30"
-            params["posted_date__gte"] = "2018-07-01"
-            # end_date = datetime.now().replace(day=1) - timedelta(days=1)
-            # params["posted_date__lte"] = end_date.strftime("%Y-%m-%d")
-            # params["posted_date__gte"] = end_date.replace(day=1).strftime("%Y-%m-%d")
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
         if "market__in" in params:
             params["market__in"] = json.loads(params.pop("market__in"))
             if not len(params["market__in"]):
@@ -495,8 +492,8 @@ class SpecificSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
             end_date = params.pop("posted_date__lte")
             start_date = params.pop("posted_date__gte")
         except KeyError as e:
-            end_date = datetime.now().strftime("%Y-%m-%d")
-            start_date = (datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
+            end_date = datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
         publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
         l_part = self._convert(publications)
@@ -589,8 +586,8 @@ class GeneralSocialDemoRatingAdmixer(generics.ListAPIView, ParamsHandler):
             end_date = params.pop("posted_date__lte")
             start_date = params.pop("posted_date__gte")
         except KeyError as e:
-            end_date = datetime.now().strftime("%Y-%m-%d")
-            start_date = (datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
+            end_date = datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
         publications = Publication.objects.filter(**params).values_list(aggregator, "shukachpublication__shukach_id")
         l_part = self._convert(publications)

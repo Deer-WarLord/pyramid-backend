@@ -23,8 +23,8 @@ def handle_request_params(request):
     params = dict(request.query_params.items())
 
     if not request.user.has_perm('global_permissions.free_time'):
-        params["posted_date__lte"] = "2018-12-30"
-        params["posted_date__gte"] = "2018-07-01"
+        params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+        params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
     if "key_word__in" in params:
         params["key_word__in"] = json.loads(params.pop("key_word__in"))
         if not len(params["key_word__in"]):
@@ -42,8 +42,8 @@ class Keyword(generics.ListAPIView):
         params = handle_request_params(request)
 
         if "posted_date__lte" not in params:
-            params["posted_date__lte"] = "2018-06-01"
-            params["posted_date__gte"] = "2018-04-01"
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
 
         if "key_word__in" in params:
             self.queryset = Publication.objects.filter(
@@ -71,8 +71,8 @@ class KeywordFactrumViews(generics.ListAPIView):
             start_date = datetime.datetime.strptime(params.pop("posted_date__gte"), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(params.pop("posted_date__lte"), "%Y-%m-%d")
         else:
-            end_date = datetime.datetime.strptime("2018-06-01", "%Y-%m-%d")
-            start_date = datetime.datetime.strptime("2018-04-01", "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
         self.queryset = []
 
@@ -106,8 +106,8 @@ class KeywordFactrumSdViews(generics.ListAPIView):
             start_date = datetime.datetime.strptime(params.pop("posted_date__gte"), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(params.pop("posted_date__lte"), "%Y-%m-%d")
         else:
-            end_date = datetime.datetime.strptime("2018-06-01", "%Y-%m-%d")
-            start_date = datetime.datetime.strptime("2018-04-01", "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
         if "key_word__in" not in params:
             top = Publication.objects.values('key_word').annotate(
@@ -164,8 +164,8 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             end_date = params.pop("posted_date__lte")
             start_date = params.pop("posted_date__gte")
         except KeyError as e:
-            end_date = datetime.datetime.now().strftime("%Y-%m-%d")
-            start_date = (datetime.datetime.now() - datetime.timedelta(days=120)).strftime("%Y-%m-%d")
+            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
         if "key_word__in" not in params:
             top = Publication.objects.values('key_word').annotate(
