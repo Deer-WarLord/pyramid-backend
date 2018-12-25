@@ -20785,7 +20785,7 @@ module.exports = __webpack_require__.p + "../../static/images/alpha.png";
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div class="widget">\n    <div class="widget-header">\n        <h3><i class="fa fa-magic"></i> Построение запроса</h3></div>\n    <div class="widget-content">\n        <div class="wizard-wrapper">\n            <div class="wizard">\n                <ul class="steps">\n                    <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Рынки<span class="chevron"></span></li>\n                    <li data-target="#step2"><span class="badge">2</span>Темы / Компании<span class="chevron"></span></li>\n                    <li data-target="#step3"><span class="badge">3</span>График<span class="chevron"></span></li>\n                </ul>\n            </div>\n            <div class="step-content">\n                <div class="step-pane active" id="step1">\n                    <form class="form1" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас рынки:</p>\n                        <select name="multiselect1[]" class="multiselect markets-selection" multiple="multiple"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step2">\n                    <form class="form2" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас темы или компании:</p>\n                        <select multiple name="select2-multiple1" class="select2 select2-multiple themes-selection"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step3">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Информация по темам и компаниям в динамике <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <div class="demo-flot-chart demo-vertical-bar-chart" data-ctype="#week"></div>\n                        </div>\n                    </div>\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Информация по темам и компаниям общая</h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <div class="demo-flot-chart" id="demo-donut-chart"></div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n\n\n';
+__p+='<div class="widget">\n    <div class="widget-header">\n        <h3><i class="fa fa-magic"></i> Построение запроса</h3></div>\n    <div class="widget-content">\n        <div class="wizard-wrapper">\n            <div class="wizard">\n                <ul class="steps">\n                    <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Рынки<span class="chevron"></span></li>\n                    <li data-target="#step2"><span class="badge">2</span>Темы / Компании<span class="chevron"></span></li>\n                    <li data-target="#step3"><span class="badge">3</span>График<span class="chevron"></span></li>\n                </ul>\n            </div>\n            <div class="step-content">\n                <div class="step-pane active" id="step1">\n                    <form class="form1" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас рынки:</p>\n                        <select name="multiselect1[]" class="multiselect markets-selection" multiple="multiple"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step2">\n                    <form class="form2" data-parsley-validate novalidate>\n                        <p>Выберите интересующие вас темы или компании:</p>\n                        <select multiple name="select2-multiple1" class="select2 select2-multiple themes-selection"></select>\n                    </form>\n                </div>\n                <div class="step-pane" id="step3">\n                    <div class="widget widget-table">\n                        <div class="widget-header">\n                            <h3><i class="fa fa-table"></i> Информация по темам и компаниям в динамике <span class="sd-chart-title"></span></h3>\n                            <div class="btn-group widget-header-toolbar">\n                                <div class="control-inline toolbar-item-group">\n                                    <div class="time-range pull-right report-range">\n                                        <i class="fa fa-calendar"></i>\n                                        <span class="range-value"></span><b class="caret"></b>\n                                        <input type="hidden"/>\n                                    </div>\n                                </div>\n                                <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                            </div>\n                        </div>\n                        <div class="widget-content">\n                            <canvas class="demo-vertical-bar-chart" height="350"></canvas>\n                        </div>\n                    </div>\n                    <div class="row">\n                        <div class="col-md-6">\n                            <div class="widget widget-table">\n                                <div class="widget-header">\n                                    <h3><i class="fa fa-table"></i> Информация по темам и компаниям общая</h3>\n                                    <div class="btn-group widget-header-toolbar">\n                                        <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                                    </div>\n                                </div>\n                                <div class="widget-content">\n                                    <canvas class="demo-donut-chart" height="350"></canvas>\n                                </div>\n                            </div>\n                        </div>\n                        <div class="col-md-6">\n                            <div class="widget widget-table">\n                                <div class="widget-header">\n                                    <h3><i class="fa fa-table"></i> Список публикаций</h3>\n                                    <div class="btn-group widget-header-toolbar">\n                                        <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n                                    </div>\n                                </div>\n                                <div class="widget-content">\n                                    <table id="publications-list" class="table table-hover table-bordered datatable">\n                                        <thead>\n                                        <tr>\n                                            <th>Название публикации</th>\n                                            <th>Дата публикаций</th>\n                                            <th>Число публикаций</th>\n                                        </tr>\n                                        </thead>\n                                        <tbody></tbody>\n                                    </table>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n\n                </div>\n            </div>\n            <div class="actions">\n                <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Назад</button>\n                <button type="button" class="btn btn-primary btn-next">Далее <i class="fa fa-arrow-right"></i></button>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n\n\n';
 }
 return __p;
 };
@@ -50549,24 +50549,57 @@ module.exports = Marionette.CompositeView.extend({
         });
     },
 
+    stringToColour: function(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var colour = '#';
+        for (var i = 0; i < 3; i++) {
+            var value = (hash >> (i * 8)) & 0xFF;
+            colour += ('00' + value.toString(16)).substr(-2);
+        }
+        return colour;
+    },
+
     processGraphData: function (data) {
         var self = this;
-        return _.chain(data)
+        var maxDate = new Date(_.max(data, function(item) {return new Date(item.date)}).date);
+        maxDate.setDate(maxDate.getDate() + 6);
+        var dateDict = _.chain(data)
+                        .map(function(item){ return item.date; })
+                        .uniq()
+                        .sortBy(function(item) {return new Date(item)})
+                        .map(function (item) { return {x: item, y: 0};})
+                        .value();
+        return [_.chain(data)
                 .groupBy(function(item) { return item.key_word; })
                 .mapObject(function(val, key) {
-                    return _.map(val,function(item){
-                        return [self.gt.apply(self, item.date.split("-")), item.publication_amount]
-                    });
+                    return _.chain(val)
+                            .map(function(item){
+                                return { x: item.date, y: item.publication_amount};
+                            })
+                            .sortBy(function(item) { return new Date(item.x); })
+                            .union(dateDict)
+                            .uniq("x")
+                            .sortBy(function(item) { return new Date(item.x); })
+                            .value();
                 })
                 .pairs()
                 .map(function (item) {
-                    return {label: item[0], data: item[1]};
+                    return {
+                        label: item[0],
+                        data: item[1],
+                        backgroundColor: self.stringToColour(item[0]),
+                        borderColor : "#111",
+                        borderWidth : 1
+                    };
                 })
-                .value();
+                .value(), maxDate];
     },
 
     processCircleGraphData: function (data) {
-
+        var self = this;
         var results =  _.chain(data)
                         .groupBy(function(item) { return item.key_word; })
                         .mapObject(function(val, key) {
@@ -50576,7 +50609,13 @@ module.exports = Marionette.CompositeView.extend({
                         })
                         .pairs()
                         .map(function (item) {
-                            return {label: item[0], data: item[1]};
+                            return {
+                                label: item[0],
+                                data: item[1],
+                                backgroundColor: self.stringToColour(item[0]),
+                                borderColor : "#111",
+                                borderWidth : 1
+                            };
                         })
                         .value();
 
@@ -50593,83 +50632,94 @@ module.exports = Marionette.CompositeView.extend({
 
     // get day function
     gt: function(y, m, d) {
-        return new Date(y, m-1, d).getTime();
+        return new Date(y, m-1, d);
     },
 
     buildDynamicGraph: function (data) {
-        var config = {
-            bars: {
-                show: true,
-                barWidth: 4,
-                fill: true,
-                order: true,
-                lineWidth: 4,
-                fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] }
-            },
-            grid: {
-                hoverable: true,
-                clickable: true,
-                borderWidth: 0,
-                tickColor: "#E4E4E4"
-            },
-            yaxis: {
-                font: { color: "#555" }
-            },
-            xaxis: {
-                mode: "time",
-                timezone: "browser",
-                timeformat: "%d/%m/%y",
-                font: { color: "#555" },
-                tickColor: "#fafafa"
-            },
-            legend: {
-                labelBoxBorderColor: "transparent",
-                backgroundColor: "transparent"
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: '%s: %y'
-            }
-        };
-        console.log(data);
-        try {
-            $.plot(this.ui.dynamicChart, data, config);
-        } catch (err) {
-            alert("По этому запросу данных не найдено");
+        var self = this;
+        if (self.barChart === undefined) {
+            self.barChart = new Chart(this.ui.dynamicChart, {
+                type: 'bar',
+                data: {
+                    datasets: data[0]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'week',
+                                displayFormats: {
+                                    quarter: 'll'
+                                },
+                                max: data[1]
+                            }
+                        }]
+                    },
+                    'onClick' : function (evt, item) {
+                        var el = this.getElementAtEvent(evt);
+                        if (el.length > 0) {
+                            var key_word = this.data.datasets[el[0]._datasetIndex].label;
+                            var date = this.data.datasets[el[0]._datasetIndex].data[el[0]._index].x;
+                            $.ajax({
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+                                },
+                                url: '/noksfishes/publications-title-date/?key_word='+key_word+'&posted_date='+date,
+                                type: 'GET',
+                                success: function(data, status, callback) {
+                                    var table = self.$("#publications-list").DataTable({
+                                        bDestroy: true,
+                                        sDom: "t",
+                                        data: data,
+                                        scrollY: "300px",
+                                        scrollCollapse: true,
+                                        paging: false,
+                                        columns: [
+                                            { data: 'title' },
+                                            { data: 'posted_date' },
+                                            { data: 'count' }
+                                        ]
+                                    });
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        } else {
+            self.barChart.data.datasets = data[0];
+            self.barChart.options.scales.xAxes[0].time.max = data[1];
+            self.barChart.update();
         }
+
     },
 
     buildCircleGraph: function (data) {
-
-        var donutLabelFormatter = function (label, series) {
-            return "<div class=\"donut-label\">" + label + "<br/>" + Math.round(series.percent) + "%</div>";
-        };
-
-        var config = {
-            series: {
-                pie: {
-                    show: true,
-                    innerRadius: .4,
-                    stroke: {
-                        width: 4,
-                        color: "#ffffff"
-                    },
-                    label: {
-                        show: true,
-                        radius: 3/4,
-                        formatter: donutLabelFormatter
-                    }
+        var self = this;
+        if (self.donutChart === undefined) {
+            self.donutChart = new Chart(this.$(".demo-donut-chart"), {
+                type: 'doughnut',
+                data: {
+                    labels: _.map(data, function(item) { return item.label; }),
+                    datasets: [{
+                        data: _.map(data, function(item) { return item.data; }),
+                        backgroundColor: _.map(data, function(item) { return item.backgroundColor; })
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false
                 }
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                hoverable: true
-            }
-        };
+            });
+        } else {
+            self.donutChart.data.datasets = [{
+                data: _.map(data, function(item) { return item.data; }),
+                backgroundColor: _.map(data, function(item) { return item.backgroundColor; })
+            }];
+            self.donutChart.update();
+        }
 
-        $.plot('#demo-donut-chart', data, config);
     },
 
     onShow: function() {
