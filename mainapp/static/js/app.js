@@ -49659,7 +49659,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<div class="widget widget-table">\n    <div class="widget-header">\n        <h3><i class="fa fa-table"></i> Информация по соц.дем профилям</h3>\n        <div class="btn-group widget-header-toolbar">\n            <button type="button" class="btn btn-primary btn-sm btn-export-csv">\n                <i class="fa fa-floppy-o"></i> <span>Экспорт CSV</span>\n            </button>\n            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>\n        </div>\n    </div>\n    <div class="widget-content">\n\n        <div id="admixer-reportrange" class="pull-right report-range">\n            <i class="fa fa-calendar"></i>\n            <span class="range-value"></span><b class="caret"></b>\n            <input type="hidden"/>\n        </div>\n\n        <table id="admixer-datatable-social-demo" class="table table-sorting table-hover table-bordered datatable">\n            <thead>\n                <tr class="row-filter">\n                    <th data-index="0"><input type="text" class="form-control input-sm" placeholder="Search..."></th>\n                    <th data-index="1"></th>\n                    <th data-index="2"></th>\n                    <th data-index="3"></th>\n                    <th data-index="4"></th>\n                    <th data-index="5"></th>\n                    <th data-index="6"></th>\n                    <th data-index="7"></th>\n                    <th data-index="8"></th>\n                </tr>\n                <tr>\n                    <th>'+
 ((__t=( keyContext() ))==null?'':__t)+
-'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+'</th>\n                    <th>Уникальных пользователей</th>\n                    <th>Просмотров</th>\n                    <th>Группы по доходам</th>\n                    <th>Возрастные группы</th>\n                    <th>Гендерные группы</th>\n                    <th>Регионы</th>\n                    <th>Платформы</th>\n                    <th>Браузеры</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="admixer-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <canvas class="modal-chart" height="350"></canvas>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -50410,7 +50410,7 @@ __p+='\n                    ';
  if (typeof(aggregator) !== "undefined" && aggregator === "publication") { 
 __p+='<th>СМИ</th>';
  } 
-__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="fg-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <div class="donut-chart"></div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
+__p+='\n                    <th>Просмотров</th>\n                    <th>Гендерные группы</th>\n                    <th>Возрастные группы</th>\n                    <th>Образование</th>\n                    <th>Дети моложе 16 лет</th>\n                    <th>Семейный статус</th>\n                    <th>Род занятий</th>\n                    <th>Группы населения</th>\n                    <th>Доход</th>\n                    <th>Регион</th>\n                    <th>ТипНП</th>\n                </tr>\n            </thead>\n            <tbody></tbody>\n        </table>\n        <div class="modal fade" id="fg-social-demo-plot">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\n                        <h4 class="modal-title">Соц.дем</h4>\n                    </div>\n                    <div class="modal-body">\n                        <div class="widget widget-quick-note quick-note-edit">\n                            <div class="widget-content">\n                                <canvas class="modal-chart" height="350"></canvas>\n                            </div>\n                        </div>\n                    </div>\n                    <div class="modal-footer">\n                        <button type="button" class="btn btn-default gist-donut" data-key="donut">Гистограмма</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class="row paginator"></div>\n    </div>\n</div>';
 }
 return __p;
 };
@@ -52941,66 +52941,7 @@ module.exports = Marionette.Behavior.extend({
 /* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($, _) {var Marionette = __webpack_require__(2);
-
-var donutConfig = {
-    series: {
-        pie: {
-            show: true,
-            innerRadius: 30,
-            label: {
-                show: true,
-                formatter: function (label, series) {
-                    return "<div class=\"donut-label\">" + label + "<br/>" + Math.round(series.percent) + "%</div>";
-                }
-            }
-        }
-    },
-    legend: {
-        show: false
-    },
-    grid: {
-        hoverable: true
-    }
-};
-
-var gistConfig = {
-    series: {
-        bars: {
-            show: true,
-            barWidth: .2
-        }
-    },
-    bars: {
-        show: true,
-        horizontal: true,
-        barWidth: 0.2,
-        fill: true,
-        order: true,
-        lineWidth: 0,
-        fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] }
-    },
-    grid: {
-        hoverable: true,
-        clickable: true,
-        borderWidth: 0,
-        tickColor: "#E4E4E4"
-
-    },
-    xaxis: {
-        autoscaleMargin: 0.2
-    },
-    yaxis: {
-        ticks: null
-    },
-    legend: {
-        show: false
-    },
-    tooltip: true,
-    tooltipOpts: {
-        content: '%s: %x'
-    }
-};
+/* WEBPACK VAR INJECTION */(function(_, $) {var Marionette = __webpack_require__(2);
 
 module.exports = Marionette.Behavior.extend({
 
@@ -53010,6 +52951,72 @@ module.exports = Marionette.Behavior.extend({
 
     events: {
         'click @ui.socialDemoItem': 'showPlot'
+    },
+
+    stringToColour: function(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var colour = '#';
+        for (var i = 0; i < 3; i++) {
+            var value = (hash >> (i * 8)) & 0xFF;
+            colour += ('00' + value.toString(16)).substr(-2);
+        }
+        return colour;
+    },
+
+    drawDonut: function(donutData) {
+        if (this.modalChart !== undefined) {
+            this.modalChart.destroy();
+        }
+        this.modalChart = new Chart(this.$(".modal-chart"), {
+            type: 'doughnut',
+            data: {
+                labels: _.map(donutData, function (item) {
+                    return item.label;
+                }),
+                datasets: [{
+                    data: _.map(donutData, function (item) {
+                        return item.data;
+                    }),
+                    backgroundColor: _.map(donutData, function (item) {
+                        return item.backgroundColor;
+                    })
+                }]
+            },
+            options: {
+                maintainAspectRatio: false
+            }
+        });
+    },
+
+    drawGist: function(gistData) {
+        if (this.modalChart !== undefined) {
+            this.modalChart.destroy();
+        }
+        this.modalChart = new Chart(this.$(".modal-chart"), {
+            type: 'horizontalBar',
+            data: {
+                labels: _.map(gistData, function (item) {
+                    return item.label;
+                }),
+                datasets: [{
+                    data: _.map(gistData, function (item) {
+                        return item.data;
+                    }),
+                    backgroundColor: _.map(gistData, function (item) {
+                        return item.backgroundColor;
+                    })
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
     },
 
     showPlot: function(e) {
@@ -53027,37 +53034,41 @@ module.exports = Marionette.Behavior.extend({
         var $td = sdTable.parent();
         var title = $($td.parents("div").get(1)).find('tr.row-headers > th').eq($td.index()).text();
 
-        var donutData = _.map(data, function(item){ return {label: item.label, data: Math.round(item.data/total * 100.0)} });
-        var index = 0;
-        var gistData = [
-            {
-                data: _.map(donutData, function(item){ index++; return [item.data, index]; }),
-                label: title
+        var donutData = _.map(data, function(item){
+            return {
+                label: item.label,
+                data: Math.round(item.data/total * 100.0),
+                backgroundColor: self.stringToColour(item.label)
             }
-        ];
-
-        index = 0;
-        gistConfig.yaxis.ticks = _.map(donutData, function(item){ index++; return [index, item.label]; });
+        });
 
         this.ui.socialDemoDialog.find(".modal-title").text(title);
 
-        this.ui.socialDemoDialog.modal().on('shown.bs.modal', function (event) {
-            self.ui.socialDemoDialog.find(".donut-chart").plot(donutData, donutConfig);
+        this.ui.socialDemoDialog.modal().off('shown.bs.modal').on('shown.bs.modal', function (event) {
+            event.preventDefault();
+            var gistDonutSwitch = self.ui.socialDemoDialog.find(".gist-donut");
 
-            self.ui.socialDemoDialog.find(".gist-donut").click(function(e) {
-                if(self.$(e.target).data("key") === "donut") {
-                    self.ui.socialDemoDialog.find(".donut-chart").plot(gistData, gistConfig);
-                    self.$(e.target).data("key", "gist").text("Диаграмма");
+            if(gistDonutSwitch.attr("data-key") === "donut") {
+                self.drawDonut(donutData);
+            } else {
+                self.drawGist(donutData);
+            }
+
+            gistDonutSwitch.off("click").on("click", function(e) {
+                if(self.$(e.target).attr("data-key") === "donut") {
+                    self.drawGist(donutData);
+                    self.$(e.target).text("Диаграмма");
+                    self.$(e.target).attr("data-key", "gist");
                 } else {
-                    self.ui.socialDemoDialog.find(".donut-chart").plot(donutData, donutConfig);
-                    self.$(e.target).data("key", "donut").text("Гистограмма");
+                    self.drawDonut(donutData);
+                    self.$(e.target).text("Гистограмма");
+                    self.$(e.target).attr("data-key", "donut");
                 }
-
             });
         });
     }
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ })
 /******/ ]);
