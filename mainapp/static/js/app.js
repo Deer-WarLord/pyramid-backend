@@ -52378,8 +52378,8 @@ function initDateRange(reportRangeID, input, options) {
         });
     };
     reportRangeID.daterangepicker({
-        startDate: '01/06/2018',
-        endDate: '01/07/2018',
+        startDate: '01/10/2018',
+        endDate: '01/12/2018',
         minDate: '01/01/2017',
         maxDate: '12/31/2019',
         dateLimit: {days: 360},
