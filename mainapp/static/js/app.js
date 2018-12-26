@@ -50648,7 +50648,9 @@ module.exports = Marionette.CompositeView.extend({
                         if (el.length > 0) {
                             var key_word = this.data.datasets[el[0]._datasetIndex].label;
                             var toDate = this.data.datasets[el[0]._datasetIndex].data[el[0]._index].x;
-                            var fromDate = moment(new Date(toDate)).format('YYYY-MM-DD');
+                            var fromDate = new Date(toDate);
+                            fromDate.setDate(fromDate.getDate() - 6);
+                            fromDate = moment(fromDate).format('YYYY-MM-DD');
                             var url = '/noksfishes/publications-title-date/?key_word=' +
                                         key_word +
                                         '&posted_date__lte=' + toDate +
