@@ -51053,6 +51053,7 @@ module.exports = Marionette.CompositeView.extend({
                 }
             });
         } else {
+            self.donutChart.data.labels = _.map(data, function(item) { return item.label; });
             self.donutChart.data.datasets = [{
                 data: _.map(data, function(item) { return item.data; }),
                 backgroundColor: _.map(data, function(item) { return item.backgroundColor; })
