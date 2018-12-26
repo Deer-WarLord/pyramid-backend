@@ -321,6 +321,8 @@ class MarketsRating(generics.ListAPIView, ParamsHandler):
             self.queryset = Market.objects.filter(**params).values(
                 "id", "name").annotate(publication_amount=Count('market_publications')).order_by("-publication_amount")
         else:
+            params["market_publications__posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["market_publications__posted_date__gte"] = settings.DEFAULT_FROM_DATE
             self.queryset = Market.objects.values(
                 "id", "name").annotate(publication_amount=Count("market_publications")).order_by("-publication_amount")
 
@@ -337,6 +339,10 @@ class ThemeCompanyRating(generics.ListAPIView, ParamsHandler):
     def get(self, request, *args, **kwargs):
 
         params = self.handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
 
         if len(params):
             self.queryset = Publication.objects.filter(**params).values(
@@ -358,6 +364,10 @@ class RegionRating(generics.ListAPIView, ParamsHandler):
     def get(self, request, *args, **kwargs):
 
         params = self.handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
 
         if "region__in" in params:
             params.pop("region__in")
@@ -383,6 +393,10 @@ class PublicationTypeRating(generics.ListAPIView, ParamsHandler):
 
         params = self.handle_request_params(request)
 
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
+
         if "type__in" in params:
             params.pop("type__in")
 
@@ -407,6 +421,10 @@ class PublicationTopicRating(generics.ListAPIView, ParamsHandler):
 
         params = self.handle_request_params(request)
 
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
+
         if "topic__in" in params:
             params.pop("topic__in")
 
@@ -430,6 +448,10 @@ class PublicationRating(generics.ListAPIView, ParamsHandler):
     def get(self, request, *args, **kwargs):
 
         params = self.handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
 
         if len(params):
             self.queryset = Publication.objects.filter(**params).values(
