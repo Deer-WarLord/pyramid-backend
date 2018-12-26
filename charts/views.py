@@ -76,11 +76,11 @@ class KeywordFactrumViews(generics.ListAPIView):
 
         self.queryset = []
 
-        for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
+        for info in UploadedInfo.objects.filter(provider__title="factrum_group"):
             if not info.is_in_period(start_date, end_date):
                 # TODO make flag for week or month
                 continue
-            self.queryset += info.factrum_group_detailed.filter(
+            self.queryset += info.factrum_group.filter(
                 title__title__in=params["key_word__in"]
             ).values("title__title").annotate(views=Sum("views")).values(
                 "views", "title__title", "upload_info__title")
