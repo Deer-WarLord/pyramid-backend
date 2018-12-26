@@ -1,6 +1,7 @@
 from collections import Counter
 
 from clickhouse_driver import Client
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Count, Sum
 from django.db.models.functions import ExtractWeek, ExtractYear
 from django.conf import settings
@@ -248,12 +249,8 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
 
 
 class ThemeList(generics.ListAPIView):
-    queryset = Publication.objects.exclude(market__name__exact = None).values("market__name", "key_word").distinct()
+    queryset = Publication.objects.values("market__name").annotate(keywords=ArrayAgg("key_word"))
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
     def list(self, request, *args, **kwargs):
-        groups = {}
-        for item in self.get_queryset():
-            groups.setdefault(item['market__name'], []).append(item["key_word"])
-
-        return Response([{"market": k, "keywords": v} for k, v in groups.items()])
+        return Response([{"market": item["market__name"], "keywords": set(item["keywords"])} for item in self.get_queryset()])
