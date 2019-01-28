@@ -75,7 +75,7 @@ class PublicationsResource(resources.ModelResource):
 class PublicationsAdmin(ImportExportModelAdmin):
     resource_class = PublicationsResource
     formats = (SCSV,)
-    list_display = ["key_word", "title", "inserted_date", "posted_date", "posted_time",
+    list_display = ["key_word", "title", "object", "inserted_date", "posted_date", "posted_time",
                     "category", "url", "priority", "advertisement", "size", "symbols", "publication", "source",
                     "country", "region", "city", "regionality", "type", "topic", "number", "printing", "page",
                     "fill_rate", "user", "author_tone", "event_tone", "general_tone", "objectivity", "mention_type",
@@ -84,9 +84,9 @@ class PublicationsAdmin(ImportExportModelAdmin):
                     "kl", "m", "pg", "h", "result", "periodicity", "activity", "marginality", "cost", "visitors",
                     "citation_index", "width", "k1", "k2", "k3", "dtek_kof", "created_date", "edit_date", "note"]
 
-    search_fields = ['upload_info__title', 'key_word', 'url', 'category', 'country', 'region', 'city', 'type', 'topic']
+    search_fields = ['upload_info__title', 'key_word', "object", 'url', 'category', 'country', 'region', 'city', 'type', 'topic']
     date_hierarchy = 'posted_date'
-    list_filter = [('posted_date', DateRangeFilter), 'upload_info__title', 'key_word', 'category', 'country', 'region',
+    list_filter = [('posted_date', DateRangeFilter), 'upload_info__title', 'key_word', "object", 'category', 'country', 'region',
                    'city', 'type', 'topic']
     ordering = ["w", "y", "z", "fc", "r", "ce", "f", "r_small", "s", "e", "ta", "ts", "tc", "tmk", "tmc", "l", "d",
                 "ktl", "kt", "kl", "m", "pg", "h", "result", "periodicity", "activity", "marginality", "cost",

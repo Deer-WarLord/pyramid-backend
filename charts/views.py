@@ -10,7 +10,8 @@ from rest_framework.response import Response
 
 from admixer.serializers import DynamicAnalyzedInfoSerializer
 from aggregator.permissions import IsRequestsToThemeAllow
-from charts.serializers import ThemeCompanyRatingSerializer, ThemeCompanyViewsSerializer, ThemeCompanySdViewsSerializer
+from charts.serializers import ThemeCompanyRatingSerializer, ThemeCompanyViewsSerializer, ThemeCompanySdViewsSerializer, \
+    ObjectCompanyRatingSerializer, ObjectViewsSerializer
 from noksfishes.models import Publication
 import json
 import datetime
@@ -30,6 +31,11 @@ def handle_request_params(request):
         params["key_word__in"] = json.loads(params.pop("key_word__in"))
         if not len(params["key_word__in"]):
             params.pop("key_word__in")
+    if "object__in" in params:
+        params["object__in"] = json.loads(params.pop("object__in"))
+        if not len(params["object__in"]):
+            params.pop("object__in")
+
     return params
 
 
@@ -50,6 +56,33 @@ class Keyword(generics.ListAPIView):
             self.queryset = Publication.objects.filter(
                 **params).values('key_word', year=ExtractYear('posted_date'), week=ExtractWeek('posted_date')).annotate(
                 publication_amount=Count("key_word"))
+
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(data=list(queryset), many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+
+
+class Object(generics.ListAPIView):
+    queryset = Publication.objects
+    serializer_class = ObjectCompanyRatingSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            params["posted_date__lte"] = settings.DEFAULT_TO_DATE
+            params["posted_date__gte"] = settings.DEFAULT_FROM_DATE
+
+        if "object__in" in params:
+            self.queryset = Publication.objects.filter(
+                **params).values('object', year=ExtractYear('posted_date'), week=ExtractWeek('posted_date')).annotate(
+                publication_amount=Count("object"))
 
         return self.list(request, *args, **kwargs)
 
@@ -85,6 +118,46 @@ class KeywordFactrumViews(generics.ListAPIView):
                 title__title__in=params["key_word__in"]
             ).values("title__title").annotate(views=Sum("views")).values(
                 "views", "title__title", "upload_info__title")
+
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(data=list(queryset), many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+
+
+class ObjectFactrumViews(generics.ListAPIView):
+    serializer_class = ObjectViewsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "posted_date__lte" in params:
+            start_date = datetime.datetime.strptime(params.pop("posted_date__gte"), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(params.pop("posted_date__lte"), "%Y-%m-%d")
+        else:
+            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
+            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
+
+        self.queryset = []
+
+        filters = {
+            "title__title__in": params["key_word__in"],
+            "article__object__in": params["object__in"]
+        }
+
+        aggregator = "article__object"
+
+        for info in UploadedInfo.objects.filter(provider__title="factrum_group"):
+            if not info.is_in_period(start_date, end_date):
+                # TODO make flag for week or month
+                continue
+            self.queryset += info.factrum_group.filter(**filters).values(aggregator).annotate(views=Sum("views")).values(
+                "views", aggregator, "upload_info__title")
 
         return self.list(request, *args, **kwargs)
 
@@ -254,3 +327,22 @@ class ThemeList(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         return Response([{"market": item["market__name"], "keywords": set(item["keywords"])} for item in self.get_queryset()])
+
+
+class ObjectsList(generics.ListAPIView):
+    queryset = Publication.objects
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if len(params):
+            self.queryset = Publication.objects.filter(**params).values("key_word").annotate(objects=ArrayAgg("object"))
+        else:
+            self.queryset = Publication.objects.values("key_word").annotate(objects=ArrayAgg("object"))
+
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        return Response([{"key_word": item["key_word"], "objects": set(item["objects"])} for item in self.get_queryset()])

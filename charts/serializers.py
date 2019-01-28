@@ -20,6 +20,19 @@ class ThemeCompanyRatingSerializer(serializers.Serializer):
         return super(ThemeCompanyRatingSerializer, self).to_internal_value(data=data)
 
 
+class ObjectCompanyRatingSerializer(serializers.Serializer):
+    object = serializers.CharField(max_length=1024)
+    publication_amount = serializers.IntegerField()
+    date = serializers.DateField(required=False)
+
+    def to_internal_value(self, data):
+
+        year = data.pop("year")
+        week = data.pop("week")
+        data["date"] = datetime.strptime("%d %d 0" % (year, week), "%Y %W %w").strftime("%Y-%m-%d")
+        return super(ObjectCompanyRatingSerializer, self).to_internal_value(data=data)
+
+
 class ThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme
@@ -46,6 +59,28 @@ class ThemeCompanyViewsSerializer(serializers.Serializer):
         data["date"] = end_period.strftime("%Y-%m-%d")
         data["key_word"] = data.pop("title__title")
         return super(ThemeCompanyViewsSerializer, self).to_internal_value(data=data)
+
+
+class ObjectViewsSerializer(serializers.Serializer):
+    object = serializers.CharField(max_length=1024)
+    views = serializers.IntegerField()
+    date = serializers.DateField(required=False)
+
+    def to_internal_value(self, data):
+        date = data.pop("upload_info__title")
+        try:
+            start_period = datetime.strptime(date, "%m-%Y")
+            end_period = start_period + timedelta(calendar.monthrange(start_period.year, start_period.month)[1])
+        except ValueError:
+            try:
+                start_period = datetime.strptime(date, "%w-%W-%Y")
+                end_period = start_period + timedelta(days=6)
+            except ValueError:
+                raise ValidationError({"title": ["Title should be in format %m-%Y or %w-%W-%Y"]})
+
+        data["date"] = end_period.strftime("%Y-%m-%d")
+        data["object"] = data.pop("article__object")
+        return super(ObjectViewsSerializer, self).to_internal_value(data=data)
 
 
 class ThemeCompanySdViewsSerializer(serializers.Serializer):
