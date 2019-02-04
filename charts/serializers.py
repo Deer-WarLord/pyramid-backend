@@ -114,3 +114,36 @@ class ThemeCompanySdViewsSerializer(serializers.Serializer):
         data["key_word"] = data.pop("title__title")
         return super(ThemeCompanySdViewsSerializer, self).to_internal_value(data=data)
 
+
+class ObjectSdViewsSerializer(serializers.Serializer):
+    key_word = serializers.CharField(max_length=1024)
+    views = serializers.IntegerField()
+    date = serializers.DateField(required=False)
+    sex = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    age = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    education = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    children_lt_16 = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    marital_status = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    occupation = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    group = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    income = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    region = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+    typeNP = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
+
+    def to_internal_value(self, data):
+        date = data.pop("upload_info__title")
+        try:
+            start_period = datetime.strptime(date, "%m-%Y")
+            end_period = start_period + timedelta(calendar.monthrange(start_period.year, start_period.month)[1])
+        except ValueError:
+            try:
+                start_period = datetime.strptime(date, "%w-%W-%Y")
+                end_period = start_period + timedelta(days=6)
+            except ValueError:
+                raise ValidationError({"title": ["Title should be in format %m-%Y or %w-%W-%Y"]})
+
+        data["date"] = end_period.strftime("%Y-%m-%d")
+        data["key_word"] = data.pop("title__title")
+        return super(ObjectSdViewsSerializer, self).to_internal_value(data=data)
+
+
