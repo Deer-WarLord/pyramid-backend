@@ -28,8 +28,8 @@ class AnalyzedInfoSerializer(serializers.ModelSerializer):
             filtered_data = []
             for raw in kwargs["data"]:
                 try:
-                    AnalyzedInfo.objects.get(id=raw["id_article"])
-                except AnalyzedInfo.DoesNotExist:
+                    Publication.objects.get(id=raw["id_article"])
+                except Publication.DoesNotExist:
                     pass
                 else:
                     filtered_data.append(raw)
