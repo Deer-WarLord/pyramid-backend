@@ -23,6 +23,21 @@ class AnalyzedInfoSerializer(serializers.ModelSerializer):
 
     upload_info = serializers.ReadOnlyField()
 
+    def __new__(cls, *args, **kwargs):
+        if kwargs.pop('many', False):
+            filtered_data = []
+            for raw in kwargs["data"]:
+                try:
+                    AnalyzedInfo.objects.get(id=raw["id_article"])
+                except AnalyzedInfo.DoesNotExist:
+                    pass
+                else:
+                    filtered_data.append(raw)
+            logger.info("Omitted %d non-existent ids", len(kwargs["data"]) - len(filtered_data))
+            kwargs["data"] = filtered_data
+            return cls.many_init(*args, **kwargs)
+        return super(AnalyzedInfoSerializer, cls).__new__(cls, *args, **kwargs)
+
     def to_internal_value(self, data):
         internal_data = {'article': int(data.pop("id_article")) if "id_article" in data else None,
                          'title': int(data.pop("id_title")) if "id_title" in data else None,
