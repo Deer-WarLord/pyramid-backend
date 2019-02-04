@@ -33,7 +33,7 @@ class AnalyzedInfoSerializer(serializers.ModelSerializer):
                     pass
                 else:
                     filtered_data.append(raw)
-            logger.info("Omitted %d non-existent ids", len(kwargs["data"]) - len(filtered_data))
+            logger.info("Omitted %d (%d) non-existent ids", len(kwargs["data"]) - len(filtered_data), len(kwargs["data"]))
             kwargs["data"] = filtered_data
             return cls.many_init(*args, **kwargs)
         return super(AnalyzedInfoSerializer, cls).__new__(cls, *args, **kwargs)
