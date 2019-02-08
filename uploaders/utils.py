@@ -1,6 +1,7 @@
 import importlib
 import datetime
 from django.conf import settings
+from django.core import mail
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.dateparse import parse_datetime
@@ -152,3 +153,6 @@ def save_data_from_provider(upload_info, json_data):
     serializer.is_valid(raise_exception=True)
     serializer.save(upload_info=upload_info)
     logger.info("Publications saved after from uploaded file")
+    mail.send_mail('Автоматическое письмо. Pyramid. Загрузка данных',
+                   'Данные из файла %s.json успешно загружены на сервре Pyramid' % upload_info.title,
+                   'pyramid@gmail.com', ['deerwarlord@gmail.com', 'olepole2009@gmail.com'], fail_silently=False)
