@@ -160,6 +160,11 @@ class GeneratePublicationsSocialDemoRating:
             "publication").annotate(themes=ArrayAgg("key_word")))
         logger.info("%d - keys processed" % len(themes_in_publication))
 
+        if None in themes_in_publication:
+            del themes_in_publication[None]
+        elif '' in themes_in_publication:
+            del themes_in_publication['']
+
         results = []
         init_sd = {}
         info = SocialDetailsSerializer()
