@@ -10,8 +10,7 @@ from rest_framework.response import Response
 
 from admixer.serializers import DynamicAnalyzedInfoSerializer
 from aggregator.permissions import IsRequestsToThemeAllow
-from charts.serializers import ThemeCompanyRatingSerializer, ThemeCompanyViewsSerializer, ThemeCompanySdViewsSerializer, \
-    ObjectCompanyRatingSerializer, ObjectViewsSerializer, ObjectSdViewsSerializer
+from charts.serializers import *
 from noksfishes.models import Publication
 import json
 import datetime
@@ -128,8 +127,99 @@ class KeywordFactrumViews(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class KeywordAdmixerViews(generics.ListAPIView):
+    serializer_class = ThemeCompanyViewsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+
+    def _chunks(self, l, n):
+        return [l[i:i+n] for i in range(0, len(l), n)]
+
+    def _convert(self, tup):
+        di = {}
+        for a, b in tup:
+            di.setdefault(a, []).append(b)
+        return di
+
+    def _with_keys(self, d, keys):
+        return {x: d[x] for x in d if x in keys}
+
+    def _query_admixer_data(self, results, batch_ids, start_date, end_date):
+        ids = ",".join("'%s'" % item for item in batch_ids)
+
+        query = 'select UrlId, Platform, Browser, Country, Age, Gender, Income, count(distinct IntVisKey), Sum(Views), Date ' \
+                'from admixer.UrlStat ' \
+                'where UrlId in (%s) and Date >= \'%s\' and Date <= \'%s\' ' \
+                'Group by UrlId, Platform, Browser, Country, Age, Gender, Income, Date' % (ids, start_date, end_date)
+
+        response = self._client.execute(query)
+        keys = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
+        for row in response:
+            item = dict(zip(keys, row[1:]))
+            date = item["date"] - datetime.timedelta(days=item["date"].weekday())
+            if date not in results:
+                results[date] = item["views"]
+            else:
+                results[date] += item["views"]
+
+        logger.info("Received %d records from ClickHouse", len(results))
+
+        return results
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            end_date = settings.DEFAULT_TO_DATE
+            start_date = settings.DEFAULT_FROM_DATE
+        else:
+            end_date = params["posted_date__lte"]
+            start_date = params["posted_date__gte"]
+
+        self.queryset = []
+
+        publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
+        logger.info("Get %d publications" % len(publications))
+
+        l_part = self._convert(publications)
+        logger.info("Convert %d publications" % len(publications))
+
+        self._client = Client(settings.CLICKHOUSE_HOST,
+                              database=settings.CLICKHOUSE_DB,
+                              user=settings.CLICKHOUSE_USER,
+                              password=settings.CLICKHOUSE_PASSWORD)
+
+        total = len(publications)
+        current = 0
+        self.queryset = []
+
+        for key_word, ids in l_part.items():
+            results = {}
+
+            for batch_ids in self._chunks(ids, 10000):
+                logger.info("Sent %d ids" % len(batch_ids))
+                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
+                current += len(batch_ids)
+                logger.info("Processed: %d/%d" % (current, total))
+
+            for date, views in results.items():
+                self.queryset.append({
+                    "key_word": key_word,
+                    "views": views,
+                    "date": date,
+                })
+
+        self._client.disconnect()
+
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        return Response(queryset)
+
+
 class ObjectFactrumViews(generics.ListAPIView):
-    serializer_class = ObjectViewsSerializer
+    serializer_class = ObjectViewsSerializerFG
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
     def get(self, request, *args, **kwargs):
@@ -166,6 +256,97 @@ class ObjectFactrumViews(generics.ListAPIView):
         serializer = self.get_serializer(data=list(queryset), many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+
+class ObjectAdmixerViews(generics.ListAPIView):
+    serializer_class = ObjectViewsSerializerAdmixer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
+
+    def _chunks(self, l, n):
+        return [l[i:i+n] for i in range(0, len(l), n)]
+
+    def _convert(self, tup):
+        di = {}
+        for a, b in tup:
+            di.setdefault(a, []).append(b)
+        return di
+
+    def _with_keys(self, d, keys):
+        return {x: d[x] for x in d if x in keys}
+
+    def _query_admixer_data(self, results, batch_ids, start_date, end_date):
+        ids = ",".join("'%s'" % item for item in batch_ids)
+
+        query = 'select UrlId, Platform, Browser, Country, Age, Gender, Income, count(distinct IntVisKey), Sum(Views), Date ' \
+                'from admixer.UrlStat ' \
+                'where UrlId in (%s) and Date >= \'%s\' and Date <= \'%s\' ' \
+                'Group by UrlId, Platform, Browser, Country, Age, Gender, Income, Date' % (ids, start_date, end_date)
+
+        response = self._client.execute(query)
+        keys = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
+        for row in response:
+            item = dict(zip(keys, row[1:]))
+            date = item["date"] - datetime.timedelta(days=item["date"].weekday())
+            if date not in results:
+                results[date] = item["views"]
+            else:
+                results[date] += item["views"]
+
+        logger.info("Received %d records from ClickHouse", len(results))
+
+        return results
+
+    def get(self, request, *args, **kwargs):
+
+        params = handle_request_params(request)
+
+        if "posted_date__lte" not in params:
+            end_date = settings.DEFAULT_TO_DATE
+            start_date = settings.DEFAULT_FROM_DATE
+        else:
+            end_date = params["posted_date__lte"]
+            start_date = params["posted_date__gte"]
+
+        self.queryset = []
+
+        publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
+        logger.info("Get %d publications" % len(publications))
+
+        l_part = self._convert(publications)
+        logger.info("Convert %d publications" % len(publications))
+
+        self._client = Client(settings.CLICKHOUSE_HOST,
+                              database=settings.CLICKHOUSE_DB,
+                              user=settings.CLICKHOUSE_USER,
+                              password=settings.CLICKHOUSE_PASSWORD)
+
+        total = len(publications)
+        current = 0
+        self.queryset = []
+
+        for obj, ids in l_part.items():
+            results = {}
+
+            for batch_ids in self._chunks(ids, 10000):
+                logger.info("Sent %d ids" % len(batch_ids))
+                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
+                current += len(batch_ids)
+                logger.info("Processed: %d/%d" % (current, total))
+
+            for date, views in results.items():
+                self.queryset.append({
+                    "object": obj,
+                    "views": views,
+                    "date": date,
+                })
+
+        self._client.disconnect()
+
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        return Response(queryset)
 
 
 class KeywordFactrumSdViews(generics.ListAPIView):
@@ -256,6 +437,7 @@ class ObjectFactrumSdViews(generics.ListAPIView):
         serializer = self.get_serializer(data=list(queryset), many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
 
 class KeywordAdmixerSdViews(generics.ListAPIView):
     serializer_class = DynamicAnalyzedInfoSerializer

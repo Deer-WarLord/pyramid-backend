@@ -61,10 +61,13 @@ class ThemeCompanyViewsSerializer(serializers.Serializer):
         return super(ThemeCompanyViewsSerializer, self).to_internal_value(data=data)
 
 
-class ObjectViewsSerializer(serializers.Serializer):
+class ObjectViewsSerializerAdmixer(serializers.Serializer):
     object = serializers.CharField(max_length=1024)
     views = serializers.IntegerField()
     date = serializers.DateField(required=False)
+
+
+class ObjectViewsSerializerFG(ObjectViewsSerializerAdmixer):
 
     def to_internal_value(self, data):
         date = data.pop("upload_info__title")
@@ -80,7 +83,10 @@ class ObjectViewsSerializer(serializers.Serializer):
 
         data["date"] = end_period.strftime("%Y-%m-%d")
         data["object"] = data.pop("article__object")
-        return super(ObjectViewsSerializer, self).to_internal_value(data=data)
+        return super(ObjectViewsSerializerFG, self).to_internal_value(data=data)
+
+
+
 
 
 class ThemeCompanySdViewsSerializer(serializers.Serializer):

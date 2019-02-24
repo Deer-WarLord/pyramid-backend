@@ -46612,8 +46612,8 @@ module.exports = Marionette.AppRouter.extend({
         'general-social-demo-rating-by-publication-fg(/:fromDate/:toDate)': 'generalSocialDemoRatingPublicationAggregatorFG',
 
         'chart-keyword/': "chartKeyword",
-        'chart-keyword-fg/': "chartKeywordFg",
-        'chart-keyword-fg-sd/': "chartKeywordFgSd",
+        'chart-keyword-object-view/': "chartKeywordFg",
+        'chart-keyword-object-sd/': "chartKeywordFgSd",
 
         'admin-data-uploader': 'admin_data_uploader',
         'admin-user-roles': 'admin_user_roles',
@@ -47646,14 +47646,14 @@ module.exports = Marionette.ItemView.extend({
     keywordChartFg: function () {
         this.activateKeywordFgChart();
         this.model.clear();
-        this.model.set("history", "chart-keyword-fg/");
+        this.model.set("history", "chart-keyword-object-view/");
         this.triggerMethod('show:chart:keyword:fg');
     },
 
     keywordChartFgSd: function () {
         this.activateKeywordFgSdChart();
         this.model.clear();
-        this.model.set("history", "chart-keyword-fg-sd/");
+        this.model.set("history", "chart-keyword-object-sd/");
         this.triggerMethod('show:chart:keyword:fg:sd');
     },
 
@@ -50901,7 +50901,7 @@ return __p;
 /* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(_, $) {//keyword-chart-fg.js
+/* WEBPACK VAR INJECTION */(function(_, $) {//keyword-object-chart-view.js
 
 var Backbone = __webpack_require__(6);
 var Marionette = __webpack_require__(2);
@@ -51305,6 +51305,7 @@ module.exports = Marionette.CompositeView.extend({
             var url = _.map($wrapper.find('.form4').serializeArray(), function (item) {
                 return item.value;
             });
+            var groupBy = "key_word";
 
             if (url.length > 0) {
                 this.model.set("url", url[0]);
@@ -51317,6 +51318,7 @@ module.exports = Marionette.CompositeView.extend({
             } else {
                 var titleKey = "object__in";
                 this.model.set("url", url[0].replace("keyword", "object"));
+                groupBy = "object";
             }
 
             this.ui.dynamicChart = $wrapper.find(".demo-vertical-bar-chart");
@@ -51325,7 +51327,7 @@ module.exports = Marionette.CompositeView.extend({
 
             this.triggerMethod('fetched');
             this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
-            this.query("object");
+            this.query(groupBy);
             $btnNext.hide();
             $btnSuccess.addClass("hidden");
 
@@ -51367,7 +51369,7 @@ return __p;
 /* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(_, $) {//keyword-chart-fg-sd.js
+/* WEBPACK VAR INJECTION */(function(_, $) {//keyword-object-chart-sd.js
 
 var Backbone = __webpack_require__(6);
 var Marionette = __webpack_require__(2);
