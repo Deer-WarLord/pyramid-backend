@@ -309,7 +309,7 @@ class ObjectAdmixerViews(generics.ListAPIView):
 
         self.queryset = []
 
-        publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
+        publications = Publication.objects.filter(**params).values_list("object", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
         l_part = self._convert(publications)
@@ -460,22 +460,15 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
 
         params = handle_request_params(request)
 
-        try:
-            end_date = params.pop("posted_date__lte")
-            start_date = params.pop("posted_date__gte")
-        except KeyError as e:
-            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
-            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
-
-        if "key_word__in" not in params:
-            top = Publication.objects.values('key_word').annotate(
-                publication_amount=Count("key_word")).order_by("-publication_amount").values_list(
-                "key_word", flat=True)[0]
-
-            params["key_word__in"] = [top]
+        if "posted_date__lte" not in params:
+            end_date = settings.DEFAULT_TO_DATE
+            start_date = settings.DEFAULT_FROM_DATE
+        else:
+            end_date = params["posted_date__lte"]
+            start_date = params["posted_date__gte"]
 
         display_fields = ['uniques', 'views', 'date']
-        sd = params.pop('sd') if "sd" in params else None
+        sd = params.pop('sd') if "sd" in params else 'gender'
         publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
@@ -530,12 +523,10 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             date = item["date"] - datetime.timedelta(days=item["date"].weekday())
             if date not in results:
                 results[date] = item
-                if sd:
-                    results[date][sd] = [item[sd]]
+                results[date][sd] = [item[sd]]
             else:
                 for key in display_fields[:2]:
                     results[date][key] += item[key]
-                if sd:
                     results[date][sd].append(item[sd])
 
         logger.info("Received %d records from ClickHouse", len(results))
@@ -568,23 +559,16 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
 
         params = handle_request_params(request)
 
-        try:
-            end_date = params.pop("posted_date__lte")
-            start_date = params.pop("posted_date__gte")
-        except KeyError as e:
-            end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
-            start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
-
-        if "key_word__in" not in params:
-            top = Publication.objects.values('key_word').annotate(
-                publication_amount=Count("key_word")).order_by("-publication_amount").values_list(
-                "key_word", flat=True)[0]
-
-            params["key_word__in"] = [top]
+        if "posted_date__lte" not in params:
+            end_date = settings.DEFAULT_TO_DATE
+            start_date = settings.DEFAULT_FROM_DATE
+        else:
+            end_date = params["posted_date__lte"]
+            start_date = params["posted_date__gte"]
 
         display_fields = ['uniques', 'views', 'date']
-        sd = params.pop('sd') if "sd" in params else None
-        publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
+        sd = params.pop('sd') if "sd" in params else 'gender'
+        publications = Publication.objects.filter(**params).values_list("object", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
         l_part = self._convert(publications)
@@ -599,7 +583,7 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
         current = 0
         self.queryset = []
 
-        for key_word, ids in l_part.items():
+        for obj, ids in l_part.items():
             results = {}
             for batch_ids in self._chunks(ids, 10000):
                 logger.info("Sent %d ids" % len(batch_ids))
@@ -608,13 +592,12 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
                 logger.info("Processed: %d/%d" % (current, total))
             for date, items in results.items():
                 row = {
-                    "key_word": key_word,
+                    "object": obj,
                     "views": items["views"],
                     "uniques": items["uniques"],
                     "date": date,
+                    sd: dict(Counter(items[sd]))
                 }
-                if sd:
-                    row[sd] = dict(Counter(items[sd]))
                 self.queryset.append(row)
 
         self._client.disconnect()
@@ -638,12 +621,10 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
             date = item["date"] - datetime.timedelta(days=item["date"].weekday())
             if date not in results:
                 results[date] = item
-                if sd:
-                    results[date][sd] = [item[sd]]
+                results[date][sd] = [item[sd]]
             else:
                 for key in display_fields[:2]:
                     results[date][key] += item[key]
-                if sd:
                     results[date][sd].append(item[sd])
 
         logger.info("Received %d records from ClickHouse", len(results))

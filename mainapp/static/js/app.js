@@ -51538,10 +51538,10 @@ var fgListTmpl = "<div class=\"control-inline toolbar-item-group sd-chart-list\"
 
 var admixerListTmpl = "<div class=\"control-inline toolbar-item-group sd-chart-list\">\n" +
     "<select class=\"sd-list\" name=\"sdList\">\n" +
+        "<option value=\"gender\">Гендер</option>\n" +
         "<option value=\"platform\">Платформа</option>\n" +
         "<option value=\"browser\">Браузер</option>\n" +
         "<option value=\"age\">Возраст</option>\n" +
-        "<option value=\"gender\">Гендер</option>\n" +
         "<!--<option value=\"region\">Регион</option>-->\n" +
         "<!--<option value=\"income\">Групп населения</option>-->\n" +
     "</select>\n" +
@@ -51667,7 +51667,7 @@ module.exports = Marionette.CompositeView.extend({
     filterCollectionSd: function(event, val, isTrue) {
         this.model.set("sd", val);
         this.ui.dynamicChart = this.$(event.target).parents(".widget").find(".demo-vertical-bar-chart");
-        this.query((self.model.has("object__in")) ? "object" : "key_word");
+        this.query((this.model.has("object__in")) ? "object" : "key_word");
     },
 
     filterCollectionDates: function(event, data) {
@@ -51752,79 +51752,51 @@ module.exports = Marionette.CompositeView.extend({
             .map(function (item) { return {x: item, y: 0};})
             .value();
 
-        if (sdKey === undefined){
-            var result = _.chain(data)
-                .groupBy(function(item) { return item[groupBy]; })
-                .mapObject(function(val, key) {
-                    return _.chain(val)
-                        .map(function(item){
-                            return { x: item.date, y: item.views};
-                        })
-                        .sortBy(function(item) { return new Date(item.x); })
-                        .union(dateDict)
-                        .uniq("x")
-                        .sortBy(function(item) { return new Date(item.x); })
-                        .value();
-                })
-                .pairs()
-                .map(function (item) {
-                    return {
-                        label: item[0],
-                        data: item[1],
-                        backgroundColor: self.stringToColour(item[0]),
-                        borderColor : "#111",
-                        borderWidth : 1
-                    };
-                })
-                .value();
-        } else {
-            result = {};
+        var result = {};
 
-            _.each(_.values(sdMap[sdKey]), function(el){
-                result[el] = [];
+        _.each(_.values(sdMap[sdKey]), function(el){
+            result[el] = [];
+        });
+
+        if (url.includes("-fg-")) {
+            _.each(data, function (el_i) {
+                _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
+                    var views = el_i[sdKey][el_j_k];
+                    views = (views !== undefined) ? views/100.0 * el_i.views : 0;
+                    result[el_j_v].push([el_i.date, views]);
+                })
             });
-
-            if (url.includes("-fg-")) {
-                _.each(data, function (el_i) {
-                    _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
-                        var views = el_i[sdKey][el_j_k];
-                        views = (views !== undefined) ? views/100.0 * el_i.views : 0;
-                        result[el_j_v].push([el_i.date, views]);
-                    })
-                });
-            } else {
-                _.each(data, function (el_i) {
-                    _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
-                        var views = el_i[sdKey][el_j_k];
-                        result[el_j_v].push([el_i.date, views]);
-                    })
-                });
-            }
-
-            result = _.chain(result).mapObject(function(val, key) {
-                    return _.chain(val)
-                            .groupBy(function(item) {return item[0];})
-                            .mapObject(function(val, key){
-                                return _.reduce(val, function(s, item) {
-                                    return s + item[1]}, 0);
-                            })
-                            .pairs().value();
-            }).pairs().map(function (item) {
-                return {
-                    label: item[0],
-                    data: _.chain(item[1])
-                            .sortBy(function (el) {
-                                return el[0];})
-                            .map(function(el){
-                                return {x:el[0], y:el[1]};})
-                            .value(),
-                    backgroundColor: self.stringToColour(item[0]),
-                    borderColor : "#111",
-                    borderWidth : 1
-                };
-            }).value();
-
+        } else {
+            _.each(data, function (el_i) {
+                _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
+                    var views = el_i[sdKey][el_j_k];
+                    result[el_j_v].push([el_i.date, views]);
+                })
+            });
         }
+
+        result = _.chain(result).mapObject(function(val, key) {
+                return _.chain(val)
+                        .groupBy(function(item) {return item[0];})
+                        .mapObject(function(val, key){
+                            return _.reduce(val, function(s, item) {
+                                return s + item[1]}, 0);
+                        })
+                        .pairs().value();
+        }).pairs().map(function (item) {
+            return {
+                label: item[0],
+                data: _.chain(item[1])
+                        .sortBy(function (el) {
+                            return el[0];})
+                        .map(function(el){
+                            return {x:el[0], y:el[1]};})
+                        .value(),
+                backgroundColor: self.stringToColour(item[0]),
+                borderColor : "#111",
+                borderWidth : 1
+            };
+        }).value();
 
         return [result, minDate, maxDate];
     },
@@ -51998,18 +51970,27 @@ module.exports = Marionette.CompositeView.extend({
                 return item.value;
             });
 
-            if (url.length > 0) {
-                this.model.set("url", url[0]);
-                var listTemplate = (url[0].includes("-fg-")) ? fgListTmpl : admixerListTmpl;
-            } else {
+            if (url.length <= 0) {
                 return false;
             }
 
+            this.model.set("url", url[0]);
+            if (url[0].includes("-fg-")) {
+                var listTemplate = fgListTmpl;
+                this.model.set("sd", "sex");
+            } else {
+                listTemplate = admixerListTmpl;
+                this.model.set("sd", "gender");
+            }
+
+            var groupBy = "key_word";
             if (this.withoutObject === true) {
                 titleKey = "key_word__in";
+
             } else {
                 var titleKey = "object__in";
                 this.model.set("url", url[0].replace("keyword", "object"));
+                groupBy = "object";
             }
 
             this.ui.dynamicChart = $wrapper.find(".demo-vertical-bar-chart");
@@ -52019,7 +52000,7 @@ module.exports = Marionette.CompositeView.extend({
             $wrapper.find(".sd-chart-list").html(listTemplate);
             this.triggerMethod('fetched');
             this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
-            this.query("object");
+            this.query(groupBy);
             $btnNext.hide();
             $btnSuccess.addClass("hidden");
 
