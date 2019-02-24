@@ -46977,9 +46977,9 @@ var PublicationTopicRating = __webpack_require__(135);
 var PublicationRating = __webpack_require__(139);
 var SocialDemoRatingAdmixer = __webpack_require__(143);
 var SocialDemoRatingFG = __webpack_require__(148);
-var KeywordChart = __webpack_require__(154);
-var KeywordChartFg = __webpack_require__(156);
-var KeywordChartFgSd = __webpack_require__(158);
+var KeywordObjectChartAmount = __webpack_require__(154);
+var KeywordObjectChartView = __webpack_require__(156);
+var KeywordObjectChartSd = __webpack_require__(158);
 
 var AdminDataUploader = __webpack_require__(161);
 var AdminUserRoles = __webpack_require__(164);
@@ -47341,7 +47341,7 @@ module.exports = Marionette.LayoutView.extend({
         if (this.initialData.permissions.theme) {
             this.showBars();
             this.$(this.regions.keyword_chart).show();
-            this.showChildView('keyword_chart', new KeywordChart({
+            this.showChildView('keyword_chart', new KeywordObjectChartAmount({
                 model: this.model,
                 permissions: this.initialData.permissions,
                 fixed_dates: this.initialData.dates
@@ -47353,7 +47353,7 @@ module.exports = Marionette.LayoutView.extend({
         if (this.initialData.permissions.theme) {
             this.showBars();
             this.$(this.regions.keyword_chart).show();
-            this.showChildView('keyword_chart', new KeywordChartFg({
+            this.showChildView('keyword_chart', new KeywordObjectChartView({
                 model: this.model,
                 permissions: this.initialData.permissions,
                 fixed_dates: this.initialData.dates
@@ -47365,7 +47365,7 @@ module.exports = Marionette.LayoutView.extend({
         if (this.initialData.permissions.theme) {
             this.showBars();
             this.$(this.regions.keyword_chart).show();
-            this.showChildView('keyword_chart', new KeywordChartFgSd({
+            this.showChildView('keyword_chart', new KeywordObjectChartSd({
                 model: this.model,
                 permissions: this.initialData.permissions,
                 fixed_dates: this.initialData.dates
