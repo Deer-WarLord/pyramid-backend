@@ -50421,7 +50421,9 @@ return __p;
 /* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(_, $) {var Backbone = __webpack_require__(6);
+/* WEBPACK VAR INJECTION */(function(_, $) {// keyword-chart.js
+
+var Backbone = __webpack_require__(6);
 var Marionette = __webpack_require__(2);
 var Cookies = __webpack_require__(14);
 
@@ -50511,6 +50513,7 @@ module.exports = Marionette.CompositeView.extend({
     events: {
         'change @ui.input': 'filterCollectionDates',
         'change @ui.wizard': "wizardChange",
+        'stepclick @ui.wizard': "stepClick",
         'click @ui.wizardNext': "wizardNext",
         'click @ui.wizardPrev': "wizardPrev"
     },
@@ -50756,6 +50759,31 @@ module.exports = Marionette.CompositeView.extend({
             },
             data: this.model.attributes
         });
+    },
+
+    stepClick: function(e, data) {
+        var self = this;
+        var $wrapper = $(e.target).parents(".wizard-wrapper");
+        var $btnNext = $wrapper.find('.btn-primary.btn-next');
+        var $btnSuccess = $wrapper.find('.btn-success.btn-next');
+        if (data.step === 3) {
+            $btnNext.hide();
+            $btnSuccess.removeClass("hidden");
+            self.queryObjectsList(function(objects){
+                $wrapper.find(".objects-selection").html(objectsTmpl({collection: objects}));
+                self.triggerMethod('fetched');
+            });
+        } else if (data.step === 2) {
+            self.model.unset("object__in");
+            $btnNext.show();
+            $btnSuccess.removeClass("hidden");
+            self.withoutObject = false;
+        } else if (data.step === 1) {
+            self.model.unset("object__in");
+            $btnNext.show();
+            $btnSuccess.addClass("hidden");
+            self.withoutObject = false;
+        }
     },
 
     wizardChange: function (e, data) {
