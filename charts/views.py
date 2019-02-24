@@ -364,19 +364,9 @@ class KeywordFactrumSdViews(generics.ListAPIView):
             end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
             start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
-        if "key_word__in" not in params:
-            top = Publication.objects.values('key_word').annotate(
-                publication_amount=Count("key_word")).order_by("-publication_amount").values_list(
-                "key_word", flat=True)[0]
-
-            params["key_word__in"] = [top]
-
         self.queryset = []
 
-        display_fields = ["views", "title__title", "upload_info__title"]
-
-        if "sd" in params:
-            display_fields.append(params['sd'])
+        display_fields = ["views", "title__title", "upload_info__title", params['sd']]
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
             if not info.is_in_period(start_date, end_date):
@@ -409,19 +399,9 @@ class ObjectFactrumSdViews(generics.ListAPIView):
             end_date = datetime.datetime.strptime(settings.DEFAULT_TO_DATE, "%Y-%m-%d")
             start_date = datetime.datetime.strptime(settings.DEFAULT_FROM_DATE, "%Y-%m-%d")
 
-        if "object__in" not in params:
-            top = Publication.objects.values('object').annotate(
-                publication_amount=Count("object")).order_by("-publication_amount").values_list(
-                "object", flat=True)[0]
-
-            params["object__in"] = [top]
-
         self.queryset = []
 
-        display_fields = ["views", "title__title", "upload_info__title"]
-
-        if "sd" in params:
-            display_fields.append(params['sd'])
+        display_fields = ["views", "title__title", "upload_info__title", params['sd']]
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
             if not info.is_in_period(start_date, end_date):

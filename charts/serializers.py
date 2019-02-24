@@ -86,9 +86,6 @@ class ObjectViewsSerializerFG(ObjectViewsSerializerAdmixer):
         return super(ObjectViewsSerializerFG, self).to_internal_value(data=data)
 
 
-
-
-
 class ThemeCompanySdViewsSerializer(serializers.Serializer):
     key_word = serializers.CharField(max_length=1024)
     views = serializers.IntegerField()
@@ -122,7 +119,7 @@ class ThemeCompanySdViewsSerializer(serializers.Serializer):
 
 
 class ObjectSdViewsSerializer(serializers.Serializer):
-    key_word = serializers.CharField(max_length=1024)
+    object = serializers.CharField(max_length=1024)
     views = serializers.IntegerField()
     date = serializers.DateField(required=False)
     sex = serializers.DictField(required=False, child=serializers.IntegerField(min_value=0))
