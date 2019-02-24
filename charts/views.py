@@ -11,12 +11,15 @@ from rest_framework.response import Response
 from admixer.serializers import DynamicAnalyzedInfoSerializer
 from aggregator.permissions import IsRequestsToThemeAllow
 from charts.serializers import *
+from factrum_group.serializers import SocialDetailsSerializer
 from noksfishes.models import Publication
 import json
+import copy
 import datetime
 from uploaders.models import UploadedInfo
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -110,8 +113,7 @@ class KeywordFactrumViews(generics.ListAPIView):
         self.queryset = []
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group"):
-            if not info.is_in_period(start_date, end_date):
-                # TODO make flag for week or month
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
             self.queryset += info.factrum_group.filter(
                 title__title__in=params["key_word__in"]
@@ -132,7 +134,7 @@ class KeywordAdmixerViews(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -243,10 +245,10 @@ class ObjectFactrumViews(generics.ListAPIView):
         aggregator = "article__object"
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group"):
-            if not info.is_in_period(start_date, end_date):
-                # TODO make flag for week or month
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
-            self.queryset += info.factrum_group.filter(**filters).values(aggregator).annotate(views=Sum("views")).values(
+            self.queryset += info.factrum_group.filter(**filters).values(aggregator).annotate(
+                views=Sum("views")).values(
                 "views", aggregator, "upload_info__title")
 
         return self.list(request, *args, **kwargs)
@@ -263,7 +265,7 @@ class ObjectAdmixerViews(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -369,7 +371,7 @@ class KeywordFactrumSdViews(generics.ListAPIView):
         display_fields = ["views", "title__title", "upload_info__title", params['sd']]
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
-            if not info.is_in_period(start_date, end_date):
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
             self.queryset += info.factrum_group_detailed.filter(
                 title__title__in=params["key_word__in"]
@@ -388,6 +390,59 @@ class ObjectFactrumSdViews(generics.ListAPIView):
     serializer_class = ObjectSdViewsSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
+    fg_values_list = ('views', 'sex', 'age', 'education', 'children_lt_16',
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
+
+    def _concat_dict(self, ld, rd):
+        return dict([(k, ld[k] + rd[k] if k in rd else 0) for k in ld.keys()])
+
+    def _transform_concat(self, total, sd, all, specific, group):
+        views = sd["views"] / all * specific
+        calculate = lambda v: v / 100.0 * views
+        converter = lambda d: dict([(k, int(calculate(v))) for k, v in d.items()])
+        return {
+            "views": int(total["views"] + views),
+            group: self._concat_dict(total[group], converter(sd[group]))
+        }
+
+    def _build_object_sd(self, info, params):
+
+        instance = info.factrum_group_detailed.filter(title__title__in=params["key_word__in"]).first()
+
+        instance_sd = dict(zip(
+                self.fg_values_list,
+                [getattr(instance, field) for field in self.fg_values_list]))
+
+        start_date = datetime.datetime.strptime(instance.upload_info.title, "%w-%W-%Y")
+        end_date = start_date + datetime.timedelta(days=6)
+
+        query_params = {
+            'posted_date__gte': start_date,
+            'posted_date__lte': end_date,
+            'key_word__in': params["key_word__in"]
+        }
+
+        theme_rating = Publication.objects.filter(**query_params).values_list(
+            "key_word").annotate(publication_amount=Count("key_word")).order_by("-publication_amount").first()[1]
+
+        query_params["object__in"] = params["object__in"]
+
+        object_rating = Publication.objects.filter(**query_params).values_list(
+            "object").annotate(publication_amount=Count("key_word")).order_by("-publication_amount").first()[1]
+
+        init_sd = {}
+        info = SocialDetailsSerializer()
+        for key in self.fg_values_list[1:]:
+            keys = [str(f) for f in info.fields[key].keys]
+            init_sd[key] = dict(zip(keys, [0] * len(keys)))
+        init_sd["views"] = 0
+
+        sd = self._transform_concat(init_sd, instance_sd, theme_rating, object_rating, params["sd"])
+        sd["object"] = params["object__in"][0]
+        sd["date"] = end_date.strftime("%Y-%m-%d")
+
+        return [sd]
+
     def get(self, request, *args, **kwargs):
 
         params = handle_request_params(request)
@@ -401,22 +456,16 @@ class ObjectFactrumSdViews(generics.ListAPIView):
 
         self.queryset = []
 
-        display_fields = ["views", "title__title", "upload_info__title", params['sd']]
-
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
-            if not info.is_in_period(start_date, end_date):
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
-            self.queryset += info.factrum_group_detailed.filter(
-                title__title__in=params["key_word__in"]
-            ).values(*display_fields)
+            self.queryset += self._build_object_sd(info, params)
 
         return self.list(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(data=list(queryset), many=True)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data)
+        return Response(queryset)
 
 
 class KeywordAdmixerSdViews(generics.ListAPIView):
@@ -425,7 +474,7 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
     admixer_values_list = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -456,9 +505,9 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
         logger.info("Convert %d publications" % len(publications))
 
         self._client = Client(settings.CLICKHOUSE_HOST,
-                        database=settings.CLICKHOUSE_DB,
-                        user=settings.CLICKHOUSE_USER,
-                        password=settings.CLICKHOUSE_PASSWORD)
+                              database=settings.CLICKHOUSE_DB,
+                              user=settings.CLICKHOUSE_USER,
+                              password=settings.CLICKHOUSE_PASSWORD)
 
         total = len(publications)
         current = 0
@@ -524,7 +573,7 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
     admixer_values_list = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
 
     def _chunks(self, l, n):
-        return [l[i:i+n] for i in range(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def _convert(self, tup):
         di = {}
@@ -621,7 +670,8 @@ class ThemeList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
 
     def list(self, request, *args, **kwargs):
-        return Response([{"market": item["market__name"], "keywords": set(item["keywords"])} for item in self.get_queryset()])
+        return Response(
+            [{"market": item["market__name"], "keywords": set(item["keywords"])} for item in self.get_queryset()])
 
 
 class ObjectsList(generics.ListAPIView):
@@ -640,4 +690,5 @@ class ObjectsList(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        return Response([{"key_word": item["key_word"], "objects": set(item["objects"])} for item in self.get_queryset()])
+        return Response(
+            [{"key_word": item["key_word"], "objects": set(item["objects"])} for item in self.get_queryset()])
