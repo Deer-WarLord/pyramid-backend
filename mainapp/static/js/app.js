@@ -51667,7 +51667,9 @@ module.exports = Marionette.CompositeView.extend({
     filterCollectionSd: function(event, val, isTrue) {
         this.model.set("sd", val);
         this.ui.dynamicChart = this.$(event.target).parents(".widget").find(".demo-vertical-bar-chart");
-        this.query((this.model.has("object__in")) ? "object" : "key_word");
+        var url = this.model.get("url") || "/charts/keyword-fg-sd/";
+        var sdMap = (url.includes("-fg-")) ? FACTRUM_SD_MAP : ADMIXER_SD_MAP;
+        this.buildDynamicGraph(this.processGraphData(this.respond, sdMap, url, val));
     },
 
     filterCollectionDates: function(event, data) {
@@ -51700,6 +51702,7 @@ module.exports = Marionette.CompositeView.extend({
             url: url,
             data: _.omit(this.model.toJSON(), "url"),
             success: function( respond, textStatus, jqXHR ){
+                self.respond = respond;
                 self.buildDynamicGraph(self.processGraphData(respond, sdMap, url, groupBy));
             },
             error: function( jqXHR, textStatus, errorThrown ){
@@ -51758,7 +51761,7 @@ module.exports = Marionette.CompositeView.extend({
             result[el] = [];
         });
 
-        if (url.includes("-fg-")) {
+        if (url.includes("-fg-") && !url.includes("object")) {
             _.each(data, function (el_i) {
                 _.each(sdMap[sdKey], function (el_j_v, el_j_k) {
                     var views = el_i[sdKey][el_j_k];
@@ -51883,6 +51886,7 @@ module.exports = Marionette.CompositeView.extend({
         } else if (data.step === 3) {
             self.model.unset("object__in");
             self.model.unset("url");
+            self.model.unset("sd");
             $btnNext.show();
             $btnSuccess.addClass("hidden");
             self.queryObjectsList(function(objects){
@@ -51892,12 +51896,14 @@ module.exports = Marionette.CompositeView.extend({
         } else if (data.step === 2) {
             self.model.unset("object__in");
             self.model.unset("url");
+            self.model.unset("sd");
             $btnNext.show();
             $btnSuccess.addClass("hidden");
             self.withoutObject = false;
         } else if (data.step === 1) {
             self.model.unset("object__in");
             self.model.unset("url");
+            self.model.unset("sd");
             $btnNext.show();
             $btnSuccess.addClass("hidden");
             self.withoutObject = false;

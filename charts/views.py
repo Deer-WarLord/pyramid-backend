@@ -142,9 +142,6 @@ class KeywordAdmixerViews(generics.ListAPIView):
             di.setdefault(a, []).append(b)
         return di
 
-    def _with_keys(self, d, keys):
-        return {x: d[x] for x in d if x in keys}
-
     def _query_admixer_data(self, results, batch_ids, start_date, end_date):
         ids = ",".join("'%s'" % item for item in batch_ids)
 
@@ -260,43 +257,8 @@ class ObjectFactrumViews(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ObjectAdmixerViews(generics.ListAPIView):
+class ObjectAdmixerViews(KeywordAdmixerViews):
     serializer_class = ObjectViewsSerializerAdmixer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
-
-    def _chunks(self, l, n):
-        return [l[i:i + n] for i in range(0, len(l), n)]
-
-    def _convert(self, tup):
-        di = {}
-        for a, b in tup:
-            di.setdefault(a, []).append(b)
-        return di
-
-    def _with_keys(self, d, keys):
-        return {x: d[x] for x in d if x in keys}
-
-    def _query_admixer_data(self, results, batch_ids, start_date, end_date):
-        ids = ",".join("'%s'" % item for item in batch_ids)
-
-        query = 'select UrlId, Platform, Browser, Country, Age, Gender, Income, count(distinct IntVisKey), Sum(Views), Date ' \
-                'from admixer.UrlStat ' \
-                'where UrlId in (%s) and Date >= \'%s\' and Date <= \'%s\' ' \
-                'Group by UrlId, Platform, Browser, Country, Age, Gender, Income, Date' % (ids, start_date, end_date)
-
-        response = self._client.execute(query)
-        keys = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
-        for row in response:
-            item = dict(zip(keys, row[1:]))
-            date = item["date"] - datetime.timedelta(days=item["date"].weekday())
-            if date not in results:
-                results[date] = item["views"]
-            else:
-                results[date] += item["views"]
-
-        logger.info("Received %d records from ClickHouse", len(results))
-
-        return results
 
     def get(self, request, *args, **kwargs):
 
@@ -368,7 +330,8 @@ class KeywordFactrumSdViews(generics.ListAPIView):
 
         self.queryset = []
 
-        display_fields = ["views", "title__title", "upload_info__title", params['sd']]
+        display_fields = ["views", "title__title", "upload_info__title", 'sex', 'age', 'education', 'children_lt_16',
+                          'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP']
 
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
             if not info.is_in_period(start_date, end_date, "week"):
@@ -402,7 +365,16 @@ class ObjectFactrumSdViews(generics.ListAPIView):
         converter = lambda d: dict([(k, int(calculate(v))) for k, v in d.items()])
         return {
             "views": int(total["views"] + views),
-            group: self._concat_dict(total[group], converter(sd[group]))
+            "sex": self._concat_dict(total["sex"], converter(sd["sex"])),
+            "age": self._concat_dict(total["age"], converter(sd["age"])),
+            "education": self._concat_dict(total["education"], converter(sd["education"])),
+            "children_lt_16": self._concat_dict(total["children_lt_16"], converter(sd["children_lt_16"])),
+            "marital_status": self._concat_dict(total["marital_status"], converter(sd["marital_status"])),
+            "occupation": self._concat_dict(total["occupation"], converter(sd["occupation"])),
+            "group": self._concat_dict(total["group"], converter(sd["group"])),
+            "income": self._concat_dict(total["income"], converter(sd["income"])),
+            "region": self._concat_dict(total["region"], converter(sd["region"])),
+            "typeNP": self._concat_dict(total["typeNP"], converter(sd["typeNP"]))
         }
 
     def _build_object_sd(self, info, params):
@@ -482,12 +454,10 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             di.setdefault(a, []).append(b)
         return di
 
-    def _with_keys(self, d, keys):
-        return {x: d[x] for x in d if x in keys}
-
     def get(self, request, *args, **kwargs):
 
         params = handle_request_params(request)
+        params.pop('sd')
 
         if "posted_date__lte" not in params:
             end_date = settings.DEFAULT_TO_DATE
@@ -496,8 +466,6 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             end_date = params["posted_date__lte"]
             start_date = params["posted_date__gte"]
 
-        display_fields = ['uniques', 'views', 'date']
-        sd = params.pop('sd') if "sd" in params else 'gender'
         publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
@@ -517,7 +485,7 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             results = {}
             for batch_ids in self._chunks(ids, 10000):
                 logger.info("Sent %d ids" % len(batch_ids))
-                results = self._query_admixer_data(results, batch_ids, display_fields, sd, start_date, end_date)
+                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
                 current += len(batch_ids)
                 logger.info("Processed: %d/%d" % (current, total))
             for date, items in results.items():
@@ -525,17 +493,17 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
                     "key_word": key_word,
                     "views": items["views"],
                     "uniques": items["uniques"],
-                    "date": date,
+                    "date": date
                 }
-                if sd:
-                    row[sd] = dict(Counter(items[sd]))
+                for key in self.admixer_values_list[:-3]:
+                    row[key] = dict(Counter(items[key]))
                 self.queryset.append(row)
 
         self._client.disconnect()
 
         return self.list(request, *args, **kwargs)
 
-    def _query_admixer_data(self, results, batch_ids, display_fields, sd, start_date, end_date):
+    def _query_admixer_data(self, results, batch_ids, start_date, end_date):
         ids = ",".join("'%s'" % item for item in batch_ids)
 
         query = 'select UrlId, Platform, Browser, Country, Age, Gender, Income, count(distinct IntVisKey), Sum(Views), Date ' \
@@ -545,18 +513,20 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
 
         response = self._client.execute(query)
         keys = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
-        df = display_fields + [sd] if sd else display_fields
         for row in response:
             item = dict(zip(keys, row[1:]))
-            item = self._with_keys(item, df)
             date = item["date"] - datetime.timedelta(days=item["date"].weekday())
             if date not in results:
-                results[date] = item
-                results[date][sd] = [item[sd]]
+                results[date] = {}
+                results[date]['uniques'] = item['uniques']
+                results[date]['views'] = item['views']
+                for key in keys[:-3]:
+                    results[date][key] = [item[key]]
             else:
-                for key in display_fields[:2]:
-                    results[date][key] += item[key]
-                    results[date][sd].append(item[sd])
+                for key in keys[:-3]:
+                    results[date][key].append(item[key])
+                results[date]['uniques'] += item['uniques']
+                results[date]['views'] += item['views']
 
         logger.info("Received %d records from ClickHouse", len(results))
 
@@ -567,26 +537,13 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
         return Response(queryset)
 
 
-class ObjectAdmixerSdViews(generics.ListAPIView):
+class ObjectAdmixerSdViews(KeywordAdmixerSdViews):
     serializer_class = DynamicAnalyzedInfoSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
-    admixer_values_list = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
-
-    def _chunks(self, l, n):
-        return [l[i:i + n] for i in range(0, len(l), n)]
-
-    def _convert(self, tup):
-        di = {}
-        for a, b in tup:
-            di.setdefault(a, []).append(b)
-        return di
-
-    def _with_keys(self, d, keys):
-        return {x: d[x] for x in d if x in keys}
 
     def get(self, request, *args, **kwargs):
 
         params = handle_request_params(request)
+        params.pop("sd")
 
         if "posted_date__lte" not in params:
             end_date = settings.DEFAULT_TO_DATE
@@ -595,8 +552,6 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
             end_date = params["posted_date__lte"]
             start_date = params["posted_date__gte"]
 
-        display_fields = ['uniques', 'views', 'date']
-        sd = params.pop('sd') if "sd" in params else 'gender'
         publications = Publication.objects.filter(**params).values_list("object", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
@@ -616,7 +571,7 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
             results = {}
             for batch_ids in self._chunks(ids, 10000):
                 logger.info("Sent %d ids" % len(batch_ids))
-                results = self._query_admixer_data(results, batch_ids, display_fields, sd, start_date, end_date)
+                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
                 current += len(batch_ids)
                 logger.info("Processed: %d/%d" % (current, total))
             for date, items in results.items():
@@ -624,45 +579,15 @@ class ObjectAdmixerSdViews(generics.ListAPIView):
                     "object": obj,
                     "views": items["views"],
                     "uniques": items["uniques"],
-                    "date": date,
-                    sd: dict(Counter(items[sd]))
+                    "date": date
                 }
+                for key in self.admixer_values_list[:-3]:
+                    row[key] = dict(Counter(items[key]))
                 self.queryset.append(row)
 
         self._client.disconnect()
 
         return self.list(request, *args, **kwargs)
-
-    def _query_admixer_data(self, results, batch_ids, display_fields, sd, start_date, end_date):
-        ids = ",".join("'%s'" % item for item in batch_ids)
-
-        query = 'select UrlId, Platform, Browser, Country, Age, Gender, Income, count(distinct IntVisKey), Sum(Views), Date ' \
-                'from admixer.UrlStat ' \
-                'where UrlId in (%s) and Date >= \'%s\' and Date <= \'%s\' ' \
-                'Group by UrlId, Platform, Browser, Country, Age, Gender, Income, Date' % (ids, start_date, end_date)
-
-        response = self._client.execute(query)
-        keys = ('platform', 'browser', 'region', 'age', 'gender', 'income', 'uniques', 'views', 'date')
-        df = display_fields + [sd] if sd else display_fields
-        for row in response:
-            item = dict(zip(keys, row[1:]))
-            item = self._with_keys(item, df)
-            date = item["date"] - datetime.timedelta(days=item["date"].weekday())
-            if date not in results:
-                results[date] = item
-                results[date][sd] = [item[sd]]
-            else:
-                for key in display_fields[:2]:
-                    results[date][key] += item[key]
-                    results[date][sd].append(item[sd])
-
-        logger.info("Received %d records from ClickHouse", len(results))
-
-        return results
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        return Response(queryset)
 
 
 class ThemeList(generics.ListAPIView):
