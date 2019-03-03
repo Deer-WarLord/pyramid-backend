@@ -35,16 +35,21 @@ class UploadedInfo(models.Model):
     file = models.FileField()
     created_date = models.DateTimeField(default=now)
 
-    def is_in_period(self, start_date, end_date):
-        try:
-            start_period = datetime.datetime.strptime(self.title, "%m-%Y")
-            end_period = start_period + datetime.timedelta(calendar.monthrange(start_period.year, start_period.month)[1])
-        except ValueError:
+    def is_in_period(self, start_date, end_date, period):
+
+        if period == "week":
             try:
                 start_period = datetime.datetime.strptime(self.title, "%w-%W-%Y")
                 end_period = start_period + datetime.timedelta(days=6)
             except ValueError:
-                raise ValidationError({"title": ["Title should be in format %m-%Y or %w-%W-%Y"]})
+                return False
+        else:
+            try:
+                start_period = datetime.datetime.strptime(self.title, "%m-%Y")
+                end_period = start_period + datetime.timedelta(calendar.monthrange(start_period.year, start_period.month)[1])
+            except ValueError:
+                return False
+
         return start_period >= start_date and end_period <= end_date
 
     def __unicode__(self):

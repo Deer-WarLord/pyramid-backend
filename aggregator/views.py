@@ -672,8 +672,7 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
         start_date = datetime.strptime(params['posted_date__gte'], "%Y-%m-%d")
         end_date = datetime.strptime(params['posted_date__lte'], "%Y-%m-%d")
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
-            if not info.is_in_period(start_date, end_date):
-                # TODO make flag for week or month
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
             queryset += info.factrum_group_detailed.filter(
                 title__title__in=params['key_word__in']).values(*self.fg_values_list).order_by("-views")
@@ -726,8 +725,7 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHa
         start_date = datetime.strptime(params['posted_date__gte'], "%Y-%m-%d")
         end_date = datetime.strptime(params['posted_date__lte'], "%Y-%m-%d")
         for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
-            if not info.is_in_period(start_date, end_date):
-                # TODO make flag for week or month
+            if not info.is_in_period(start_date, end_date, "week"):
                 continue
             sd += info.factrum_group_detailed.filter(
                 title__title__in=params['key_word__in']).values(*self.fg_values_list)
@@ -770,8 +768,7 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
             start_date = datetime.strptime(params['posted_date__gte'], "%Y-%m-%d")
             end_date = datetime.strptime(params['posted_date__lte'], "%Y-%m-%d")
             for info in UploadedInfo.objects.filter(provider__title="factrum_group_social"):
-                if not info.is_in_period(start_date, end_date):
-                    # TODO make flag for week or month
+                if not info.is_in_period(start_date, end_date, "week"):
                     continue
                 queryset += info.factrum_group_detailed.values(*self.fg_values_list).order_by("-views")
         else:
