@@ -77,17 +77,31 @@ class ParamsHandler:
         return params
 
 
-class GeneralInfoRenderer(r.CSVRenderer):
+class WinCSVRenderer(r.CSVRenderer):
+
+    def render(self, data, *args, **kwargs):
+        args[1]['encoding'] = 'cp1251'
+        return super(WinCSVRenderer, self).render(data, *args, **kwargs)
+
+
+class WinPaginatedCSVRenderer(r.PaginatedCSVRenderer):
+
+    def render(self, data, *args, **kwargs):
+        args[1]['encoding'] = 'cp1251'
+        return super(WinPaginatedCSVRenderer, self).render(data, *args, **kwargs)
+
+
+class GeneralInfoRenderer(WinCSVRenderer):
     header = ['shukach_id', 'url', 'factrum_views', 'admixer_views']
 
 
-class SocialDetailsRenderer(r.CSVRenderer):
+class SocialDetailsRenderer(WinCSVRenderer):
     header = ['id_theme', 'theme', 'factrum_views', 'admixer_views', 'uniques_admixer', 'sex_factrum', 'sex_admixer',
               'age_factrum', 'age_admixer', 'region_factrum', 'region_admixer', 'income_factrum', 'income_admixer',
               'education', 'children_lt_16', 'marital_status', 'occupation', 'group', 'typeNP', 'platform', 'browser']
 
 
-class FGRenderer(r.PaginatedCSVRenderer):
+class FGRenderer(WinPaginatedCSVRenderer):
     labels = {
         "title__title": "Ключи",
         "publication": "СМИ",
@@ -148,7 +162,7 @@ class FGRenderer(r.PaginatedCSVRenderer):
     }
 
 
-class AdmixerRenderer(r.PaginatedCSVRenderer):
+class AdmixerRenderer(WinPaginatedCSVRenderer):
     labels = {
         "uniques": "Уникальных пользователей",
         "views": "Просмотров",
@@ -305,7 +319,7 @@ class FactrumAdmixerSocialDetailsList(generics.ListAPIView):
 
 
 class MarketsRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Market.objects
     serializer_class = MarketsRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -330,7 +344,7 @@ class MarketsRating(generics.ListAPIView, ParamsHandler):
 
 
 class ThemeCompanyRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = ThemeCompanyRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -355,7 +369,7 @@ class ThemeCompanyRating(generics.ListAPIView, ParamsHandler):
 
 
 class RegionRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = RegionRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -383,7 +397,7 @@ class RegionRating(generics.ListAPIView, ParamsHandler):
 
 
 class PublicationTypeRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationTypeRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -411,7 +425,7 @@ class PublicationTypeRating(generics.ListAPIView, ParamsHandler):
 
 
 class PublicationTopicRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationTopicRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToThemeAllow)
@@ -439,7 +453,7 @@ class PublicationTopicRating(generics.ListAPIView, ParamsHandler):
 
 
 class PublicationRating(generics.ListAPIView, ParamsHandler):
-    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, r.PaginatedCSVRenderer)
+    renderer_classes = (r.BrowsableAPIRenderer, r.JSONRenderer, WinPaginatedCSVRenderer)
     queryset = Publication.objects
     serializer_class = PublicationRatingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToPublicationAllow)
