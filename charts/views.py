@@ -454,22 +454,21 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
             di.setdefault(a, []).append(b)
         return di
 
-    def get(self, request, *args, **kwargs):
-
+    def _init(self, request):
         params = handle_request_params(request)
         params.pop('sd')
 
         if "posted_date__lte" not in params:
-            end_date = settings.DEFAULT_TO_DATE
-            start_date = settings.DEFAULT_FROM_DATE
+            self.end_date = settings.DEFAULT_TO_DATE
+            self.start_date = settings.DEFAULT_FROM_DATE
         else:
-            end_date = params["posted_date__lte"]
-            start_date = params["posted_date__gte"]
+            self.end_date = params["posted_date__lte"]
+            self.start_date = params["posted_date__gte"]
 
         publications = Publication.objects.filter(**params).values_list("key_word", "shukachpublication__shukach_id")
         logger.info("Get %d publications" % len(publications))
 
-        l_part = self._convert(publications)
+        self.l_part = self._convert(publications)
         logger.info("Convert %d publications" % len(publications))
 
         self._client = Client(settings.CLICKHOUSE_HOST,
@@ -477,17 +476,21 @@ class KeywordAdmixerSdViews(generics.ListAPIView):
                               user=settings.CLICKHOUSE_USER,
                               password=settings.CLICKHOUSE_PASSWORD)
 
-        total = len(publications)
-        current = 0
+        self.total = len(publications)
+        self.current = 0
         self.queryset = []
 
-        for key_word, ids in l_part.items():
+    def get(self, request, *args, **kwargs):
+
+        self._init(request)
+
+        for key_word, ids in self.l_part.items():
             results = {}
             for batch_ids in self._chunks(ids, 10000):
                 logger.info("Sent %d ids" % len(batch_ids))
-                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
-                current += len(batch_ids)
-                logger.info("Processed: %d/%d" % (current, total))
+                results = self._query_admixer_data(results, batch_ids, self.start_date, self.end_date)
+                self.current += len(batch_ids)
+                logger.info("Processed: %d/%d" % (self.current, self.total))
             for date, items in results.items():
                 row = {
                     "key_word": key_word,
@@ -542,38 +545,15 @@ class ObjectAdmixerSdViews(KeywordAdmixerSdViews):
 
     def get(self, request, *args, **kwargs):
 
-        params = handle_request_params(request)
-        params.pop("sd")
+        self._init(request)
 
-        if "posted_date__lte" not in params:
-            end_date = settings.DEFAULT_TO_DATE
-            start_date = settings.DEFAULT_FROM_DATE
-        else:
-            end_date = params["posted_date__lte"]
-            start_date = params["posted_date__gte"]
-
-        publications = Publication.objects.filter(**params).values_list("object", "shukachpublication__shukach_id")
-        logger.info("Get %d publications" % len(publications))
-
-        l_part = self._convert(publications)
-        logger.info("Convert %d publications" % len(publications))
-
-        self._client = Client(settings.CLICKHOUSE_HOST,
-                              database=settings.CLICKHOUSE_DB,
-                              user=settings.CLICKHOUSE_USER,
-                              password=settings.CLICKHOUSE_PASSWORD)
-
-        total = len(publications)
-        current = 0
-        self.queryset = []
-
-        for obj, ids in l_part.items():
+        for obj, ids in self.l_part.items():
             results = {}
             for batch_ids in self._chunks(ids, 10000):
                 logger.info("Sent %d ids" % len(batch_ids))
-                results = self._query_admixer_data(results, batch_ids, start_date, end_date)
-                current += len(batch_ids)
-                logger.info("Processed: %d/%d" % (current, total))
+                results = self._query_admixer_data(results, batch_ids, self.start_date, self.end_date)
+                self.current += len(batch_ids)
+                logger.info("Processed: %d/%d" % (self.current, self.total))
             for date, items in results.items():
                 row = {
                     "object": obj,
