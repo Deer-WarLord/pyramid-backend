@@ -52057,7 +52057,9 @@ __p+='<div class="widget">\n    <div class="widget-header">\n        <h3><i clas
 ((__t=( uid ))==null?'':__t)+
 '"><span class="badge">2</span>Темы / Компании<span class="chevron"></span></li>\n                    <li data-target="#step3-'+
 ((__t=( uid ))==null?'':__t)+
-'"><span class="badge">4</span>Провайдеры<span class="chevron"></span></li>\n                    <li data-target="#step4-'+
+'"><span class="badge">3</span>Объекты<span class="chevron"></span></li>\n                    <li data-target="#step4-'+
+((__t=( uid ))==null?'':__t)+
+'"><span class="badge">4</span>Провайдеры<span class="chevron"></span></li>\n                    <li data-target="#step5-'+
 ((__t=( uid ))==null?'':__t)+
 '"><span class="badge">5</span>График<span class="chevron"></span></li>\n                </ul>\n            </div>\n            <div class="step-content">\n                <div class="step-pane active" id="step1-'+
 ((__t=( uid ))==null?'':__t)+
