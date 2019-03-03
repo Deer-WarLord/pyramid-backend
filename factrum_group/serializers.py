@@ -128,12 +128,13 @@ class GeneratePublicationsSocialDemoRating:
         logger.info("Making a map of SocialDetails instances")
 
         for obj in instances:
-            fg_map[obj.title.title] = dict(
-                zip(
-                    self.fg_values_list,
-                    [getattr(obj, field) for field in self.fg_values_list]
+            if obj.views > 0:
+                fg_map[obj.title.title] = dict(
+                    zip(
+                        self.fg_values_list,
+                        [getattr(obj, field) for field in self.fg_values_list]
+                    )
                 )
-            )
 
         try:
             start_date = datetime.datetime.strptime(instances[0].upload_info.title, "%m-%Y")
