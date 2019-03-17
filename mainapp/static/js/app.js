@@ -47720,7 +47720,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<nav class="main-nav">\n    <ul class="main-menu">\n        <li class="active">\n            <a href="#" class="js-sub-menu-toggle">\n                <i class="fa fa-columns fw"></i>\n                <span class="text">Запросы</span>\n                <i class="toggle-icon fa fa-angle-down"></i>\n            </a>\n            <ul class="sub-menu open">\n                ';
  if (permissions.theme) { 
-__p+='\n                    <li class="active">\n                        <a id="markets-query" href="#">\n                            <span class="text">По рынкам</span>\n                        </a>\n                    </li>\n                ';
+__p+='\n                    <li class="active">\n                        <a id="markets-query" href="#">\n                            <span class="text">По Рынкам</span>\n                        </a>\n                    </li>\n                ';
  } 
 __p+='\n\n                ';
  if (permissions.publication) { 
