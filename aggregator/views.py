@@ -102,6 +102,20 @@ class SocialDetailsRenderer(WinCSVRenderer):
 
 
 class FGRenderer(WinPaginatedCSVRenderer):
+    header = ["title__title",  "publication",  "views",  "sex.male",  "sex.female",  "age.15-17",  "age.18-24",
+               "age.25-34",  "age.35-44",  "age.45+",  "education.lte9",  "education.11",  "education.bachelor",
+               "education.master",  "children_lt_16.yes",  "children_lt_16.no",  "marital_status.single",
+               "marital_status.married",  "marital_status.widow(er)",  "marital_status.divorced",
+               "marital_status.liveTogether",  "occupation.businessOwner",  "occupation.entrepreneur",
+               "occupation.hiredManager",  "occupation.middleManager",  "occupation.masterDegreeSpecialist",
+               "occupation.employee",  "occupation.skilledWorker",  "occupation.otherWorkers",
+               "occupation.mobileWorker",  "occupation.militaryPoliceman",  "occupation.student",
+               "occupation.pensioner",  "occupation.disabled",  "occupation.housewife",
+               "occupation.maternityLeave",  "occupation.temporarilyUnemployed",  "occupation.other",
+               "group.1",  "group.2",  "group.3",  "group.4",  "group.5",  "income.noAnswer",  "income.0-1000",
+               "income.1001-2000",  "income.2001-3000",  "income.3001-4000",  "income.4001-5000",
+               "income.gt5001",  "region.west",  "region.center",  "region.east",  "region.south",
+               "typeNP.50+",  "typeNP.50-"]
     labels = {
         "title__title": "Ключи",
         "publication": "СМИ",
@@ -163,7 +177,15 @@ class FGRenderer(WinPaginatedCSVRenderer):
 
 
 class AdmixerRenderer(WinPaginatedCSVRenderer):
+    header = ["aggregator", "uniques", "views", "0", "1", "2", "age_groups.0", "age_groups.1", "age_groups.2", "age_groups.3", "age_groups.4",
+     "age_groups.5", "browsers.0", "browsers.1", "browsers.2", "browsers.3", "browsers.4", "browsers.5", "browsers.6",
+     "browsers.7", "browsers.8", "browsers.9", "browsers.10", "browsers.11", "browsers.12", "platforms.0", "platforms.1",
+     "platforms.2", "platforms.3", "platforms.4", "platforms.5", "platforms.6", "platforms.7", "platforms.8", "platforms.9",
+     "platforms.10", "platforms.11", "platforms.12", "platforms.13", "platforms.14", "platforms.15", "platforms.16",
+     "platforms.17", "platforms.18", "platforms.19", "platforms.20", "platforms.21", "platforms.22", "platforms.23",
+     "platforms.24", "platforms.25", "platforms.26", "platforms.27", "platforms.28", "platforms.29"]
     labels = {
+        "aggregator": "Заголовок",
         "uniques": "Уникальных пользователей",
         "views": "Просмотров",
         "0": "Гендер.Пол Неизвестно",
