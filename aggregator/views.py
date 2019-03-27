@@ -694,7 +694,7 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
 
     def list(self, request, *args, **kwargs):
 
@@ -716,28 +716,23 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
         serializer = self.get_serializer(data=queryset, many=True)
         serializer.is_valid(raise_exception=True)
 
-        result = []
-        get_key = lambda x: x['title__title']
-        for key, group in groupby(sorted(serializer.data, key=get_key), key=get_key):
-            item = dict(zip(self.fg_values_list, [{} for i in range(len(self.fg_values_list))]))
-            item['title__title'] = key
-            item['views'] = 0
-            for row in group:
-                item['views'] += row['views']
-                for sd, sub_sd in row.items():
-                    if type(sub_sd) is dict:
-                        for k, v in sub_sd.items():
-                            try:
-                                item[sd][k] += v
-                            except KeyError:
-                                item[sd][k] = v
-            result.append(item)
+        results = {}
+        for item in serializer.data:
+            start_period = datetime.strptime(item['upload_info__title'], "%w-%W-%Y")
+            try:
+                if start_period > results[item['title__title']][0]:
+                    results[item['title__title']] = (start_period, item)
+            except KeyError:
+                results[item['title__title']] = (start_period, item)
 
-        page = self.paginate_queryset(result)
-        if page is not None:
-            return self.get_paginated_response(page)
+        results = [sd for period, sd in results.values()]
 
-        return Response(result)
+        if results:
+            page = self.paginate_queryset(results)
+            if page is not None:
+                return self.get_paginated_response(page)
+
+        return Response(results)
 
 
 class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
@@ -747,7 +742,7 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHa
                           IsRequestsToPublicationAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
 
     def list(self, request, *args, **kwargs):
 
@@ -793,7 +788,7 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
 
     def list(self, request, *args, **kwargs):
 
@@ -813,28 +808,23 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
         serializer = self.get_serializer(data=queryset, many=True)
         serializer.is_valid(raise_exception=True)
 
-        result = []
-        for key, group in groupby(serializer.data, lambda x: x['title__title']):
-            item = dict(zip(self.fg_values_list, [{} for i in range(len(self.fg_values_list))]))
-            item['title__title'] = key
-            item['views'] = 0
-            for row in group:
-                item['views'] += row['views']
-                for sd, sub_sd in row.items():
-                    if type(sub_sd) is dict:
-                        for k, v in sub_sd.items():
-                            try:
-                                item[sd][k] += v
-                            except KeyError:
-                                item[sd][k] = v
-            result.append(item)
+        results = {}
+        for item in serializer.data:
+            start_period = datetime.strptime(item['upload_info__title'], "%w-%W-%Y")
+            try:
+                if start_period > results[item['title__title']][0]:
+                    results[item['title__title']] = (start_period, item)
+            except KeyError:
+                results[item['title__title']] = (start_period, item)
 
-        if len(result):
-            page = self.paginate_queryset(result)
+        results = [sd for period, sd in results.values()]
+
+        if results:
+            page = self.paginate_queryset(results)
             if page is not None:
                 return self.get_paginated_response(page)
 
-        return Response(result)
+        return Response(results)
 
 
 class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
@@ -863,25 +853,20 @@ class GeneralByPublicationsSocialDemoRatingFG(generics.ListAPIView, ParamsHandle
         serializer = self.get_serializer(data=list(self.queryset.values()), many=True)
         serializer.is_valid(raise_exception=True)
 
-        result = []
-        get_key = lambda x: x['publication']
-        for key, group in groupby(sorted(serializer.data, key=get_key), key=get_key):
-            item = dict(zip(self.fg_values_list, [{} for i in range(len(self.fg_values_list))]))
-            item['publication'] = key
-            item['views'] = 0
-            for row in group:
-                item['views'] += row['views']
-                for sd, sub_sd in row.items():
-                    if type(sub_sd) is dict:
-                        for k, v in sub_sd.items():
-                            try:
-                                item[sd][k] += v
-                            except KeyError:
-                                item[sd][k] = v
-            result.append(item)
+        results = {}
+        for item in serializer.data:
+            start_period = item['created_date']
+            try:
+                if start_period > results[item['publication']][0]:
+                    results[item['publication']] = (start_period, item)
+            except KeyError:
+                results[item['publication']] = (start_period, item)
 
-        page = self.paginate_queryset(result)
-        if page is not None:
-            return self.get_paginated_response(page)
+        results = [sd for period, sd in results.values()]
 
-        return Response(result)
+        if results:
+            page = self.paginate_queryset(results)
+            if page is not None:
+                return self.get_paginated_response(page)
+
+        return Response(results)

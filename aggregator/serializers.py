@@ -135,6 +135,7 @@ class SocialDemoRatingAdmixerSerializer(serializers.Serializer):
 
 
 class SocialDemoRatingFGSerializer(serializers.Serializer):
+    upload_info__title = serializers.CharField(max_length=128)
     title__title = serializers.CharField(max_length=1024)
     views = serializers.IntegerField()
     sex = serializers.DictField()
@@ -161,6 +162,7 @@ class SocialDemoRatingFGSerializer(serializers.Serializer):
         converter = lambda d: dict([(k, int(calculate(v))) for k, v in d.items()])
 
         return {
+            "upload_info__title": obj.get("upload_info__title"),
             "title__title": obj.get("title__title"),
             "views": int(views),
             "sex": converter(obj.get("sex")),
