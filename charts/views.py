@@ -1,4 +1,5 @@
 from collections import Counter
+from itertools import groupby
 
 from clickhouse_driver import Client
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -118,7 +119,10 @@ class KeywordFactrumViews(generics.ListAPIView):
             self.queryset += info.factrum_group.filter(
                 title__title__in=params["key_word__in"]
             ).values("title__title").annotate(views=Sum("views")).values(
-                "views", "title__title", "upload_info__title")
+                "views", "title__title", "upload_info__title", "upload_info__created_date")
+
+        self.queryset = [max(items, key=lambda o: o["upload_info__created_date"])
+                         for g, items in groupby(self.queryset, key=lambda o: o['upload_info__title'])]
 
         return self.list(request, *args, **kwargs)
 
@@ -382,8 +386,8 @@ class ObjectFactrumSdViews(generics.ListAPIView):
         instance = info.factrum_group_detailed.filter(title__title__in=params["key_word__in"]).first()
 
         instance_sd = dict(zip(
-                self.fg_values_list,
-                [getattr(instance, field) for field in self.fg_values_list]))
+            self.fg_values_list,
+            [getattr(instance, field) for field in self.fg_values_list]))
 
         start_date = datetime.datetime.strptime(instance.upload_info.title, "%w-%W-%Y")
         end_date = start_date + datetime.timedelta(days=6)
