@@ -121,8 +121,9 @@ class KeywordFactrumViews(generics.ListAPIView):
             ).values("title__title").annotate(views=Sum("views")).values(
                 "views", "title__title", "upload_info__title", "upload_info__created_date")
 
-        self.queryset = [max(items, key=lambda o: o["upload_info__created_date"])
-                         for g, items in groupby(self.queryset, key=lambda o: o['upload_info__title'])]
+        f_title = lambda o: o['upload_info__title']
+        f_date = lambda o: o["upload_info__created_date"]
+        self.queryset = [max(items, key=f_date) for g, items in groupby(sorted(self.queryset, key=f_title), key=f_title)]
 
         return self.list(request, *args, **kwargs)
 
