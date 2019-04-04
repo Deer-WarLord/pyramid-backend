@@ -5,7 +5,6 @@ import json
 from collections import Counter
 from itertools import groupby
 
-from sortedcontainers import SortedListWithKey
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Sum, Count, Q
@@ -24,7 +23,7 @@ from factrum_group.serializers import PublicationsSocialDemoRatingSerializer
 from factrum_group.models import AnalyzedInfo as FG, SocialDetails, PublicationsSocialDemoRating
 from admixer.models import AnalyzedInfo as Admixer
 from noksfishes.models import ShukachPublication, Theme, Publication, Market
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from uploaders.models import UploadedInfo
 
