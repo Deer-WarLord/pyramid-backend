@@ -694,7 +694,8 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP',
+                      'upload_info__title', 'upload_info__created_date')
 
     def list(self, request, *args, **kwargs):
 
@@ -712,6 +713,10 @@ class SpecialByThemeSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
                 continue
             queryset += info.factrum_group_detailed.filter(
                 title__title__in=params['key_word__in']).values(*self.fg_values_list).order_by("-views")
+
+        f_title = lambda o: o['upload_info__title']
+        f_date = lambda o: o["upload_info__created_date"]
+        queryset = [max(items, key=f_date) for g, items in groupby(sorted(queryset, key=f_title), key=f_title)]
 
         serializer = self.get_serializer(data=queryset, many=True)
         serializer.is_valid(raise_exception=True)
@@ -742,7 +747,8 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHa
                           IsRequestsToPublicationAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP',
+                      'upload_info__title', 'upload_info__created_date')
 
     def list(self, request, *args, **kwargs):
 
@@ -763,6 +769,10 @@ class SpecialByThemePublicationSocialDemoRatingFG(generics.ListAPIView, ParamsHa
 
         if not len(sd):
             return Response([])
+
+        f_title = lambda o: o['upload_info__title']
+        f_date = lambda o: o["upload_info__created_date"]
+        sd = [max(items, key=f_date) for g, items in groupby(sorted(sd, key=f_title), key=f_title)]
 
         records_in_theme_by_publication = Publication.objects.filter(**params).count()
 
@@ -788,7 +798,8 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsRequestsToSocialDemoAllow, IsRequestsToThemeAllow)
     pagination_class = ConfiguredPageNumberPagination
     fg_values_list = ('title__title', 'views', 'sex', 'age', 'education', 'children_lt_16',
-                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP', 'upload_info__title')
+                      'marital_status', 'occupation', 'group', 'income', 'region', 'typeNP',
+                      'upload_info__title', 'upload_info__created_date')
 
     def list(self, request, *args, **kwargs):
 
@@ -804,6 +815,10 @@ class GeneralByThemesSocialDemoRatingFG(generics.ListAPIView, ParamsHandler):
                 queryset += info.factrum_group_detailed.values(*self.fg_values_list).order_by("-views")
         else:
             queryset = SocialDetails.objects.all().values(*self.fg_values_list).order_by("-views")
+
+        f_title = lambda o: o['upload_info__title']
+        f_date = lambda o: o["upload_info__created_date"]
+        queryset = [max(items, key=f_date) for g, items in groupby(sorted(queryset, key=f_title), key=f_title)]
 
         serializer = self.get_serializer(data=queryset, many=True)
         serializer.is_valid(raise_exception=True)
