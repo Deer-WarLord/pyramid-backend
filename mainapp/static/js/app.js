@@ -47764,7 +47764,7 @@ return __p;
 /* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// theme_company_rating_table
+// market_rating_table
 var Marionette = __webpack_require__(2);
 var MarketRatingCollection = __webpack_require__(120);
 
@@ -50797,7 +50797,7 @@ module.exports = Marionette.CompositeView.extend({
             this.ui.dynamicChart = $wrapper.find(".demo-vertical-bar-chart");
             $wrapper.find(".sd-chart-title").html(JSON.parse(this.model.get("key_word__in")).join());
             this.triggerMethod('fetched');
-            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
+            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options, this.model);
             this.query("key_word");
             $btnSuccess.removeClass("hidden");
             $btnNext.hide();
@@ -50857,7 +50857,7 @@ module.exports = Marionette.CompositeView.extend({
             this.ui.dynamicChart = $wrapper.find(".demo-vertical-bar-chart");
             $wrapper.find(".sd-chart-title").html(JSON.parse(this.model.get("object__in")).join());
             this.triggerMethod('fetched');
-            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
+            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options, this.model);
             this.query("object");
             $btnNext.hide();
             $btnSuccess.addClass("hidden");
@@ -51326,7 +51326,7 @@ module.exports = Marionette.CompositeView.extend({
             $wrapper.find(".sd-chart-title").html(JSON.parse(this.model.get(titleKey)).join());
 
             this.triggerMethod('fetched');
-            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
+            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options, this.model);
             this.query(groupBy);
             $btnNext.hide();
             $btnSuccess.addClass("hidden");
@@ -52005,7 +52005,7 @@ module.exports = Marionette.CompositeView.extend({
 
             $wrapper.find(".sd-chart-list").html(listTemplate);
             this.triggerMethod('fetched');
-            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options);
+            this.triggerMethod("updateDateControls", $wrapper.find(".time-range"), $wrapper.find(".time-range input"), this.options, this.model);
             this.query(groupBy);
             $btnNext.hide();
             $btnSuccess.addClass("hidden");
@@ -52670,18 +52670,33 @@ return __p;
 var Marionette = __webpack_require__(2);
 var moment = __webpack_require__(15);
 
-function initDateRange(reportRangeID, input, options) {
+function initDateRange(reportRangeID, input, options, model) {
 
+    reportRangeID.find('span').html(options.fixed_dates[0] + ' - ' + options.fixed_dates[1]);
 
     if (!options.permissions.free_time) {
-        reportRangeID.find('span').html(options.fixed_dates[0] + ' - ' + options.fixed_dates[1]);
         input.val(options.fixed_dates[0] + ',' + options.fixed_dates[1]);
         return;
+    }
+
+    var startDate = '10/01/2018';
+    var endDate = '12/01/2018';
+
+    if (model && model.has("posted_date__gte")) {
+
+        var fromDate = model.get("posted_date__gte");
+        var toDate = model.get("posted_date__lte");
+
+        reportRangeID.find('span').html(fromDate + ' - ' + toDate);
+
+        startDate = new Date(model.get("posted_date__gte")).toLocaleDateString("en-US");
+        endDate = new Date(model.get("posted_date__lte")).toLocaleDateString("en-US");
     }
 
     var callback = function (start, end) {
         var fromDate = start.format('YYYY-MM-DD');
         var toDate = end.format('YYYY-MM-DD');
+
         reportRangeID.find('span').html(fromDate + ' - ' + toDate);
         input.val(fromDate + ',' + toDate).trigger("change", {
             fromDate: fromDate,
@@ -52689,8 +52704,8 @@ function initDateRange(reportRangeID, input, options) {
         });
     };
     reportRangeID.daterangepicker({
-        startDate: '01/10/2018',
-        endDate: '01/12/2018',
+        startDate: startDate,
+        endDate: endDate,
         minDate: '01/01/2017',
         maxDate: '12/31/2019',
         dateLimit: {days: 360},
@@ -52731,11 +52746,12 @@ module.exports = Marionette.Behavior.extend({
         var reportRangeID = this.view.ui.reportRange;
         var input = this.view.ui.input;
         var options = this.view.options;
-        initDateRange(reportRangeID, input, options);
+        var model = this.view.model;
+        initDateRange(reportRangeID, input, options, model);
     },
 
-    onUpdateDateControls: function (reportRangeID, input, options) {
-        initDateRange(reportRangeID, input, options);
+    onUpdateDateControls: function (reportRangeID, input, options, model) {
+        initDateRange(reportRangeID, input, options, model);
     }
 
 });
