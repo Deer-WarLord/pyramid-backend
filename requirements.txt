@@ -8,7 +8,7 @@ clickhouse-driver==0.0.8
 dj-database-url==0.4.1
 Django==1.11.1
 django-celery-beat==1.1.1
-django-celery-results==1.0.1
+django-celery-results==2.4.0
 django-daterange-filter==1.0.0
 django-debug-toolbar==1.9.1
 django-extensions==2.0.7
